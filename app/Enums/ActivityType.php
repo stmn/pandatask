@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Enums;
+
+enum ActivityType: string
+{
+    case TASK_CREATED = 'task_created';
+    case TASK_COMMENTED = 'task_commented';
+    case TASK_CHANGED = 'task_changed';
+
+    public function getDescription(): string
+    {
+        return match ($this) {
+            self::TASK_CREATED => 'created a task',
+            self::TASK_COMMENTED => 'commented on a task',
+            self::TASK_CHANGED => 'changed a task',
+        };
+    }
+}
