@@ -1,10 +1,9 @@
 <script setup>
-import {Head, router, useForm, Link} from '@inertiajs/vue3';
-import {computed, onMounted, ref, watch} from "vue";
+import {Head, Link, router, useForm} from '@inertiajs/vue3';
+import {computed, onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import {ElMessage} from "element-plus";
-import {useStorage, useTimeAgo} from "@vueuse/core";
-import {Check, EditPen, Files, List, Message, Operation, Setting, Upload, UploadFilled} from "@element-plus/icons-vue";
+import {Check, EditPen, Operation, Upload, UploadFilled} from "@element-plus/icons-vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
@@ -30,6 +29,10 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    users: {
+        type: Array,
+        required: true
+    },
 });
 
 // const activities = computed(() => props.activities);
@@ -38,36 +41,60 @@ const onBack = () => {
     router.visit(route('project.tasks', {project: props.project.id}))
 };
 
+const uploadRef = ref(null);
 
-const defaultComment = {
+// const defaultComment = {
+//     comment: '',
+//     files: [],
+//     private: false,
+// };
+
+// const comment = useStorage('comment', defaultComment);
+// const commentForm = useForm(defaultComment);
+//
+// commentForm.comment = comment.value.comment;
+// commentForm.private = comment.value.private;
+//
+// watch(commentForm, (value) => {
+//     comment.value = value
+// }, {deep: true});
+
+console.log('abc', props.task)
+
+const form = useForm({
     comment: '',
+    files: [],
     private: false,
-};
-const comment = useStorage('comment', defaultComment);
-const commentForm = useForm(defaultComment);
-commentForm.comment = comment.value.comment;
-commentForm.private = comment.value.private;
-watch(commentForm, (value) => {
-    comment.value = value
-}, {deep: true});
-const settingsForm = useForm({})
+});
+
+const detailsForm = useForm({
+    assignees: props.task.assignees,
+});
 
 const submit = () => {
     // router.post(route('project.task', {project: props.project, task: props.task}), {...commentForm, ...settingsForm})
-
-    commentForm.post('', {
-        preserveScroll: true,
-        onSuccess: () => {
-            commentForm.reset();
-            settingsForm.reset();
-            document.querySelector('textarea')?.focus();
-            ElMessage({
-                message: 'Form submitted successfully!',
-                type: 'success',
-            })
-            activeTab2.value = 'activity'
-        },
+    console.log(form.data(), detailsForm.data(), {
+        ...form.data(),
+        ...detailsForm.data(),
     })
+    form.transform((data) => ({
+        ...form.data(),
+        ...detailsForm.data(),
+    }))
+        .post('', {
+            preserveScroll: true,
+            forceFormData: true,
+            onSuccess: () => {
+                form.reset();
+                // settingsForm.reset();
+                document.querySelector('textarea')?.focus();
+                ElMessage({
+                    message: 'Form submitted successfully!',
+                    type: 'success',
+                })
+                activeTab2.value = 'activity'
+            },
+        })
 };
 
 const activeTab = ref('comment');
@@ -76,6 +103,10 @@ const activeTab2 = ref('activity');
 onMounted(() => {
     document.querySelector('textarea').focus()
     // timeline.value.push(...props.timeline.slice(timeline.value.length, timeline.value.length + 1))
+})
+
+const canSubmit = computed(() => {
+    return form.comment || form.files.length || detailsForm.isDirty;
 })
 </script>
 
@@ -96,7 +127,7 @@ onMounted(() => {
         <!--        </template>-->
         <template #content>
             <div style="display: flex; align-items: center;">
-                <Timer :task="task" />
+                <Timer :task="task"/>
 
                 <el-avatar
                     :size="28"
@@ -104,34 +135,10 @@ onMounted(() => {
                     :src="task.project.avatar"
                 />
                 <span style="margin-right: 5px;">{{ task.subject }} <b>#{{ task.number }}</b></span>
-                &nbsp;<el-tag>Private</el-tag>
+                &nbsp;<el-tag v-if="task.private">Private</el-tag>
             </div>
         </template>
-<!--        <template #extra>-->
-<!--            <div class="flex items-center">-->
-<!--                <el-button type="primary" class="ml-2">Edit</el-button>-->
-<!--            </div>-->
-<!--        </template>-->
     </el-page-header>
-
-<!--    <br>-->
-<!--    <el-card>-->
-<!--        <el-row>-->
-<!--            <el-col :span="6">-->
-<!--                <el-statistic title="Type" :value="'Feature'"/>-->
-<!--            </el-col>-->
-<!--            <el-col :span="6">-->
-<!--                <el-statistic title="Status" :value="'New'"/>-->
-<!--            </el-col>-->
-<!--            <el-col :span="6">-->
-<!--                <el-statistic title="Priority" :value="'High'"/>-->
-<!--            </el-col>-->
-<!--            <el-col :span="6">-->
-<!--                <el-statistic title="Assignees" :value="'Nobody'"/>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
-<!--    </el-card>-->
-
 
     <el-container>
         <el-container>
@@ -146,8 +153,8 @@ onMounted(() => {
                 >
                     <div style="display: flex; align-items: center; font-size: 14px;">
                         <span>Created by</span>
-                        <span style="margin: 0 10px;"><User :user="task.author" /></span>
-                        <Time :time="task.created_at" />
+                        <span style="margin: 0 10px;"><User :user="task.author"/></span>
+                        <Time :time="task.created_at"/>
                     </div>
                     <br>
 
@@ -158,71 +165,90 @@ onMounted(() => {
                     <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
                         <el-tab-pane name="comment">
                             <template #label>
-                                <el-badge :is-dot="commentForm.isDirty">
-                                <el-icon>
-                                    <EditPen/>
-                                </el-icon> &nbsp;
-                                Comment
+                                <el-badge :is-dot="form.comment.length">
+                                    <el-icon>
+                                        <EditPen/>
+                                    </el-icon> &nbsp;
+                                    Comment
                                 </el-badge>
                             </template>
                             <el-form-item>
-                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="commentForm.comment"
+                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="form.comment"
                                           placeholder="Add comment..."/>
-                                <div v-if="commentForm.errors.comment" class="el-form-item__error"
+                                <div v-if="form.errors.comment" class="el-form-item__error"
                                      style="padding: 5px 0; position: relative;">
-                                    {{ commentForm.errors.comment }}
+                                    {{ form.errors.comment }}
                                 </div>
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane name="attachments">
                             <template #label>
-                                <el-icon>
-                                    <Upload />
-                                </el-icon> &nbsp;
-                                Attachments
+                                <el-badge :is-dot="form.files.length">
+                                    <el-icon>
+                                        <Upload/>
+                                    </el-icon> &nbsp;
+                                    Attachments
+                                </el-badge>
                             </template>
 
                             <el-upload
-                                class="upload-demo"
                                 drag
-                                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
                                 multiple
+                                ref="uploadRef"
+                                v-model:file-list="form.files"
+                                :auto-upload="false"
                             >
-                                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                                <el-icon class="el-icon--upload">
+                                    <upload-filled/>
+                                </el-icon>
                                 <div class="el-upload__text">
                                     Drop file here or <em>click to upload</em>
                                 </div>
-                                <template #tip>
-                                    <div class="el-upload__tip">
-                                        jpg/png files with a size less than 500kb
-                                    </div>
-                                </template>
+                                <!--                                <template #tip>-->
+                                <!--                                    <div class="el-upload__tip">-->
+                                <!--                                        jpg/png files with a size less than 500kb-->
+                                <!--                                    </div>-->
+                                <!--                                </template>-->
                             </el-upload>
                         </el-tab-pane>
                         <el-tab-pane name="settings">
                             <template #label>
-                                <el-badge :is-dot="settingsForm.isDirty">
-                                <el-icon>
-                                    <Operation/>
-                                </el-icon> &nbsp;
-                                Details
+                                <el-badge :is-dot="detailsForm.isDirty">
+                                    <el-icon>
+                                        <Operation/>
+                                    </el-icon> &nbsp;
+                                    Details
                                 </el-badge>
                             </template>
-                            test<br>
-                            test<br>
-                            test<br>
+                            <el-form-item label="Assignees">
+                                <el-select v-model="detailsForm.assignees"
+                                           value-key="id"
+                                           filterable multiple
+                                           placeholder="Select"
+                                           style="width: 100%;"
+                                           fit-input-width>
+                                    <el-option
+                                        v-for="item in users"
+                                        :key="item.id"
+                                        :label="item.full_name"
+                                        :value="item"
+                                    >
+                                        <User :user="item" disable-popover/>
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
                         </el-tab-pane>
                     </el-tabs>
                     <el-switch
-                        v-model="commentForm.private"
+                        v-model="form.private"
                         size="small"
                         active-text="Is private"
                     />
-                <br><br>
+                    <br><br>
                     <el-form-item>
                         <el-button type="success" @click="submit"
-                                   :loading="commentForm.processing"
-                                   :disabled="commentForm.processing || !commentForm.isDirty || settingsForm.isDirty">
+                                   :loading="form.processing"
+                                   :disabled="form.processing || !canSubmit">
                             <el-icon>
                                 <Check/>
                             </el-icon> &nbsp;
@@ -240,7 +266,7 @@ onMounted(() => {
                             Activity
                         </template>
 
-                        <Activities :activities="activities" />
+                        <Activities :activities="activities"/>
                     </el-tab-pane>
                     <el-tab-pane name="timesheet">
                         <template #label>
@@ -250,7 +276,7 @@ onMounted(() => {
                             Timesheets
                         </template>
 
-                        <Timesheets :times="times" :task="task" />
+                        <Timesheets :times="times" :task="task"/>
                     </el-tab-pane>
                 </el-tabs>
                 <!--                <div ref="el">-->
@@ -263,19 +289,22 @@ onMounted(() => {
         <el-aside width="300px" class="" style="">
             <div style="position: sticky;  top: 0;">
                 <div>
-<!--                    <span style="font-size: 14px; font-weight: 500;">-->
-<!--                        <el-icon>-->
-<!--                            <Operation/>-->
-<!--                        </el-icon> &nbsp;-->
-<!--                        Details-->
-<!--                    </span>-->
-<!--                    <hr>-->
+                    <!--                    <span style="font-size: 14px; font-weight: 500;">-->
+                    <!--                        <el-icon>-->
+                    <!--                            <Operation/>-->
+                    <!--                        </el-icon> &nbsp;-->
+                    <!--                        Details-->
+                    <!--                    </span>-->
+                    <!--                    <hr>-->
 
                     <el-divider content-position="left">Details</el-divider>
 
                     <el-descriptions column="1" border>
                         <el-descriptions-item label="Project">
-                            <Link :href="route('project.tasks', {project: task.project_id})">{{ task.project.name }}</Link>
+                            <Link :href="route('project.tasks', {project: task.project_id})">{{
+                                    task.project.name
+                                }}
+                            </Link>
                         </el-descriptions-item>
                         <el-descriptions-item label="Status">
                             <el-tag size="small">School</el-tag>
@@ -284,11 +313,11 @@ onMounted(() => {
                             <el-tag size="small">School</el-tag>
                         </el-descriptions-item>
                         <el-descriptions-item label="Assignees">
-                            <User :user="task.author" only-avatar />
+                            <User v-for="user in task.assignees" :user="user" only-avatar/>
                         </el-descriptions-item>
-                        <el-descriptions-item label="Followers">
-                            <User :user="task.author" only-avatar />
-                        </el-descriptions-item>
+                        <!--                        <el-descriptions-item label="Followers">-->
+                        <!--                            <User :user="task.author" only-avatar />-->
+                        <!--                        </el-descriptions-item>-->
                     </el-descriptions>
 
                 </div>

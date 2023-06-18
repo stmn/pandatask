@@ -99,7 +99,7 @@ const timeBetweenTwoDates = (date1, date2) => {
         </el-table-column>
         <el-table-column v-if="cols.includes('actions')" prop="actions" label="Actions" width="90">
             <template #default="{row}">
-                <Link :href="route('project.timesheets.edit', {project: row.project_id, time: row.id})">
+                <Link :preserve-state="true" :href="route('project.timesheets.edit', {project: row.project_id, time: row.id})">
                     <el-button type="primary" circle :icon="Edit"></el-button>
                 </Link>
             </template>

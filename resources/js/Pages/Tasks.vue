@@ -43,11 +43,6 @@ watchDebounced(
                 <span>Tasks</span>
             </div>
         </template>
-        <template #extra>
-            <div class="flex items-center">
-                <el-button type="primary" class="ml-2">Create</el-button>
-            </div>
-        </template>
     </el-page-header>
 
     <br>

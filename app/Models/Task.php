@@ -23,6 +23,11 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function assignees()
+    {
+        return $this->belongsToMany(User::class, 'task_users');
+    }
+
     public function times()
     {
         return $this->hasMany(Time::class);
@@ -35,7 +40,7 @@ class Task extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasManyThrough(Comment::class, Activity::class);
     }
 
     public function activities()

@@ -55,7 +55,7 @@ watchDebounced(
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link :href="route('projects.create')">
+                <Link preserve-state :href="route('projects.create')">
                     <el-button type="success" class="ml-2">
                         <el-icon>
                             <CirclePlusFilled/>
@@ -100,7 +100,7 @@ watchDebounced(
                             <template v-if="item.latest_activity">
                                 <el-divider direction="vertical"></el-divider>
                                 <div class="last-activity">
-                                    <User :user="item.latest_activity.activity.author"/>
+                                    <User :user="item.latest_activity.author"/>
                                     <Activity :activity="item.latest_activity"/>
                                     <Time :time="item.latest_activity.created_at"/>
                                 </div>
@@ -116,7 +116,7 @@ watchDebounced(
                                 </el-button>
                             </Link>
                             &nbsp;
-                            <Link :href="route('project.tasks.create', {project: item.id})">
+                            <Link preserve-state :href="route('project.tasks.create', {project: item.id})">
                                 <el-button class="button" type="success">
                                     <el-icon>
                                         <CirclePlusFilled/>

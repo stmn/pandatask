@@ -23,7 +23,7 @@ class DashboardController extends Controller
                         ->latest()
                         ->limit(5);
                 },
-                'tasks.latestActivity.activity.author',
+                'tasks.latestActivity.user',
             ])
             ->groupBy('projects.id')
             ->orderByDesc('latest_activity_at')

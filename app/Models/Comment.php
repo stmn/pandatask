@@ -12,6 +12,10 @@ class Comment extends Model
         'private'
     ];
 
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
+
+
     public function task()
     {
         return $this->belongsTo(Task::class);

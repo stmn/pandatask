@@ -3,23 +3,22 @@ import {usePage, Link} from '@inertiajs/vue3'
 import {computed} from "vue";
 import Timer from "@/Components/Timer.vue";
 import {useNow} from "@vueuse/core";
+import {Edit} from "@element-plus/icons-vue";
 
 
 const page = usePage()
 
 const auth = computed(() => page.props.auth)
-
+const activeTime = computed(() => page.props.auth.user.active_time)
 
 const time = computed(() => {
-    if (!auth.value.time) {
+    if (!activeTime.value) {
         return 0;
     }
 
     const now = useNow();
 
-    const seconds = Math.floor((now.value - Date.parse(auth.value.time?.start_at)) / 1000);
-
-    // seconds to 00:00 notation with leading zero
+    const seconds = Math.floor((now.value - Date.parse(activeTime.value?.start_at)) / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
 
@@ -28,7 +27,7 @@ const time = computed(() => {
 </script>
 
 <template>
-    <Timer :task="auth.time?.task">
+    <Timer :task="activeTime?.task">
         <template #play>
             <el-button>PLAY</el-button>
         </template>
@@ -40,11 +39,15 @@ const time = computed(() => {
             >
                 <template #default>
                     <b>Task:</b> <Link
-                    :href="auth.time?.task.url">{{
-                        auth.time?.task?.subject
+                    :href="activeTime?.task.url">{{
+                        activeTime?.task?.subject
                     }}</Link>
                     <br>
-                    <b>Total time:</b> {{ time }}
+                    <b>Time:</b> {{ time }}
+
+                    <Link preserve-state :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
+                        <el-button type="success" size="small">Edit</el-button>
+                    </Link>
                 </template>
                 <template #reference>
                     <div class="timer-stop">

@@ -1,5 +1,5 @@
 <script setup>
-import {usePage} from '@inertiajs/vue3'
+import {usePage,Link} from '@inertiajs/vue3'
 import {computed} from "vue";
 
 const props = defineProps({
@@ -42,13 +42,12 @@ const fullName = computed(() => {
                     :size="24"
                     style="vertical-align: sub; margin-right: 5px;"
                     :src="user?.avatar"
-                /></el-tooltip> <b v-if="!onlyAvatar">{{ fullName }}</b>
+                /></el-tooltip> <b v-if="!onlyAvatar">{{ user?.first_name }} {{ user?.last_name?.[0] }}</b>
             </span>
         </template>
 
         <div>
             <el-avatar
-                class="mr-3"
                 :size="50"
                 style="vertical-align: sub; float: left; margin-right: 10px;"
                 :src="user.avatar"
@@ -61,8 +60,15 @@ const fullName = computed(() => {
                     <!--                    <el-button size="small">E-mail</el-button>-->
                 </a>
             </div>
-            <div style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">
-                Working on <a href="#">Project</a> #123123
+            <div v-if="user.active_time" style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">
+                Working on
+                <Link :href="route('project.overview', {project: user.active_time.task.project_id})" style="margin-right: 5px;">
+                    {{ user.active_time.task.project.name }}
+                </Link>
+                <el-tooltip :content="user.active_time.task.subject">
+                <Link :href="route('project.task', {project: user.active_time.task.project_id, task: user.active_time.task.number})">#{{ user.active_time.task.number }}
+                </Link>
+                </el-tooltip>
             </div>
         </div>
     </el-popover>
@@ -80,6 +86,7 @@ const fullName = computed(() => {
     }
 
     b {
+        font-weight: 400;
         margin-top: -1px;
         color: var(--el-color-primary-dark-2);
     }

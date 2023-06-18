@@ -19,10 +19,10 @@ const isRun = computed(() => {
         return auth.value.time?.task_id;
     }
 
-    return auth.value.time?.task_id == props.task?.id;
+    return auth.value.user.active_time?.task_id == props.task?.id;
 });
 
-const visible = computed(() => auth.value.time?.task_id || props.task?.id);
+const visible = computed(() => auth.value.user.active_time?.task_id || props.task?.id);
 
 const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
 </script>

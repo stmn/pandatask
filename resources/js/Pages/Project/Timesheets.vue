@@ -10,6 +10,7 @@ import User from "@/Components/User.vue";
 import Pagination from "@/Components/Pagination.vue";
 import {useNow} from "@vueuse/core";
 import Timesheets from "@/Components/Timesheets.vue";
+import {CirclePlusFilled} from "@element-plus/icons-vue";
 
 defineOptions({ layout: [Layout, ProjectLayout] })
 
@@ -41,8 +42,10 @@ const handleClick = (index) => {
 <template>
     <Head :title="project.name + ' - Timesheets'"/>
 
-    <Link :href="route('project.timesheets.create', {project: project.id})">
-        <el-button type="primary">Add</el-button>
+    <Link preserve-state :href="route('project.timesheets.create', {project: project.id})">
+        <el-button type="success"><el-icon>
+            <CirclePlusFilled/>
+        </el-icon> &nbsp; Add</el-button>
     </Link>
 
     <Timesheets :times="times" />

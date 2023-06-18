@@ -86,7 +86,7 @@ const auth = computed(() => page.props.auth)
             <template #default="{row}">
                 <template v-if="row.latest_activity">
                     <div style="display: flex; align-items: center;">
-                        <User :user="row.latest_activity.activity.author"/> &nbsp;
+                        <User :user="row.latest_activity.user"/> &nbsp;
                         <Activity :activity="row.latest_activity" :task="row" only-icon style="margin: 0 5px;"/>
                         <Time :time="row.latest_activity.created_at"/>
                     </div>

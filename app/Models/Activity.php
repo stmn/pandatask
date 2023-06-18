@@ -4,10 +4,15 @@ namespace App\Models;
 
 use App\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Activity extends Model
+class Activity extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
+        'user_id',
         'project_id',
         'task_id',
         'type',
@@ -24,6 +29,11 @@ class Activity extends Model
     protected $appends = [
         'description',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function project()
     {
@@ -45,6 +55,10 @@ class Activity extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function comment(){
+        return $this->hasOne(Comment::class);
+    }
+
     // polymorphic relationship
     public function activity()
     {
@@ -53,6 +67,7 @@ class Activity extends Model
 
     public function getDescriptionAttribute()
     {
-        return $this->type->getDescription();
+        return ' INFO ';
+//        return $this->type->getDescription();
     }
 }

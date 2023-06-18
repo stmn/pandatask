@@ -20,10 +20,14 @@ const props = defineProps({
 });
 const form = useForm(Object.assign({
     comment: null,
-    start_at: null,
-    end_at: null,
+    start_at: new Date(),
+    end_at: new Date(),
     task: {},
 }, props.time))
+
+if(form.end_at === null) {
+    form.end_at = new Date()
+}
 
 const {close, redirect} = useModal()
 
@@ -37,20 +41,18 @@ const create = () => form.post(url, {
 
 onMounted(() => {
     setTimeout(() => {
-        // document.querySelector('.focus-me input').focus();
+        document.querySelector('.focus-me textarea').focus();
+        document.querySelector('.focus-me input').focus();
     }, 100)
 })
 
-const activeTab = ref('general');
-
-const defaultTime = new Date()
 </script>
 
 <template>
     <Modal>
         <template #title>{{ time ? 'Edit time' : 'Create a new time' }}</template>
 
-        {{ JSON.stringify(form) }}
+<!--        {{ JSON.stringify(form) }}-->
 
         <el-form label-width="120px">
             <el-form-item label="Task" :class="{'is-error': form.errors.task}">
@@ -68,7 +70,6 @@ const defaultTime = new Date()
                 <el-date-picker
                     v-model="form.start_at"
                     type="datetime"
-                    :default-time="defaultTime"
                 />
                 <InputError :message="form.errors.start_at" />
             </el-form-item>
@@ -76,12 +77,11 @@ const defaultTime = new Date()
                 <el-date-picker
                     v-model="form.end_at"
                     type="datetime"
-                    :default-time="defaultTime"
                 />
                 <InputError :message="form.errors.end_at" />
             </el-form-item>
             <el-form-item label="Comment">
-                <el-input v-model="form.comment" type="textarea"/>
+                <el-input v-model="form.comment" type="textarea" class="focus-me" autosize />
                 <InputError :message="form.errors.comment" />
             </el-form-item>
         </el-form>

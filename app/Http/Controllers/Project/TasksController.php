@@ -20,7 +20,7 @@ class TasksController extends Controller
             'search' => $request->get('search'),
             'project' => $project,
             'tasks' => $project->tasks()
-                ->with(['latestActivity.activity.author'])
+                ->with(['latestActivity.author'])
                 ->withCount('comments')
                 ->when($request->has('search'), function ($query) use ($request) {
                     $query->where('subject', 'like', '%' . $request->get('search') . '%');

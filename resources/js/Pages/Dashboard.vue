@@ -2,6 +2,7 @@
 import {Head, Link} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import TasksTable from "@/Components/TasksTable.vue";
+import {CirclePlusFilled} from "@element-plus/icons-vue";
 
 defineOptions({layout: [Layout]})
 
@@ -48,16 +49,24 @@ const props = defineProps({
                         <el-button type="primary">View all tasks</el-button>
                     </Link>
                     &nbsp;
-                    <Link :href="route('project.tasks.create', {project: project.id})">
-                        <el-button type="success">Add task</el-button>
+                    <Link preserve-state :href="route('project.tasks.create', {project: project.id})">
+                        <el-button type="success">
+                            <el-icon>
+                                <CirclePlusFilled/>
+                            </el-icon> &nbsp; Add task
+                        </el-button>
                     </Link>
                 </div>
             </div>
             <div v-else>
                 <el-alert :closable="false" type="info">
                     No tasks found.
-                    <Link :href="route('project.tasks.create', {project: project.id})" style="margin-left: 5px;">
-                        <el-button type="success">Add task</el-button>
+                    <Link preserve-state :href="route('project.tasks.create', {project: project.id})" style="margin-left: 5px;">
+                        <el-button type="success" size="small">
+                            <el-icon>
+                                <CirclePlusFilled/>
+                            </el-icon> &nbsp; Add
+                        </el-button>
                     </Link>
                 </el-alert>
             </div>

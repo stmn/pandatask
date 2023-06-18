@@ -55,7 +55,7 @@ const activeTab = ref('general');
                         <InputError :message="form.errors.name" />
                     </el-form-item>
                     <el-form-item label="Description">
-                        <el-input v-model="form.description" type="textarea" />
+                        <el-input v-model="form.description" type="textarea" autosize />
                     </el-form-item>
                     <el-form-item label="Client">
                         <el-select v-model="form.client_id"  placeholder="Select">

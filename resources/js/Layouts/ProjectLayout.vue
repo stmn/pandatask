@@ -70,7 +70,7 @@ const onBack = () => {
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link :href="route('projects.edit', {project: project.id})">
+                <Link preserve-state :href="route('projects.edit', {project: project.id})">
                 <el-button type="primary" class="ml-2">
                     <el-icon>
                         <Edit/>
