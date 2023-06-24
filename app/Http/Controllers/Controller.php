@@ -9,4 +9,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    public function message(string $type, string $message): void
+    {
+        request()->session()->flash('message', [
+            'type' => $type,
+            'message' => $message
+        ]);
+    }
 }

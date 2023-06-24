@@ -57,7 +57,7 @@ const timeBetweenTwoDates = (date1, date2) => {
         <!--                <Timer :task="row.task" />-->
         <!--            </template>-->
         <!--        </el-table-column>-->
-        <el-table-column v-if="cols.includes('task_id') && !task" prop="task_id">
+        <el-table-column v-if="cols.includes('task_id') && !task" prop="task_id" min-width="200">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
@@ -65,7 +65,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </div>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User">
+        <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
             <template #default="{row}">
                 <User :user="row.author" :only-avatar="onlyAvatar"/>
             </template>
@@ -92,12 +92,12 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </template>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment">
+        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="100">
             <template #default="{row}">
                 {{ row.comment }}
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('actions')" prop="actions" label="Actions" width="90">
+        <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">
             <template #default="{row}">
                 <Link :preserve-state="true" :href="route('project.timesheets.edit', {project: row.project_id, time: row.id})">
                     <el-button type="primary" circle :icon="Edit"></el-button>

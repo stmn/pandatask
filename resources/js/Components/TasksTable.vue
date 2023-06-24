@@ -46,7 +46,7 @@ const auth = computed(() => page.props.auth)
 <!--                <Timer :task="row"/>-->
 <!--            </template>-->
 <!--        </el-table-column>-->
-        <el-table-column prop="subject">
+        <el-table-column prop="subject" min-width="300">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row" style="margin-right: 5px;"/>
@@ -60,7 +60,7 @@ const auth = computed(() => page.props.auth)
                 </div>
             </template>
         </el-table-column>
-        <el-table-column v-if="showProject" prop="project_id" label="Project">
+        <el-table-column v-if="showProject" prop="project_id" label="Project" min-width="140">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <el-avatar
@@ -72,17 +72,17 @@ const auth = computed(() => page.props.auth)
                 </div>
             </template>
         </el-table-column>
-        <el-table-column prop="status" label="Status" width="140">
+        <el-table-column prop="status" label="Status" width="120">
             <template #default="{row}">
                 <el-tag size="small">In progress</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="priority" label="Priority" width="140">
+        <el-table-column prop="priority" label="Priority" width="120">
             <template #default="{row}">
                 <el-tag size="small">Normal</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="latest_activity" label="Last activity">
+        <el-table-column prop="latest_activity" label="Last activity" min-width="260">
             <template #default="{row}">
                 <template v-if="row.latest_activity">
                     <div style="display: flex; align-items: center;">

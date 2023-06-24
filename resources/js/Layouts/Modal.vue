@@ -24,8 +24,9 @@ const {show, close, redirect} = useModal()
 <template>
     <el-dialog
         v-model="show"
-        width="50%"
+        width="80%"
         @close="handleClose"
+        draggable
     >
         <template #title>
             <slot name="title"/>

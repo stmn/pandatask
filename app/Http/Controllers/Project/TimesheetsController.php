@@ -18,6 +18,7 @@ class TimesheetsController extends Controller
     {
         return Inertia::render('Project/Timesheets', [
             'activeTab' => 'timesheets',
+            'projects' => Project::query()->get(),
             'project' => $project,
             'times' => $project->times()
                 ->with(['task', 'author'])
@@ -47,7 +48,7 @@ class TimesheetsController extends Controller
         $request->validate([
             'task' => 'required',
             'start_at' => 'required',
-            'end_at' => 'required',
+//            'end_at' => 'required',
         ]);
 //dd($request->all());
         $time = Time::query()->updateOrCreate([

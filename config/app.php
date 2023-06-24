@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        eloquentFilter\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -183,6 +184,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'EloquentFilter' => eloquentFilter\Facade\EloquentFilter::class,
     ])->toArray(),
 
 ];

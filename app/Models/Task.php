@@ -2,10 +2,43 @@
 
 namespace App\Models;
 
+use eloquentFilter\QueryFilter\ModelFilters\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Lorisleiva\LaravelSearchString\Concerns\SearchString;
 
 class Task extends Model
 {
+    use SearchString, Filterable;
+
+    private static $whiteListFilter = ['*'];
+
+    public function getAliasListFilter(): ?array
+    {
+        return [
+            'custom_fields->cost' => 'cost',
+        ];
+    }
+
+    protected $searchStringColumns = [
+        'subject' => ['searchable' => true],
+        'number' => ['searchable' => true],
+        'assignees' => ['relationship' => true],
+        'custom_fields->cost' => [
+            'key' => 'cost',
+        ],
+        'custom_fields->category' => [
+            'key' => 'category',
+        ],
+    ];
+
+    public function getSearchStringOptions()
+    {
+        return [
+            'columns' => $this->searchStringColumns ?? 'KURWA',
+            'keywords' => $this->searchStringKeywords ?? [],
+        ];
+    }
+
     protected $fillable = [
         'subject',
         'description',

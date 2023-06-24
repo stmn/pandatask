@@ -1,7 +1,6 @@
 <script setup>
-import {Link, router, usePage} from '@inertiajs/vue3'
+import {router, usePage} from '@inertiajs/vue3'
 import {computed, ref, watch} from "vue";
-import {HomeFilled, List, Menu} from "@element-plus/icons-vue";
 import {Modal} from 'momentum-modal'
 
 import {useDark, useToggle} from "@vueuse/core";
@@ -54,17 +53,15 @@ const handleSelect = ({index}, middleClick = false) => {
 </script>
 
 <template>
-    <el-container style="height: 100%;">
-        <Header />
+    <el-container style="min-height: 100%;">
+        <Header/>
         <el-main
             style="background: var(--el-bg-color); border-radius: 15px; margin: 0 30px;">
             <slot/>
         </el-main>
         <el-footer>
             <br>
-            <center>
-                <small>Copyright &copy; <a href="#">Pandatask</a> v0.1</small>
-            </center>
+            <small>All rights reserved &copy; <a href="#">Pandatask</a> v1.0</small>
         </el-footer>
     </el-container>
 
@@ -73,6 +70,26 @@ const handleSelect = ({index}, middleClick = false) => {
 </template>
 
 <style lang="scss">
+.el-main {
+    //min-height: 69vmax;
+}
+
+.el-header > ul > .el-menu-item {
+    & > a {
+        color: #fff;
+    }
+}
+
+.el-footer {
+    color: #fff;
+    text-align: center;
+
+    a {
+        font-weight: 800;
+        color: #fff;
+    }
+}
+
 //.el-menu-item {
 //    padding: 0;
 //}

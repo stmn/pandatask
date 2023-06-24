@@ -1,5 +1,5 @@
 <script setup>
-import {router, Link} from '@inertiajs/vue3'
+import {Link, router} from '@inertiajs/vue3'
 import Layout from "@/Layouts/Layout.vue";
 import {ref} from "vue";
 // import Edit from "@/Pages/Profile/Edit.vue";
@@ -17,6 +17,11 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    projects: {
+        type: Array,
+        required: false,
+        default: () => []
+    }
 });
 
 const activeTab = ref(props.activeTab);
@@ -36,21 +41,25 @@ const handleClick = (index) => {
 const onBack = () => {
     router.visit(route('projects'))
 }
+
+const projectValue = ref('')
+const projectsSelectRef = ref();
+const dropdownRef = ref();
+const onOpen = (visible) => {
+    if(visible) {
+        setTimeout(() => {
+            projectsSelectRef.value.focus()
+        }, 150)
+    }
+}
+const onProjectChange = (value) => {
+    dropdownRef.value?.handleClose();
+    router.visit(route('project.' + activeTab.value, {project: value.id}), {})
+}
 </script>
 
 <template>
     <el-page-header @back="onBack">
-        <!--        <template #breadcrumb>-->
-        <!--            <el-breadcrumb separator="/">-->
-        <!--                <el-breadcrumb-item :to="{ path: './page-header.html' }">-->
-        <!--                    homepage-->
-        <!--                </el-breadcrumb-item>-->
-        <!--                <el-breadcrumb-item-->
-        <!--                ><a href="./page-header.html">route 1</a></el-breadcrumb-item-->
-        <!--                >-->
-        <!--                <el-breadcrumb-item>route 2</el-breadcrumb-item>-->
-        <!--            </el-breadcrumb>-->
-        <!--        </template>-->
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-avatar
@@ -58,24 +67,42 @@ const onBack = () => {
                     style="margin-right: 10px;"
                     :src="project.avatar"
                 />
-                <span class="text-large font-600 mr-3"> {{ project.name }} </span>
-                <small
-                    class="text-sm mr-2"
-                    style="color: var(--el-text-color-regular)"
-                >
-                    <!--             ({{ activeTab }})-->
-                </small>
-                <!--                <el-tag>Default</el-tag>-->
+
+                <el-dropdown trigger="click" ref="dropdownRef" @visible-change="onOpen" style="color: inherit; font-size: inherit; line-height: inherit; cursor: pointer;">
+                    <span>{{ project.name }} <el-icon style="margin-top: 3px; margin-left: 5px; position: absolute; opacity: 0.4;"><arrow-down/></el-icon></span>
+
+                    <template #dropdown>
+                        <el-select ref="projectsSelectRef" :persistent="false" v-model="projectValue" @change="onProjectChange" value-key="id" filterable
+                                   placeholder="Select">
+                            <el-option
+                                v-for="item in projects"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item"
+                            >
+<!--                                <span style="float: left">{{ item.name }}</span>-->
+<!--                                <span-->
+<!--                                    style="-->
+<!--          float: right;-->
+<!--          color: var(&#45;&#45;el-text-color-secondary);-->
+<!--          font-size: 13px;-->
+<!--        "-->
+<!--                                >ID: {{ item.id }}</span-->
+<!--                                >-->
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-dropdown>
             </div>
         </template>
         <template #extra>
             <div class="flex items-center">
                 <Link preserve-state :href="route('projects.edit', {project: project.id})">
-                <el-button type="primary" class="ml-2">
-                    <el-icon>
-                        <Edit/>
-                    </el-icon> &nbsp; Edit
-                </el-button>
+                    <el-button type="primary" class="ml-2">
+                        <el-icon>
+                            <Edit/>
+                        </el-icon> &nbsp; Edit
+                    </el-button>
                 </Link>
             </div>
         </template>

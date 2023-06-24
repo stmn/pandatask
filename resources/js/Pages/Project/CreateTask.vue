@@ -72,10 +72,10 @@ onMounted(() => {
       <span class="dialog-footer">
         <el-button @click="close">Cancel</el-button>
 
-        <el-button type="primary" @click="createAndOpen">
+        <el-button type="success" @click="createAndOpen">
           Create and open
         </el-button>
-          <el-button type="primary" @click="create">
+          <el-button type="success" @click="create">
           Create
         </el-button>
       </span>

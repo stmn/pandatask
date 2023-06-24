@@ -1,9 +1,8 @@
 <script setup>
-import {usePage, Link} from '@inertiajs/vue3'
+import {Link, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 import Timer from "@/Components/Timer.vue";
 import {useNow} from "@vueuse/core";
-import {Edit} from "@element-plus/icons-vue";
 
 
 const page = usePage()
@@ -33,20 +32,24 @@ const time = computed(() => {
         </template>
         <template #stop>
             <el-popover
-                placement="top-end"
+                placement="left"
                 :width="200"
                 trigger="hover"
+                show-after="600"
             >
                 <template #default>
-                    <b>Task:</b> <Link
-                    :href="activeTime?.task.url">{{
-                        activeTime?.task?.subject
-                    }}</Link>
+                    <b>Task:</b>
+                    <Link
+                        :href="activeTime?.task.url">{{
+                            activeTime?.task?.subject
+                        }}
+                    </Link>
                     <br>
                     <b>Time:</b> {{ time }}
 
-                    <Link preserve-state :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
-                        <el-button type="success" size="small">Edit</el-button>
+                    <Link preserve-state
+                          :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
+                        <el-button type="primary" size="small">Edit</el-button>
                     </Link>
                 </template>
                 <template #reference>
@@ -64,35 +67,35 @@ const time = computed(() => {
 
 <style lang="scss">
 .timer-stop {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.2s ease-in-out;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 3px solid rgba(255, 255, 255, 0.8);
+    border: 3px solid var(--el-bg-color);
     cursor: pointer;
     color: #fff;
 
     height: 80px;
     width: 80px;
-    background: rgba(200, 40, 40, 1);
+    background: var(--el-color-danger-light-3);
     border-radius: 50%;
     text-align: center;
     position: fixed;
     top: 15px;
     right: 15px;
     z-index: 10;
-    font-size: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    //box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     &:hover {
-        background: rgba(255, 0, 0, 0.8);
-        border-color: rgba(255, 255, 255, 1);
+        background: var(--el-color-danger-light-5);
+        //border-color: rgba(255, 255, 255, 1);
     }
 
     &:active {
         //transition: all 0s ease-in-out;
         //background: rgba(255, 0, 0, 0.8);
-        border-color: rgba(200, 0, 0, 0.8);
+        //border-color: var(--el-color-primary-dark-2);
         //box-shadow: none;
     }
 }

@@ -53,11 +53,10 @@ const fullName = computed(() => {
                 :src="user.avatar"
             />
             <div><b>{{ user?.first_name }} {{ user?.last_name }}</b></div>
-            <div><small>Webdeveloper</small></div>
+            <div><small>{{ user.job_title }}</small></div>
             <div style="margin-top: 0px;">
-                <a :href="`mailto:${user.email}`">
-                    {{ user.email }}
-                    <!--                    <el-button size="small">E-mail</el-button>-->
+                <a :href="`mailto:${user.public_email || user.email}`">
+                    {{ user.public_email || user.email }}
                 </a>
             </div>
             <div v-if="user.active_time" style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">

@@ -45,7 +45,7 @@ const auth = computed(() => page.props.auth)
                     <Time class="el-timeline-item__timestamp" :time="event.created_at"/>
                 </div>
                 <el-card v-if="event?.comments?.length" style="margin-top: 15px;">
-                    {{ event.comments[0].content }}
+                    <div v-html="event.comments[0].content"></div>
 
 <!--                    {{ JSON.stringify(event.media) }}-->
 

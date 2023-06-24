@@ -104,6 +104,12 @@ const test = () => {
 
             <el-sub-menu index="2" :show-timeout="0" :teleported="false" style="margin-left: 20px;">
                 <template #title>Profile</template>
+                <el-menu-item index="profile">
+                    <Link :href="route('profile.edit')">Edit profile</Link>
+                </el-menu-item>
+                <el-menu-item index="admin">
+                    <Link :href="route('admin.users.index')">Admin</Link>
+                </el-menu-item>
                 <el-menu-item index="logout">
                     <Link method="post" :href="route('logout')">Logout</Link>
                 </el-menu-item>

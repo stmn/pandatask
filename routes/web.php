@@ -24,6 +24,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(callback: function () {
+    // Admin routes
+
+    Route::group(['as' => 'admin.', 'prefix' => '/admin/', 'middleware' => 'admin'], function () {
+        Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['show']);
+    });
+
     // Main routes
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

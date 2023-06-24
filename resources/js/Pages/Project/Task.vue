@@ -9,6 +9,10 @@ import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Timesheets from "@/Components/Timesheets.vue";
 import Activities from "@/Components/Activities.vue";
+import Editor from "@/Components/Editor.vue";
+
+// import { useEditor, EditorContent } from '@tiptap/vue-3'
+// import StarterKit from '@tiptap/starter-kit'
 
 defineOptions({layout: [Layout]})
 
@@ -66,6 +70,13 @@ const form = useForm({
     files: [],
     private: false,
 });
+
+// const editor = useEditor({
+//     content: 'ABC',
+//     extensions: [
+//         StarterKit,
+//     ],
+// })
 
 const detailsForm = useForm({
     assignees: props.task.assignees,
@@ -172,9 +183,19 @@ const canSubmit = computed(() => {
                                     Comment
                                 </el-badge>
                             </template>
+
+<!--                            <editor-content v-model="form.comment"-->
+<!--                                            :editor="editor"-->
+<!--                                            style="height: 100px; width: 100%;"-->
+<!--                                            class="editor-content" />-->
+
+                            <editor v-model="form.comment" />
+<br>
                             <el-form-item>
                                 <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="form.comment"
                                           placeholder="Add comment..."/>
+
+
                                 <div v-if="form.errors.comment" class="el-form-item__error"
                                      style="padding: 5px 0; position: relative;">
                                     {{ form.errors.comment }}
@@ -286,43 +307,30 @@ const canSubmit = computed(() => {
                 <el-backtop :right="100" :bottom="100"/>
             </el-main>
         </el-container>
-        <el-aside width="300px" class="" style="">
-            <div style="position: sticky;  top: 0;">
-                <div>
-                    <!--                    <span style="font-size: 14px; font-weight: 500;">-->
-                    <!--                        <el-icon>-->
-                    <!--                            <Operation/>-->
-                    <!--                        </el-icon> &nbsp;-->
-                    <!--                        Details-->
-                    <!--                    </span>-->
-                    <!--                    <hr>-->
-
-                    <el-divider content-position="left">Details</el-divider>
-
-                    <el-descriptions column="1" border>
-                        <el-descriptions-item label="Project">
-                            <Link :href="route('project.tasks', {project: task.project_id})">{{
-                                    task.project.name
-                                }}
-                            </Link>
-                        </el-descriptions-item>
-                        <el-descriptions-item label="Status">
-                            <el-tag size="small">School</el-tag>
-                        </el-descriptions-item>
-                        <el-descriptions-item label="Priority">
-                            <el-tag size="small">School</el-tag>
-                        </el-descriptions-item>
-                        <el-descriptions-item label="Assignees">
-                            <User v-for="user in task.assignees" :user="user" only-avatar/>
-                        </el-descriptions-item>
-                        <!--                        <el-descriptions-item label="Followers">-->
-                        <!--                            <User :user="task.author" only-avatar />-->
-                        <!--                        </el-descriptions-item>-->
-                    </el-descriptions>
-
-                </div>
-            </div>
-        </el-aside>
+<!--        <el-aside width="300px" class="" style="">-->
+<!--            <div style="position: sticky;  top: 0;">-->
+<!--                <div>-->
+<!--                    <el-divider content-position="left">Details</el-divider>-->
+<!--                    <el-descriptions column="1" border>-->
+<!--                        <el-descriptions-item label="Project">-->
+<!--                            <Link :href="route('project.tasks', {project: task.project_id})">{{-->
+<!--                                    task.project.name-->
+<!--                                }}-->
+<!--                            </Link>-->
+<!--                        </el-descriptions-item>-->
+<!--                        <el-descriptions-item label="Status">-->
+<!--                            <el-tag size="small">School</el-tag>-->
+<!--                        </el-descriptions-item>-->
+<!--                        <el-descriptions-item label="Priority">-->
+<!--                            <el-tag size="small">School</el-tag>-->
+<!--                        </el-descriptions-item>-->
+<!--                        <el-descriptions-item label="Assignees">-->
+<!--                            <User v-for="user in task.assignees" :user="user" only-avatar/>-->
+<!--                        </el-descriptions-item>-->
+<!--                    </el-descriptions>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </el-aside>-->
     </el-container>
 </template>
 

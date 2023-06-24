@@ -17,6 +17,7 @@ class ActivitiesController extends Controller
     {
         return Inertia::render('Project/Activities', [
             'activeTab' => 'activity',
+            'projects' => Project::query()->get(),
             'project' => $project,
             'activities' => $project->activities()->with([
                 'activity.author', 'task'

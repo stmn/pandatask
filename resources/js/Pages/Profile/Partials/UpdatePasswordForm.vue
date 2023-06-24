@@ -1,10 +1,9 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import {ref} from 'vue';
+import InputError from "@/Components/InputError.vue";
+import {ElMessage} from "element-plus";
+import {InfoFilled} from "@element-plus/icons-vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -18,7 +17,9 @@ const form = useForm({
 const updatePassword = () => {
     form.put(route('password.update'), {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            ElMessage.success('Password updated.')
+        },
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation');
@@ -35,66 +36,49 @@ const updatePassword = () => {
 
 <template>
     <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
+        <h3>Update Password</h3>
 
-            <p class="mt-1 text-sm text-gray-600">
-                Ensure your account is using a long, random password to stay secure.
-            </p>
-        </header>
+        <el-alert :show-icon="InfoFilled" type="warning" :closable="false">
+            Ensure your account is using a long, random password to stay secure.
+        </el-alert>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="current_password" value="Current Password" />
+        <br>
 
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
+        <el-card shadow="never">
+            <el-form @submit.prevent="updatePassword" label-position="left" label-width="180">
+                <el-form-item label="Current password">
+                    <el-input
+                        ref="currentPasswordInput"
+                        v-model="form.current_password"
+                        type="password"
+                        autocomplete="current-password"
+                    />
+                    <InputError :message="form.errors.current_password"/>
+                </el-form-item>
 
-                <InputError :message="form.errors.current_password" class="mt-2" />
-            </div>
+                <el-form-item label="New password">
+                    <el-input
+                        ref="passwordInput"
+                        v-model="form.password"
+                        type="password"
+                        autocomplete="new-password"
+                    />
+                    <InputError :message="form.errors.password"/>
+                </el-form-item>
 
-            <div>
-                <InputLabel for="password" value="New Password" />
+                <el-form-item label="Password confirmation">
+                    <el-input
+                        v-model="form.password_confirmation"
+                        type="password"
+                        autocomplete="new-password"
+                    />
+                    <InputError :message="form.errors.password_confirmation"/>
+                </el-form-item>
 
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password_confirmation" class="mt-2" />
-            </div>
-
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
-                </Transition>
-            </div>
-        </form>
+                <el-form-item>
+                    <el-button type="primary" @click="updatePassword" :disabled="form.processing">Save</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
     </section>
 </template>
