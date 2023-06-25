@@ -107,7 +107,7 @@ const test = () => {
                 <el-menu-item index="profile">
                     <Link :href="route('profile.edit')">Edit profile</Link>
                 </el-menu-item>
-                <el-menu-item index="admin">
+                <el-menu-item index="admin" v-if="group('admin')">
                     <Link :href="route('admin.users.index')">Admin</Link>
                 </el-menu-item>
                 <el-menu-item index="logout">
@@ -121,8 +121,6 @@ const test = () => {
                     </el-button>
                 </el-menu-item>
             </el-sub-menu>
-
-
         </el-menu>
     </el-header>
 </template>

@@ -38,10 +38,6 @@ const handleClick = (index) => {
     router.visit(route('project.' + activeTab.value, {project: props.project.id}), {})
 };
 
-const onBack = () => {
-    router.visit(route('projects'))
-}
-
 const projectValue = ref('')
 const projectsSelectRef = ref();
 const dropdownRef = ref();
@@ -59,7 +55,7 @@ const onProjectChange = (value) => {
 </script>
 
 <template>
-    <el-page-header @back="onBack">
+    <el-page-header @back="() => router.visit(route('projects'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-avatar

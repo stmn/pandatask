@@ -10,19 +10,16 @@ use Inertia\Response;
 
 class ActivitiesController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function index(Request $request, Project $project): Response
     {
         return Inertia::render('Project/Activities', [
             'activeTab' => 'activity',
             'projects' => Project::query()->get(),
             'project' => $project,
-            'activities' => $project->activities()->with([
-                'activity.author', 'task'
-            ])->latest()->paginate(10),
-//        'tasks' => \App\Models\Task::all(),
+            'activities' => $project->activities()
+                ->with(['task', 'user'])
+                ->latest()
+                ->paginate($this->perPage()),
         ]);
     }
 }

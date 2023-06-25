@@ -8,7 +8,6 @@ class UserQueryBuilder extends Builder
         'id',
         'first_name',
         'last_name',
-        'email',
         'public_email',
     ];
 }

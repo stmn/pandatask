@@ -45,6 +45,14 @@ const app = createInertiaApp({
             app.component(key, component)
         }
 
+        app.mixin({
+            methods: {
+                group: function (name) {
+                    return this.$page.props.auth.groups?.[name];
+                },
+            },
+        })
+
 
         return app.mount(el);
     },

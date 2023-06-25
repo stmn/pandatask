@@ -1,5 +1,5 @@
 <script setup>
-import {Head, Link, router, useForm} from '@inertiajs/vue3';
+import {Head, router, useForm} from '@inertiajs/vue3';
 import {computed, onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import {ElMessage} from "element-plus";
@@ -38,12 +38,6 @@ const props = defineProps({
         required: true
     },
 });
-
-// const activities = computed(() => props.activities);
-
-const onBack = () => {
-    router.visit(route('project.tasks', {project: props.project.id}))
-};
 
 const uploadRef = ref(null);
 
@@ -124,7 +118,7 @@ const canSubmit = computed(() => {
 <template>
     <Head :title="task.subject+ ' #'+task.number+' - '+project.name"/>
 
-    <el-page-header @back="onBack">
+    <el-page-header @back="() => router.visit(route('project.tasks', {project: props.project.id}))">
         <!--        <template #breadcrumb>-->
         <!--            <el-breadcrumb separator="/">-->
         <!--                <el-breadcrumb-item :to="{ path: './page-header.html' }">-->
@@ -184,13 +178,13 @@ const canSubmit = computed(() => {
                                 </el-badge>
                             </template>
 
-<!--                            <editor-content v-model="form.comment"-->
-<!--                                            :editor="editor"-->
-<!--                                            style="height: 100px; width: 100%;"-->
-<!--                                            class="editor-content" />-->
+                            <!--                            <editor-content v-model="form.comment"-->
+                            <!--                                            :editor="editor"-->
+                            <!--                                            style="height: 100px; width: 100%;"-->
+                            <!--                                            class="editor-content" />-->
 
-                            <editor v-model="form.comment" />
-<br>
+                            <editor v-model="form.comment"/>
+                            <br>
                             <el-form-item>
                                 <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="form.comment"
                                           placeholder="Add comment..."/>
@@ -269,12 +263,8 @@ const canSubmit = computed(() => {
                     <el-form-item>
                         <el-button type="success" @click="submit"
                                    :loading="form.processing"
-                                   :disabled="form.processing || !canSubmit">
-                            <el-icon>
-                                <Check/>
-                            </el-icon> &nbsp;
-                            Submit
-                        </el-button>
+                                   :disabled="form.processing || !canSubmit"
+                        :icon="Check">Submit</el-button>
                     </el-form-item>
                 </el-form>
 
@@ -307,30 +297,30 @@ const canSubmit = computed(() => {
                 <el-backtop :right="100" :bottom="100"/>
             </el-main>
         </el-container>
-<!--        <el-aside width="300px" class="" style="">-->
-<!--            <div style="position: sticky;  top: 0;">-->
-<!--                <div>-->
-<!--                    <el-divider content-position="left">Details</el-divider>-->
-<!--                    <el-descriptions column="1" border>-->
-<!--                        <el-descriptions-item label="Project">-->
-<!--                            <Link :href="route('project.tasks', {project: task.project_id})">{{-->
-<!--                                    task.project.name-->
-<!--                                }}-->
-<!--                            </Link>-->
-<!--                        </el-descriptions-item>-->
-<!--                        <el-descriptions-item label="Status">-->
-<!--                            <el-tag size="small">School</el-tag>-->
-<!--                        </el-descriptions-item>-->
-<!--                        <el-descriptions-item label="Priority">-->
-<!--                            <el-tag size="small">School</el-tag>-->
-<!--                        </el-descriptions-item>-->
-<!--                        <el-descriptions-item label="Assignees">-->
-<!--                            <User v-for="user in task.assignees" :user="user" only-avatar/>-->
-<!--                        </el-descriptions-item>-->
-<!--                    </el-descriptions>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </el-aside>-->
+        <!--        <el-aside width="300px" class="" style="">-->
+        <!--            <div style="position: sticky;  top: 0;">-->
+        <!--                <div>-->
+        <!--                    <el-divider content-position="left">Details</el-divider>-->
+        <!--                    <el-descriptions column="1" border>-->
+        <!--                        <el-descriptions-item label="Project">-->
+        <!--                            <Link :href="route('project.tasks', {project: task.project_id})">{{-->
+        <!--                                    task.project.name-->
+        <!--                                }}-->
+        <!--                            </Link>-->
+        <!--                        </el-descriptions-item>-->
+        <!--                        <el-descriptions-item label="Status">-->
+        <!--                            <el-tag size="small">School</el-tag>-->
+        <!--                        </el-descriptions-item>-->
+        <!--                        <el-descriptions-item label="Priority">-->
+        <!--                            <el-tag size="small">School</el-tag>-->
+        <!--                        </el-descriptions-item>-->
+        <!--                        <el-descriptions-item label="Assignees">-->
+        <!--                            <User v-for="user in task.assignees" :user="user" only-avatar/>-->
+        <!--                        </el-descriptions-item>-->
+        <!--                    </el-descriptions>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </el-aside>-->
     </el-container>
 </template>
 

@@ -27,7 +27,7 @@ class TimesheetsController extends Controller
 //                $query->where('subject', 'like', '%'.$request->get('search').'%');
 //            })
                 ->orderByDesc('id')
-                ->paginate(20)
+                ->paginate($this->perPage())
         ]);
     }
 

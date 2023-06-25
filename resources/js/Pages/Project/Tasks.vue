@@ -6,6 +6,7 @@ import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import {CirclePlusFilled, Search} from "@element-plus/icons-vue";
 import {watchDebounced} from "@vueuse/core";
 import TasksTable from "@/Components/TasksTable.vue";
+import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
@@ -40,15 +41,7 @@ const handleClick = (index) => {
 
 const tableData = props.tasks;
 
-const search = ref(props.search);
-
-watchDebounced(
-    search,
-    () => {
-        router.replace(route('project.tasks', {project: props.project.id, search: search.value || null}))
-    },
-    {debounce: 200, maxWait: 500},
-)
+const {query} = useList();
 
 const predefinedFilters = [
     {
@@ -66,53 +59,13 @@ const predefinedFilters = [
 ];
 
 const changeFilter = (value) => {
-    search.value = value;
+    query.search = value;
 };
 
 const filters = [];
 
 const checkboxGroup1 = ref(['Shanghai'])
 const cities = ['Not started', 'In Progress', 'Done']
-
-
-// function convertQueryToString(query) {
-//     const params = new URLSearchParams(query);
-//
-//     let result = '';
-//
-//     for (const [key, value] of params.entries()) {
-//         const [field, fieldKey] = key.split('[');
-//         const fieldValue = fieldKey ? `${field}:${value}` : `${key}:${value}`;
-//         result += result ? ` ${fieldValue}` : fieldValue;
-//     }
-//
-//     return result;
-// }
-
-// Funkcja do zamiany czytelnego stringa na zapytanie
-// function convertStringToQuery(string) {
-//     const pairs = string.split(' ');
-//
-//     const params = new URLSearchParams();
-//
-//     pairs.forEach((pair) => {
-//         const [key, value] = pair.split(':');
-//         const [field, fieldKey] = key.split('[');
-//
-//         const paramKey = fieldKey ? `${field}[${fieldKey}` : key;
-//         params.append(paramKey, value);
-//     });
-//
-//     return params.toString();
-// }
-
-// setInterval(() => {
-//     try {
-//         console.log(convertStringToQuery('assignees:test category:1,2,3 status:1,2,3'))
-//     } catch (e) {
-//
-//     }
-// }, 1000)
 </script>
 
 <template>
@@ -137,7 +90,7 @@ const cities = ['Not started', 'In Progress', 'Done']
     <el-input
         :prefix-icon="Search"
         :clearable="true"
-        v-model="search"
+        v-model="query.search"
         placeholder="Search..."
         size="large"
         class="w-full"></el-input>
@@ -147,32 +100,28 @@ const cities = ['Not started', 'In Progress', 'Done']
         active-text="Advanced search"
     />
 
-    <br><br>
-    <el-config-provider size="small">
-    <el-card>
-        <el-checkbox-group v-model="checkboxGroup1">
-            <el-checkbox-button v-for="city in cities" :key="city" :label="city">
-                {{ city }}
-            </el-checkbox-button>
-        </el-checkbox-group>
-        <br>
-        <el-input
-            :clearable="true"
-            placeholder="Cost"></el-input>
-    </el-card>
-    </el-config-provider>
+<!--    <br><br>-->
+<!--    <el-config-provider size="small">-->
+<!--    <el-card>-->
+<!--        <el-checkbox-group v-model="checkboxGroup1">-->
+<!--            <el-checkbox-button v-for="city in cities" :key="city" :label="city">-->
+<!--                {{ city }}-->
+<!--            </el-checkbox-button>-->
+<!--        </el-checkbox-group>-->
+<!--        <br>-->
+<!--        <el-input-->
+<!--            :clearable="true"-->
+<!--            placeholder="Cost"></el-input>-->
+<!--    </el-card>-->
+<!--    </el-config-provider>-->
 
     <br><br>
 
     <Link preserve-state :href="route('project.tasks.create', {project: project.id})">
-        <el-button type="success">
-            <el-icon>
-                <CirclePlusFilled/>
-            </el-icon> &nbsp; Add
-        </el-button>
+        <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
     </Link>
 
-    <TasksTable :tasks="tasks.data"/>
+    <TasksTable :tasks="tasks"/>
 </template>
 
 <style>

@@ -43,9 +43,7 @@ const handleClick = (index) => {
     <Head :title="project.name + ' - Timesheets'"/>
 
     <Link preserve-state :href="route('project.timesheets.create', {project: project.id})">
-        <el-button type="success"><el-icon>
-            <CirclePlusFilled/>
-        </el-icon> &nbsp; Add</el-button>
+        <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
     </Link>
 
     <Timesheets :times="times" />

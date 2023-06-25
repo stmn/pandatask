@@ -19,14 +19,17 @@ class ProjectsController extends Controller
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
             'projects' => Project::query()
+                ->withMax('latestActivity', 'created_at')
                 ->with([
                     'latestActivity.activity.author',
-                    'latestActivity.task'
+                    'latestActivity.task',
+                    'latestActivity.user'
                 ])
                 ->when($request->has('search'), function ($query) use ($request) {
                     $query->where('name', 'like', '%' . $request->get('search') . '%');
                 })
-                ->paginate(6),
+                ->orderByDesc('latest_activity_max_created_at')
+                ->paginate($this->perPage()),
         ]);
     }
 

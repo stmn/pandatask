@@ -1,14 +1,12 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
-import {ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import {watchDebounced} from "@vueuse/core";
-import {CirclePlusFilled, Menu, Search} from '@element-plus/icons-vue'
+import {CirclePlusFilled, List, Menu, Search} from '@element-plus/icons-vue'
 import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Activity from "@/Components/Activity.vue";
-
+import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
@@ -24,27 +22,13 @@ const props = defineProps({
     },
 });
 
-const onBack = () => {
-    router.visit(route('dashboard'))
-}
-
-const loading = ref(false);
-
-const search = ref(props.search);
-
-watchDebounced(
-    search,
-    () => {
-        router.replace(route('projects', {search: search.value}))
-    },
-    {debounce: 200, maxWait: 500},
-)
+const {query} = useList();
 </script>
 
 <template>
     <Head title="Projects"/>
 
-    <el-page-header @back="onBack">
+    <el-page-header @back="() => router.visit(route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-icon style="margin-right: 5px;">
@@ -56,11 +40,7 @@ watchDebounced(
         <template #extra>
             <div class="flex items-center">
                 <Link preserve-state :href="route('projects.create')">
-                    <el-button type="success" class="ml-2">
-                        <el-icon>
-                            <CirclePlusFilled/>
-                        </el-icon> &nbsp; Create
-                    </el-button>
+                    <el-button type="success" :icon="CirclePlusFilled">Create</el-button>
                 </Link>
             </div>
         </template>
@@ -71,15 +51,15 @@ watchDebounced(
     <el-input
         :prefix-icon="Search"
         :clearable="true"
-        v-model="search"
-        placeholder="Search..."
+        v-model="query.search"
+        placeholder="Type to search"
         size="large"
         autofocus
         class="w-full"></el-input>
 
     <br><br>
 
-    <div v-loading="loading">
+    <div>
         <div v-if="projects.data.length > 0" v-for="item in projects.data" :key="item.id">
             <el-card class="box-card project-card">
                 <template #header>
@@ -100,7 +80,7 @@ watchDebounced(
                             <template v-if="item.latest_activity">
                                 <el-divider direction="vertical"></el-divider>
                                 <div class="last-activity">
-                                    <User :user="item.latest_activity.author"/>
+                                    <User :user="item.latest_activity.user"/>
                                     <Activity :activity="item.latest_activity"/>
                                     <Time :time="item.latest_activity.created_at"/>
                                 </div>
@@ -109,19 +89,11 @@ watchDebounced(
                         </div>
                         <div>
                             <Link :href="route('project.tasks', {project: item.id})">
-                                <el-button class="button" type="primary">
-                                    <el-icon>
-                                        <List/>
-                                    </el-icon> &nbsp; Tasks
-                                </el-button>
+                                <el-button class="button" type="primary" :icon="List">Tasks</el-button>
                             </Link>
                             &nbsp;
                             <Link preserve-state :href="route('project.tasks.create', {project: item.id})">
-                                <el-button class="button" type="success">
-                                    <el-icon>
-                                        <CirclePlusFilled/>
-                                    </el-icon> &nbsp; Add task
-                                </el-button>
+                                <el-button class="button" type="success" :icon="CirclePlusFilled">Add task</el-button>
                             </Link>
                         </div>
                     </div>
@@ -139,9 +111,8 @@ watchDebounced(
             <el-empty description="Projects not found"/>
         </div>
     </div>
-    <br>
 
-    <pagination class="mt-6" :data="projects"/>
+    <pagination :data="projects"/>
 </template>
 
 <style lang="scss" scoped>

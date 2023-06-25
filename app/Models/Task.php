@@ -2,42 +2,28 @@
 
 namespace App\Models;
 
-use eloquentFilter\QueryFilter\ModelFilters\Filterable;
+use App\QueryBuilders\ActivityQueryBuilder;
+use App\QueryBuilders\CommentQueryBuilder;
+use App\QueryBuilders\ProjectQueryBuilder;
+use App\QueryBuilders\TaskQueryBuilder;
+use App\QueryBuilders\TimeQueryBuilder;
+use App\QueryBuilders\UserQueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Lorisleiva\LaravelSearchString\Concerns\SearchString;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @mixin IdeHelperTask
+ */
 class Task extends Model
 {
-    use SearchString, Filterable;
-
-    private static $whiteListFilter = ['*'];
-
-    public function getAliasListFilter(): ?array
-    {
-        return [
-            'custom_fields->cost' => 'cost',
-        ];
-    }
-
-    protected $searchStringColumns = [
-        'subject' => ['searchable' => true],
-        'number' => ['searchable' => true],
-        'assignees' => ['relationship' => true],
-        'custom_fields->cost' => [
-            'key' => 'cost',
-        ],
-        'custom_fields->category' => [
-            'key' => 'category',
-        ],
-    ];
-
-    public function getSearchStringOptions()
-    {
-        return [
-            'columns' => $this->searchStringColumns ?? 'KURWA',
-            'keywords' => $this->searchStringKeywords ?? [],
-        ];
-    }
+    use SoftDeletes;
 
     protected $fillable = [
         'subject',
@@ -51,43 +37,64 @@ class Task extends Model
         'url',
     ];
 
-    public function project()
+    protected static function booted(): void
+    {
+        static::creating(function (Task $task) {
+            $task->number = intval(Task::whereProjectId($task->project_id)
+                    ->orderBy('number', 'desc')
+                    ->first()?->number) + 1;
+        });
+    }
+
+    public static function query(): Builder|TaskQueryBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): TaskQueryBuilder
+    {
+        return new TaskQueryBuilder($query);
+    }
+
+    public function project(): BelongsTo|ProjectQueryBuilder
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function assignees()
+    public function assignees(): BelongsToMany|UserQueryBuilder
     {
         return $this->belongsToMany(User::class, 'task_users');
     }
 
-    public function times()
+    public function times(): HasMany|TimeQueryBuilder
     {
         return $this->hasMany(Time::class);
     }
 
-    public function author()
+    public function author(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    public function comments(): HasManyThrough|CommentQueryBuilder
     {
         return $this->hasManyThrough(Comment::class, Activity::class);
     }
 
-    public function activities()
+    public function activities(): HasMany|ActivityQueryBuilder
     {
         return $this->hasMany(Activity::class);
     }
 
-    public function latestActivity()
+    public function latestActivity(): HasOne|ActivityQueryBuilder
     {
         return $this->hasOne(Activity::class)->latest();
     }
 
-    public function getUrlAttribute()
+    protected function url(): Attribute
     {
-        return route('project.task', ['project' => $this->project_id, 'task' => $this]);
+        return Attribute::make(
+            get: fn() => route('project.task', ['project' => $this->project_id, 'task' => $this])
+        );
     }
 }

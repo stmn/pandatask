@@ -17,17 +17,19 @@ class DashboardController extends Controller
         $projects = Project::query()
             ->leftJoin('activities', 'projects.id', '=', 'activities.project_id')
             ->selectRaw('projects.*, MAX(activities.created_at) as latest_activity_at')
-            ->with([
-                'tasks' => function ($query) {
-                    $query->withCount('comments')
-                        ->latest()
-                        ->limit(5);
-                },
-                'tasks.latestActivity.user',
-            ])
             ->groupBy('projects.id')
             ->orderByDesc('latest_activity_at')
             ->get();
+
+        $projects->each->load([
+            'tasks' => function ($query) {
+                return $query->withCount('comments')
+                    ->latest('latest_activity_max_created_at')
+                    ->withMax('latestActivity', 'created_at')
+                    ->limit(5);
+            },
+            'tasks.latestActivity.user',
+        ]);
 
 
         return Inertia::render('Dashboard', [

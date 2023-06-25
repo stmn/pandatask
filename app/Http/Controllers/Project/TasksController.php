@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,33 +15,24 @@ class TasksController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-//        $query = Task::query()->usingSearchString("'WTF'");
-//        dump(
-//            $query->toSql(),
-//        );
-//        dd($query->get()->count());
-
         return Inertia::render('Project/Tasks', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
             'projects' => Project::query()->get(),
             'project' => $project,
             'tasks' => $project->tasks()
-                ->filter()
-//                    ->usingSearchString($request->get('search'))//->dd()
-//                ->usingSearchString()
-                ->with(['latestActivity.author'])
+                ->search($request->get('search'))
+                ->sortByString($request->get('sort'))
+                ->latest('latest_activity_max_created_at')
+                ->withMax('latestActivity', 'created_at')
+                ->with(['latestActivity.user'])
                 ->withCount('comments')
-                ->when($request->has('search'), function ($query) use ($request) {
-                    $query->where('subject', 'like', '%' . $request->get('search') . '%')
-                          ->orWhere('number', 'like', $request->get('search') . '%');
-                })
-//                ->latest()
-                ->paginate(5)
+                ->paginate($this->perPage())
         ]);
     }
 
-    public function create(\App\Models\Project $project, \Illuminate\Http\Request $request){
+    public function create(\App\Models\Project $project, \Illuminate\Http\Request $request)
+    {
         return Inertia::modal('Project/CreateTask', [
             'project' => $project,
             'times' => $project->tasks()
@@ -55,7 +45,8 @@ class TasksController extends Controller
             ->baseRoute('project.tasks', ['project' => $project]);
     }
 
-    public function store(\App\Models\Project $project, \Illuminate\Http\Request $request){
+    public function store(\App\Models\Project $project, \Illuminate\Http\Request $request)
+    {
         $task = $project->tasks()->create([
             'subject' => $request->subject,
             'description' => $request->description,

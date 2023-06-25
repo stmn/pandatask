@@ -10,11 +10,22 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    /**
+     * Flash a message to the session.
+     * @param string $type
+     * @param string $message
+     * @return void
+     */
     public function message(string $type, string $message): void
     {
         request()->session()->flash('message', [
             'type' => $type,
             'message' => $message
         ]);
+    }
+
+    public function perPage(): int
+    {
+        return request()->per_page ?? 25;
     }
 }

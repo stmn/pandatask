@@ -2,8 +2,15 @@
 
 namespace App\Models;
 
+use App\QueryBuilders\TaskQueryBuilder;
+use App\QueryBuilders\UserQueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperTime
+ */
 class Time extends Model
 {
     protected $fillable = [
@@ -21,12 +28,22 @@ class Time extends Model
         'end_at' => 'datetime',
     ];
 
-    public function task()
+    public static function query(): Builder|TaskQueryBuilder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): TaskQueryBuilder
+    {
+        return new TaskQueryBuilder($query);
+    }
+
+    public function task(): BelongsTo|TaskQueryBuilder
     {
         return $this->belongsTo(Task::class);
     }
 
-    public function author()
+    public function author(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class);
     }

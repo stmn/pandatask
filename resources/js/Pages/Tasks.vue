@@ -1,13 +1,11 @@
 <script setup>
-import {Head, Link, router} from '@inertiajs/vue3';
-import {ref} from "vue";
+import {Head, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
-import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import {List, Menu, Search} from "@element-plus/icons-vue";
+import {List, Search} from "@element-plus/icons-vue";
 import TasksTable from "@/Components/TasksTable.vue";
-import {watchDebounced} from "@vueuse/core";
+import useList from "@/Composables/useList.js";
 
-defineOptions({ layout: [Layout] })
+defineOptions({layout: [Layout]})
 
 const props = defineProps({
     tasks: {
@@ -20,26 +18,18 @@ const props = defineProps({
     },
 });
 
-const search = ref(props.search);
-
-watchDebounced(
-    search,
-    () => {
-        router.replace(route('tasks', {search: search.value}))
-    },
-    {debounce: 200, maxWait: 500},
-)
+const {query} = useList();
 </script>
 
 <template>
     <Head title="Tasks"/>
 
-    <el-page-header @back="onBack">
+    <el-page-header @back="() => router.visit(route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-icon style="margin-right: 5px;">
-                        <List/>
-                    </el-icon>
+                    <List/>
+                </el-icon>
                 <span>Tasks</span>
             </div>
         </template>
@@ -50,14 +40,14 @@ watchDebounced(
     <el-input
         :prefix-icon="Search"
         :clearable="true"
-        v-model="search"
+        v-model="query.search"
         placeholder="Search..."
         size="large"
         class="w-full"></el-input>
 
     <br><br>
 
-    <TasksTable :tasks="tasks" />
+    <TasksTable :tasks="tasks"/>
 </template>
 
 <style>

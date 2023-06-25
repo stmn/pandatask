@@ -21,15 +21,13 @@ class OverviewController extends Controller
             'activeTab' => 'overview',
             'project' => $project,
             'projects' => Project::query()->get(),
-            'activities' => $project->activities()->with([
-                'activity.author', 'task'
-            ])->latest()->limit(10)->get(),
+            'activities' => $project->activities()
+                ->with(['task', 'user'])
+                ->latest()
+                ->limit(10)
+                ->get(),
             'times' => $project->times()
                 ->with(['task', 'author'])
-//            ->with(['latestActivity.activity.author'])
-//            ->when($request->has('search'), function ($query) use ($request) {
-//                $query->where('subject', 'like', '%'.$request->get('search').'%');
-//            })
                 ->latest()
                 ->limit(10)
                 ->get()

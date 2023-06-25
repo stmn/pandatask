@@ -3,6 +3,20 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Activity;
+use App\Models\Comment;
+use App\Models\Group;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\Time;
+use App\Models\User;
+use App\Policies\ActivityPolicy;
+use App\Policies\CommentPolicy;
+use App\Policies\GroupPolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\TaskPolicy;
+use App\Policies\TimePolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +27,13 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        Activity::class => ActivityPolicy::class,
+        Comment::class => CommentPolicy::class,
+        Group::class => GroupPolicy::class,
+        Project::class => ProjectPolicy::class,
+        Task::class => TaskPolicy::class,
+        Time::class => TimePolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
