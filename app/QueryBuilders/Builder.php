@@ -9,6 +9,8 @@ class Builder extends EloquentBuilder
 
     protected $searchFields = [];
 
+//    protected $defaultSort = '-id';
+
     public function search(?string $phrase = null)
     {
         if ($phrase) {

@@ -21,19 +21,14 @@ class TaskController extends Controller
         return Inertia::render('Project/Task', [
             'project' => $project,
             'task' => $task->load('author', 'project', 'assignees'),
-            'activities' => $task->activities()->with([
-                'user',
-                'comments',
-                'media',
-            ])->latest()->get(),
+            'activities' => $task->activities()
+                ->with(['user', 'comments', 'media'])
+                ->latest()
+                ->get(),
             'users' => $project->members()->get(),
             'times' => $task->times()
                 ->with(['author'])
-//            ->with(['latestActivity.activity.author'])
-//            ->when($request->has('search'), function ($query) use ($request) {
-//                $query->where('subject', 'like', '%'.$request->get('search').'%');
-//            })
-                ->orderByDesc('id')
+                ->latest()
                 ->get()
         ]);
     }

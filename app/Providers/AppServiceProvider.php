@@ -20,8 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Request::macro('ids', function ($field) {
-            return collect($this->input($field))->map(fn ($row) => $row['id'])->toArray();
+        Request::macro('ids', function (string $field): array {
+            return collect($this->input($field))->map(fn($row) => $row['id'])->toArray();
         });
     }
 }

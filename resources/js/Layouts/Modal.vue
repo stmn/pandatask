@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import {useModal} from "momentum-modal"
 
-// const dialogVisible = ref(true)
+const props = defineProps({
+    width: {
+        type: String,
+        default: '80%',
+    },
+})
 
 const handleClose = (done: () => void) => {
     redirect();
@@ -24,7 +29,7 @@ const {show, close, redirect} = useModal()
 <template>
     <el-dialog
         v-model="show"
-        width="80%"
+       :width="width"
         @close="handleClose"
         draggable
     >

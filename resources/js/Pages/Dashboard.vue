@@ -50,11 +50,7 @@ const props = defineProps({
                     </Link>
                     &nbsp;
                     <Link preserve-state :href="route('project.tasks.create', {project: project.id})">
-                        <el-button type="success">
-                            <el-icon>
-                                <CirclePlusFilled/>
-                            </el-icon> &nbsp; Add task
-                        </el-button>
+                        <el-button type="success" :icon="CirclePlusFilled">Add task</el-button>
                     </Link>
                 </div>
             </div>
@@ -62,11 +58,7 @@ const props = defineProps({
                 <el-alert :closable="false" type="info">
                     No tasks found.
                     <Link preserve-state :href="route('project.tasks.create', {project: project.id})" style="margin-left: 5px;">
-                        <el-button type="success" size="small">
-                            <el-icon>
-                                <CirclePlusFilled/>
-                            </el-icon> &nbsp; Add
-                        </el-button>
+                        <el-button type="success" size="small" :icon="CirclePlusFilled">Add</el-button>
                     </Link>
                 </el-alert>
             </div>

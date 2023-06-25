@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {useForm} from "@inertiajs/vue3"
 import Modal from "../../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import InputError from "@/Components/InputError.vue";
+import useAdminForm from "@/Composables/useAdminForm.js";
 
 const props = defineProps({
     user: {
@@ -15,33 +15,24 @@ const props = defineProps({
 
 const {close, redirect} = useModal()
 
-const isEdit = props.user?.id;
-
-const initialValues = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    job_title: '',
-    password: '',
-    confirm_password: '',
-    groups: [],
-};
-
-const form = useForm({
-    ...initialValues,
-    ...(props.user || {}),
+const {form, save, isEdit} = useAdminForm({
+    values: {
+        ...{
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone: '',
+            job_title: '',
+            password: '',
+            confirm_password: '',
+            groups: [],
+        },
+        ...props.user
+    },
+    singular: 'user',
+    plural: 'users',
+    onSuccess: redirect,
 });
-
-const save = () => {
-    const routeName = isEdit ? 'update' : 'store';
-    const routeParams = { user: props.user?.id };
-    const onSuccess = () => redirect();
-
-    form.submit(isEdit ? 'patch' : 'post', route(`admin.users.${routeName}`, routeParams), { onSuccess });
-};
-
-console.log(props.groups)
 </script>
 
 <template>
@@ -80,10 +71,6 @@ console.log(props.groups)
                 <el-row :gutter="10">
                     <el-col :sm="12" :lg="12">
                         <el-form-item label="Groups" :class="{'is-error':form.errors.groups}">
-                            {{ JSON.stringify(form.groups) }}
-<hr>
-                            {{ JSON.stringify(groups) }}
-
                             <el-select v-model="form.groups"
                                        value-key="id"
                                        filterable multiple
@@ -95,8 +82,7 @@ console.log(props.groups)
                                     :key="item"
                                     :label="item.name"
                                     :value="item"
-                                >
-                                </el-option>
+                                ></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -111,13 +97,13 @@ console.log(props.groups)
                 <el-row :gutter="10">
                     <el-col :sm="12" :lg="12">
                         <el-form-item label="Password" :class="{'is-error':form.errors.password}">
-                            <el-input v-model="form.password"/>
+                            <el-input v-model="form.password" type="password"/>
                             <InputError :message="form.errors.password"/>
                         </el-form-item>
                     </el-col>
                     <el-col :sm="12" :lg="12">
                         <el-form-item label="Confirm password" :class="{'is-error':form.errors.confirm_password}">
-                            <el-input v-model="form.confirm_password"/>
+                            <el-input v-model="form.confirm_password" type="password"/>
                             <InputError :message="form.errors.confirm_password"/>
                         </el-form-item>
                     </el-col>

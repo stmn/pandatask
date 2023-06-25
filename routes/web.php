@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\GroupsController;
+use App\Http\Controllers\Admin\PrioritiesController;
+use App\Http\Controllers\Admin\StatusesController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Project\ActivitiesController;
@@ -27,7 +31,13 @@ Route::middleware('auth')->group(callback: function () {
     // Admin routes
 
     Route::group(['as' => 'admin.', 'prefix' => '/admin/', 'middleware' => 'admin'], function () {
-        Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['show']);
+        Route::resource('users', UsersController::class)->except(['show']);
+        Route::resource('groups', GroupsController::class)->except(['show']);
+        Route::resource('priorities', PrioritiesController::class)->except(['show']);
+        Route::resource('statuses', StatusesController::class)->except(['show']);
+
+
+        Route::redirect('/', route('admin.users.index'));
     });
 
     // Main routes

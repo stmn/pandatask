@@ -18,7 +18,9 @@ class UsersController extends AdminController
             ->search($request->search)
             ->sortByString($request->sort)
             ->with('groups')
-            ->get();
+            ->paginate($this->perPage());
+
+        $items->append('can');
 
         return Inertia::render('Admin/Users/List', [
             'items' => $items,
@@ -64,12 +66,12 @@ class UsersController extends AdminController
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6',
-            'confirm_password' => 'nullable|same:password',
+            'password' => (!$user->exists?'required':'nullable').'|min:6',
+            'confirm_password' => (!$user->exists?'required':'nullable').'|same:password',
             'groups' => 'nullable|array',
         ]);
 
-        $user->fill(request()->all());
+        $user->fill(request()->except('password'));
 
         if (request()->filled('password')) {
             $user->password = Hash::make(request()->password);

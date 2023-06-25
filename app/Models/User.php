@@ -3,9 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\QueryBuilders\GroupQueryBuilder;
+use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,35 +20,12 @@ use Laravolt\Avatar\Avatar;
 
 //use Lorisleiva\LaravelSearchString\Concerns\SearchString;
 
+/**
+ * @mixin IdeHelperUser
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Searchable;
-
-//    use SearchString;
-
-    public function toSearchableArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'first_name' => $this->first_name,
-        ];
-    }
-
-    protected $searchStringColumns = [
-        'id' => ['searchable' => true],
-        'first_name' => ['searchable' => true],
-        'last_name' => ['searchable' => true],
-//        'number' => ['searchable' => true],
-//        'assignees' => ['searchable' => true],
-    ];
-
-    public function getSearchStringOptions()
-    {
-        return [
-            'columns' => $this->searchStringColumns ?? 'KURWA',
-            'keywords' => $this->searchStringKeywords ?? [],
-        ];
-    }
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'first_name',
@@ -80,43 +63,56 @@ class User extends Authenticatable
         return new UserQueryBuilder($query);
     }
 
-    public function getAvatarAttribute()
-    {
-        if (!$this->full_name) {
-            return null;
-        }
-
-        return (new Avatar([
-            ...config('laravolt.avatar'),
-            ...['chars' => 2]
-        ]))->create($this->full_name)->toBase64();
-    }
-
-    public function getFullNameAttribute()
-    {
-        return trim($this->first_name . ' ' . $this->last_name);
-    }
-
-    public function times()
+    public function times(): HasMany|TimeQueryBuilder
     {
         return $this->hasMany(Time::class, 'author_id');
     }
 
-    public function groups()
+    public function groups(): BelongsToMany|GroupQueryBuilder
     {
         return $this->belongsToMany(Group::class, 'group_users');
-    }
-
-    public function getActiveTimeAttribute()
-    {
-        return $this->times()
-            ->with('task.project')
-            ->whereNull('end_at')
-            ->first();
     }
 
     public function isAdmin(): bool
     {
         return $this->groups()->where('id', 1)->exists();
+    }
+
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (!$this->full_name) {
+                    return null;
+                }
+
+                return (new Avatar([
+                    ...config('laravolt.avatar'),
+                    ...['chars' => 2]
+                ]))->create($this->full_name)->toBase64();
+            },
+        );
+    }
+
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => trim($this->first_name . ' ' . $this->last_name)
+        );
+    }
+
+    protected function activeTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->times()
+                ->with('task.project')
+                ->whereNull('end_at')
+                ->first(),
+        );
+    }
+
+    protected function getCanAttribute()
+    {
+        return [];
     }
 }

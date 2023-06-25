@@ -70,12 +70,12 @@ const timeBetweenTwoDates = (date1, date2) => {
                 <User :user="row.author" :only-avatar="onlyAvatar"/>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="140">
+        <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">
             <template #default="{row}">
                 <Time :time="row.start_at" force-type="date"/>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="140">
+        <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="150">
             <template #default="{row}">
                 <Time v-if="row.end_at" :time="row.end_at" force-type="date"/>
                 <span v-else>

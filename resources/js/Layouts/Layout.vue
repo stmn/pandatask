@@ -27,7 +27,8 @@ watch(message, (message) => {
     if (message) {
         ElMessage({
             message: message.message,
-            type: message.type
+            type: message.type,
+            position: 'bottom-right',
         });
     }
 });
@@ -37,19 +38,6 @@ const activeIndex = ref(props.activeIndex);
 router.on('success', (event) => {
     activeIndex.value = event.detail.page.props.activeIndex;
 })
-
-const handleSelect = ({index}, middleClick = false) => {
-    // const openInNewTab = middleClick || event.metaKey;
-    // const url = route(index);
-    //
-    //
-    // if (openInNewTab) {
-    //     const win = window.open(url, '_blank');
-    //     win.focus();
-    // } else {
-    //     router.visit(url);
-    // }
-}
 </script>
 
 <template>
