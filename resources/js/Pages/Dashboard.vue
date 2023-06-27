@@ -1,5 +1,5 @@
 <script setup>
-import {Head, Link} from '@inertiajs/vue3';
+import {Head, Link, usePage} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import TasksTable from "@/Components/TasksTable.vue";
 import {CirclePlusFilled} from "@element-plus/icons-vue";
@@ -21,11 +21,13 @@ const props = defineProps({
         <div class="el-page-header__left">
             <div class="el-page-header__content">
                 <div>
-                    <span>Dashboard</span>
+                    <b>Hello, {{ usePage().props.auth.user.first_name }}!</b>
                 </div>
             </div>
         </div>
     </div>
+
+    <br>
 
     <el-config-provider size="default">
         <div v-for="project in projects">

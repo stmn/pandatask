@@ -5,7 +5,9 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Activity;
 use App\Models\Comment;
+use App\Models\Priority;
 use App\Models\Project;
+use App\Models\Status;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -59,7 +61,6 @@ class DemoDatabaseSeeder extends Seeder
 
         shuffle($this->projects);
         for ($i = 0; $i < min($projectsNumber, count($this->projects)); $i++) {
-            dump($i);
             $project = Project::create($this->projects[$i]);
             shuffle($this->tasks);
 
@@ -79,6 +80,8 @@ class DemoDatabaseSeeder extends Seeder
                 $task['author_id'] = $projectMembers->random();
                 $task['created_at'] = $faker->dateTimeBetween('-90 days', 'now');
                 $task['subject'] .= ' ' . \Arr::random(['🚀', '', '', '', '', '', '', '', '', '', '']);
+                $task['status_id'] = Status::query()->inRandomOrder()->first()->id;
+                $task['priority_id'] = Priority::query()->inRandomOrder()->first()->id;
                 $project->tasks()->save($task);
             }
 

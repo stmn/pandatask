@@ -22,6 +22,7 @@ class TasksController extends Controller
                     'project',
                     'latestActivity.activity',
                     'latestActivity.user',
+                    'status', 'priority',
                 ])
                 ->withCount('comments')
                 ->when($request->has('search'), function ($query) use ($request) {

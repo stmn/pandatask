@@ -26,6 +26,7 @@ class DashboardController extends Controller
                 return $query->withCount('comments')
                     ->latest('latest_activity_max_created_at')
                     ->withMax('latestActivity', 'created_at')
+                    ->with(['status', 'priority'])
                     ->limit(5);
             },
             'tasks.latestActivity.user',

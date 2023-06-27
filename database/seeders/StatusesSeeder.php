@@ -16,23 +16,23 @@ class StatusesSeeder extends Seeder
         $statuses = [
             [
                 'name' => 'New',
-                'color' => '#66ff66',
+                'color' => '#d3ad03',
             ],
             [
                 'name' => 'In Progress',
-                'color' => '#ffff66',
+                'color' => '#9d9ef7',
             ],
             [
                 'name' => 'On Hold',
-                'color' => '#ff66ff',
+                'color' => '#000000',
             ],
             [
                 'name' => 'Awaiting Feedback',
-                'color' => '#66ffff',
+                'color' => '#1be32d',
             ],
             [
                 'name' => 'Completed',
-                'color' => '#ff6666',
+                'color' => '#000000',
             ],
         ];
 

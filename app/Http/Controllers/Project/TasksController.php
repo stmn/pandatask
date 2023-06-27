@@ -25,7 +25,7 @@ class TasksController extends Controller
                 ->sortByString($request->get('sort'))
                 ->latest('latest_activity_max_created_at')
                 ->withMax('latestActivity', 'created_at')
-                ->with(['latestActivity.user'])
+                ->with(['latestActivity.user', 'priority', 'status'])
                 ->withCount('comments')
                 ->paginate($this->perPage())
         ]);

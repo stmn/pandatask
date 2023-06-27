@@ -5,6 +5,7 @@ namespace App\Models;
 use App\QueryBuilders\ActivityQueryBuilder;
 use App\QueryBuilders\CommentQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
+use App\QueryBuilders\StatusQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
@@ -89,6 +90,16 @@ class Task extends Model
     public function latestActivity(): HasOne|ActivityQueryBuilder
     {
         return $this->hasOne(Activity::class)->latest();
+    }
+
+    public function status(): BelongsTo|StatusQueryBuilder
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function priority(): BelongsTo|ProjectQueryBuilder
+    {
+        return $this->belongsTo(Priority::class);
     }
 
     protected function url(): Attribute

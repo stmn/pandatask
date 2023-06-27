@@ -31,6 +31,8 @@ const showProject = ref(tasksRows.value?.[0]?.project)
 </script>
 
 <template>
+
+<!--    {{ JSON.stringify(usePage().props.statuses) }}-->
     <el-table :data="tasksRows" stripe style="width: 100%">
 <!--        <el-table-column fixed prop="number" label="#" width="64">-->
 <!--            <template #default="{row}">-->
@@ -73,14 +75,42 @@ const showProject = ref(tasksRows.value?.[0]?.project)
                 </div>
             </template>
         </el-table-column>
-        <el-table-column prop="status" label="Status" width="120">
+        <el-table-column prop="status" label="Status" width="150" align="center">
             <template #default="{row}">
-                <el-tag size="small">In progress</el-tag>
+                <el-dropdown style="width: 100%;" size="default" trigger="click">
+                    <el-tag v-if="row.status"
+                            class="status-tag"
+                            size="small"
+                            :color="row.status.color"
+                            :style="`border-color: ${row.status.color};`"
+                            effect="dark">{{ row.status.name }}</el-tag>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="status in usePage().props.statuses"
+                                              :disabled="status.id===row.status_id"
+                                              v-text="status.name"></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </template>
         </el-table-column>
-        <el-table-column prop="priority" label="Priority" width="120">
+        <el-table-column prop="priority" label="Priority" width="120" align="center">
             <template #default="{row}">
-                <el-tag size="small">Normal</el-tag>
+                <el-dropdown style="width: 100%;" size="default" trigger="click">
+                    <el-tag v-if="row.priority"
+                            class="priority-tag"
+                            size="small"
+                            :color="row.priority.color"
+                            :style="`border-color: ${row.status.color};`"
+                            effect="plain">{{ row.priority.name }}</el-tag>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="priority in usePage().props.priorities"
+                                              :disabled="priority.id===row.priority_id"
+                                              v-text="priority.name"></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </template>
         </el-table-column>
         <el-table-column prop="latest_activity_created_at" label="Last activity" min-width="280">

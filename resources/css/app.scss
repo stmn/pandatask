@@ -79,3 +79,38 @@ code {
     background-color: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
 }
+
+.status-tag, .priority-tag {
+    color: var(--el-text-color) !important;
+    background: var(--el-bg-color-page) !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom-width: 2px !important;
+    border-radius: 0 !important;
+    padding: 10px 5px !important;
+    font-weight: 600;
+    cursor: pointer;
+    margin: auto;
+    //font-size: 0.9em;
+
+    &.status-tag {
+        width: 95%;
+    }
+    &.priority-tag {
+        width: 70%;
+    }
+
+    &:hover {
+        color: #000 !important;
+    }
+}
+
+.dark {
+    .status-tag, .priority-tag {
+        background: #222 !important;
+        &:hover {
+            color: #fff !important;
+        }
+    }
+}

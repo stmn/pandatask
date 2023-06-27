@@ -16,15 +16,15 @@ class PrioritiesSeeder extends Seeder
         $priorities = [
             [
                 'name' => 'Low',
-                'color' => '#66ff66',
+                'color' => '#1be32d',
             ],
             [
                 'name' => 'Medium',
-                'color' => '#ffff66',
+                'color' => '#9d9ef7',
             ],
             [
                 'name' => 'High',
-                'color' => '#ff6666',
+                'color' => '#ff2f2f',
             ],
         ];
 
