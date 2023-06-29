@@ -1,8 +1,9 @@
 <script setup>
-import {Head, Link, usePage} from '@inertiajs/vue3';
+import {Head, Link, usePage, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import TasksTable from "@/Components/TasksTable.vue";
 import {CirclePlusFilled} from "@element-plus/icons-vue";
+import {ref} from "vue";
 
 defineOptions({layout: [Layout]})
 
@@ -12,6 +13,12 @@ const props = defineProps({
         required: true
     },
 });
+
+const loaded = ref(1);
+const load = () => {
+    console.log('load', loaded.value++);
+    // router.reload({only: ['projects'], preserveState: true, data: {page: loaded.value++}});
+}
 </script>
 
 <template>
@@ -21,7 +28,7 @@ const props = defineProps({
         <div class="el-page-header__left">
             <div class="el-page-header__content">
                 <div>
-                    <b>Hello, {{ usePage().props.auth.user.first_name }}!</b>
+                    <span><b>Hello</b>, {{ usePage().props.auth.user.first_name }}!</span>
                 </div>
             </div>
         </div>
@@ -29,8 +36,12 @@ const props = defineProps({
 
     <br>
 
-    <el-config-provider size="default">
-        <div v-for="project in projects">
+    <el-config-provider size="default" v-infinite-scroll="load">
+<!--        <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">-->
+<!--            <li v-for="i in count" :key="i" class="infinite-list-item">{{ i }}</li>-->
+<!--        </ul>-->
+
+        <div v-for="project in projects" :key="project.id">
             <el-divider content-position="left">
                 <div class="flex items-center">
                     <Link :href="route('project.overview', {project: project.id})" style="display: flex; align-items: center;">
@@ -44,14 +55,16 @@ const props = defineProps({
                 </div>
             </el-divider>
 
-            <div v-if="project.tasks.length">
+            <div v-if="project.tasks === undefined">LOADING</div>
+
+            <div v-else-if="project.tasks.length">
                 <TasksTable :tasks="project.tasks"/>
                 <div style="text-align: right;">
                     <Link :href="route('project.tasks', {project: project.id})">
                         <el-button type="primary">View all tasks</el-button>
                     </Link>
                     &nbsp;
-                    <Link preserve-state :href="route('project.tasks.create', {project: project.id})">
+                    <Link preserve-state preserve-scroll :href="route('project.tasks.create', {project: project.id})" :only="['modal']">
                         <el-button type="success" :icon="CirclePlusFilled">Add task</el-button>
                     </Link>
                 </div>

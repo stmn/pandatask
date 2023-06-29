@@ -18,9 +18,9 @@ class TasksController extends Controller
         return Inertia::render('Project/Tasks', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
-            'projects' => Project::query()->get(),
+            'projects' => fn() => Project::query()->get(),
             'project' => $project,
-            'tasks' => $project->tasks()
+            'tasks' => fn() => $project->tasks()
                 ->search($request->get('search'))
                 ->sortByString($request->get('sort'))
                 ->latest('latest_activity_max_created_at')
@@ -35,12 +35,12 @@ class TasksController extends Controller
     {
         return Inertia::modal('Project/CreateTask', [
             'project' => $project,
-            'times' => $project->tasks()
-                ->with(['latestActivity.activity.author'])
-                ->when($request->has('search'), function ($query) use ($request) {
-                    $query->where('subject', 'like', '%' . $request->get('search') . '%');
-                })
-                ->paginate(20)
+//            'times' => fn() => $project->tasks()
+//                ->with(['latestActivity.activity.author'])
+//                ->when($request->has('search'), function ($query) use ($request) {
+//                    $query->where('subject', 'like', '%' . $request->get('search') . '%');
+//                })
+//                ->paginate(20)
         ])
             ->baseRoute('project.tasks', ['project' => $project]);
     }

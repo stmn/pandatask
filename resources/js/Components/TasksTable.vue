@@ -1,5 +1,5 @@
 <script setup>
-import {Link, usePage} from '@inertiajs/vue3'
+import {Link, usePage, router} from '@inertiajs/vue3'
 import {computed, ref} from "vue";
 import {useDateFormat, useStorage, useTimeAgo} from "@vueuse/core";
 import Time from "@/Components/Time.vue";
@@ -28,6 +28,14 @@ const props = defineProps({
 const tasksRows = computed(() => props.tasks.data || props.tasks)
 
 const showProject = ref(tasksRows.value?.[0]?.project)
+
+const updateTask = ({task, data}) => {
+    router.post(
+        route('project.task', {task: task.number, project: task.project_id}),
+        {task: data},
+        {preserveScroll: true, preserveState: true, only: ['projects', 'tasks']},
+    )
+}
 </script>
 
 <template>
@@ -77,7 +85,7 @@ const showProject = ref(tasksRows.value?.[0]?.project)
         </el-table-column>
         <el-table-column prop="status" label="Status" width="150" align="center">
             <template #default="{row}">
-                <el-dropdown style="width: 100%;" size="default" trigger="click">
+                <el-dropdown style="width: 100%;" size="default" trigger="click" @command="updateTask">
                     <el-tag v-if="row.status"
                             class="status-tag"
                             size="small"
@@ -88,6 +96,7 @@ const showProject = ref(tasksRows.value?.[0]?.project)
                         <el-dropdown-menu>
                             <el-dropdown-item v-for="status in usePage().props.statuses"
                                               :disabled="status.id===row.status_id"
+                                              :command="{task: row, data: { status_id: status.id}}"
                                               v-text="status.name"></el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -96,17 +105,18 @@ const showProject = ref(tasksRows.value?.[0]?.project)
         </el-table-column>
         <el-table-column prop="priority" label="Priority" width="120" align="center">
             <template #default="{row}">
-                <el-dropdown style="width: 100%;" size="default" trigger="click">
+                <el-dropdown style="width: 100%;" size="default" trigger="click" @command="updateTask">
                     <el-tag v-if="row.priority"
                             class="priority-tag"
                             size="small"
                             :color="row.priority.color"
-                            :style="`border-color: ${row.status.color};`"
+                            :style="`border-color: ${row.priority.color};`"
                             effect="plain">{{ row.priority.name }}</el-tag>
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item v-for="priority in usePage().props.priorities"
                                               :disabled="priority.id===row.priority_id"
+                                              :command="{task: row, data: { priority_id: priority.id}}"
                                               v-text="priority.name"></el-dropdown-item>
                         </el-dropdown-menu>
                     </template>

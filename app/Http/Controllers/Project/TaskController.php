@@ -21,12 +21,12 @@ class TaskController extends Controller
         return Inertia::render('Project/Task', [
             'project' => $project,
             'task' => $task->load('author', 'project', 'assignees'),
-            'activities' => $task->activities()
+            'activities' => fn() => $task->activities()
                 ->with(['user', 'comments', 'media'])
                 ->latest()
                 ->get(),
-            'users' => $project->members()->get(),
-            'times' => $task->times()
+            'users' => fn() => $project->members()->get(),
+            'times' => fn() => $task->times()
                 ->with(['author'])
                 ->latest()
                 ->get()
@@ -40,11 +40,26 @@ class TaskController extends Controller
             'files' => [],
             'private' => [],
             'assignees' => [],
-        ], $request->all());
 
-        $comment = new Comment([
-            'content' => $request->comment,
-        ]);
+            'task.priority_id' => [],
+            'task.status_id' => [],
+        ], $request->all());
+//dd($task->number,$request->input('task'));
+        $task->update($request->input('task'));
+
+        $activity = Activity::query()
+            ->create([
+                'user_id' => $request->user()->id,
+                'project_id' => $task->project_id,
+                'task_id' => $task->id,
+                'changes' => ['priority_id' => [1, 2]],
+                'private' => false,
+            ]);
+
+        if ($request->comment) {
+            $comment = new Comment([
+                'content' => $request->comment,
+            ]);
 
 //        if($request->comment || $request->files){
             $activity = Activity::query()
@@ -53,16 +68,15 @@ class TaskController extends Controller
                     'project_id' => $task->project_id,
                     'task_id' => $task->id,
                     'private' => $request->private,
-
-
 //                    'type' => \App\Enums\ActivityType::TASK_COMMENTED,
 //                    'activity_type' => \App\Models\Comment::class,
 //                    'activity_id' => $comment->id,
                 ]);
 //        }
-        assert($activity instanceof Activity);
+            assert($activity instanceof Activity);
 
-        $activity->comment()->save($comment);
+            $activity->comment()->save($comment);
+        }
 
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
@@ -70,11 +84,13 @@ class TaskController extends Controller
             }
         }
 
-        $result = $task->assignees()->sync(
-            collect($request->assignees)->pluck('id')
-        );
+        if ($request->assignees !== NULL) {
+            $result = $task->assignees()->sync(
+                collect($request->assignees)->pluck('id')
+            );
+        }
 
-        if(0) {
+        if (0) {
             if ($result['attached'] || $result['detached']) {
                 $activity = Activity::query()
                     ->create([
@@ -101,6 +117,6 @@ class TaskController extends Controller
             }
         }
 
-        return to_route('project.task', ['project' => $project, 'task' => $task]);
+//        return to_route('project.task', ['project' => $project, 'task' => $task]);
     }
 }

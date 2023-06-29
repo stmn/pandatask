@@ -7,9 +7,10 @@ const props = defineProps({
         default: '80%',
     },
 })
-
+const {show, close, redirect} = useModal()
 const handleClose = (done: () => void) => {
     redirect();
+    // close();
     // close();
     // ElMessageBox.confirm('Are you sure to close this dialog?')
     //     .then(() => {
@@ -21,7 +22,6 @@ const handleClose = (done: () => void) => {
 }
 
 // import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue"
-const {show, close, redirect} = useModal()
 
 
 </script>

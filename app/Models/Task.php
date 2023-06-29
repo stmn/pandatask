@@ -9,6 +9,7 @@ use App\QueryBuilders\StatusQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperTask
@@ -26,12 +28,17 @@ class Task extends Model
 {
     use SoftDeletes;
 
+    use Cachable;
+    protected $cacheCooldownSeconds = 300;
+
     protected $fillable = [
         'subject',
         'description',
         'author_id',
         'number',
         'private',
+        'priority_id',
+        'status_id',
     ];
 
     protected $appends = [

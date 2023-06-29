@@ -5,15 +5,20 @@ namespace App\Models;
 use App\QueryBuilders\CommentQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperComment
  */
 class Comment extends Model
 {
+    use Cachable;
+    protected $cacheCooldownSeconds = 300;
+
     protected $fillable = [
         'author_id',
         'content',

@@ -20,13 +20,13 @@ class OverviewController extends Controller
         return Inertia::render('Project/Overview', [
             'activeTab' => 'overview',
             'project' => $project,
-            'projects' => Project::query()->get(),
-            'activities' => $project->activities()
+            'projects' => fn() => Project::query()->get(),
+            'activities' => fn() => $project->activities()
                 ->with(['task', 'user'])
                 ->latest()
                 ->limit(10)
                 ->get(),
-            'times' => $project->times()
+            'times' => fn() => $project->times()
                 ->with(['task', 'author'])
                 ->latest()
                 ->limit(10)

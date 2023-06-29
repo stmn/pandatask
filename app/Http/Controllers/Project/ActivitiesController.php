@@ -14,9 +14,10 @@ class ActivitiesController extends Controller
     {
         return Inertia::render('Project/Activities', [
             'activeTab' => 'activity',
-            'projects' => Project::query()->get(),
+            'projects' => fn() => Project::query()->get(),
             'project' => $project,
-            'activities' => $project->activities()
+            'activities' => fn() => $project
+                ->activities()
                 ->with(['task', 'user'])
                 ->latest()
                 ->paginate($this->perPage()),

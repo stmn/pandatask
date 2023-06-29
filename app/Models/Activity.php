@@ -8,6 +8,7 @@ use App\QueryBuilders\CommentQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -25,11 +27,16 @@ class Activity extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
+    use Cachable;
+    protected $cacheCooldownSeconds = 300;
+
     protected $fillable = [
         'user_id',
         'project_id',
         'task_id',
+        'comment_id',
         'type',
+        'changes',
         'activity_type',
         'activity_id',
         'private',
@@ -38,6 +45,7 @@ class Activity extends Model implements HasMedia
     protected $casts = [
         'type' => ActivityType::class,
         'private' => 'boolean',
+        'changes' => 'array',
     ];
 
     protected $appends = [

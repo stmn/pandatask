@@ -17,10 +17,9 @@ class TasksController extends Controller
         return Inertia::render('Tasks', [
             'activeIndex' => 'tasks',
             'search' => $request->get('search'),
-            'tasks' => Task::query()
+            'tasks' => fn() => Task::query()
                 ->with([
                     'project',
-                    'latestActivity.activity',
                     'latestActivity.user',
                     'status', 'priority',
                 ])

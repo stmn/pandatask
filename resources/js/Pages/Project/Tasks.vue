@@ -117,7 +117,7 @@ const cities = ['Not started', 'In Progress', 'Done']
 
     <br><br>
 
-    <Link preserve-state :href="route('project.tasks.create', {project: project.id})">
+    <Link preserve-state preserve-scroll :only="['modal']" :href="route('project.tasks.create', {project: project.id})">
         <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
     </Link>
 

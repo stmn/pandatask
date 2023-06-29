@@ -34,6 +34,7 @@ const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
           as="span"
           style="display: inline-flex;"
           :data="{ task: task?.id }"
+          :only="['auth']"
           preserve-scroll>
         <template v-if="isRun">
             <slot name="stop">

@@ -18,10 +18,9 @@ class ProjectsController extends Controller
         return Inertia::render('Projects', [
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
-            'projects' => Project::query()
+            'projects' => fn() => Project::query()
                 ->withMax('latestActivity', 'created_at')
                 ->with([
-                    'latestActivity.activity.author',
                     'latestActivity.task',
                     'latestActivity.user'
                 ])
@@ -33,7 +32,8 @@ class ProjectsController extends Controller
         ]);
     }
 
-    public function form(Request $request, ?Project $project = null){
+    public function form(Request $request, ?Project $project = null)
+    {
         $project?->load('members');
 
         return Inertia::modal('CreateProject', [
@@ -49,7 +49,8 @@ class ProjectsController extends Controller
             ->baseRoute($project ? 'project.overview' : 'projects', ['project' => $project]);
     }
 
-    public function save(Request $request, ?Project $project = null){
+    public function save(Request $request, ?Project $project = null)
+    {
         $request->validate([
             'name' => 'required',
         ]);
@@ -66,7 +67,7 @@ class ProjectsController extends Controller
             collect($request->members)->pluck('id')
         );
 
-        if($project->wasRecentlyCreated) {
+        if ($project->wasRecentlyCreated) {
             return to_route('project.tasks', ['project' => $project]);
         }
     }

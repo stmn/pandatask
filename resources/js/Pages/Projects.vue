@@ -39,7 +39,7 @@ const {query} = useList();
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link preserve-state :href="route('projects.create')">
+                <Link preserve-state preserve-scroll :only="['modal']" :href="route('projects.create')">
                     <el-button type="success" :icon="CirclePlusFilled">Create</el-button>
                 </Link>
             </div>
@@ -92,7 +92,7 @@ const {query} = useList();
                                 <el-button class="button" type="primary" :icon="List">Tasks</el-button>
                             </Link>
                             &nbsp;
-                            <Link preserve-state :href="route('project.tasks.create', {project: item.id})">
+                            <Link preserve-state preserve-scroll :only="['modal']" :href="route('project.tasks.create', {project: item.id})">
                                 <el-button class="button" type="success" :icon="CirclePlusFilled">Add task</el-button>
                             </Link>
                         </div>

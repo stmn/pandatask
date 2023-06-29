@@ -18,9 +18,9 @@ class TimesheetsController extends Controller
     {
         return Inertia::render('Project/Timesheets', [
             'activeTab' => 'timesheets',
-            'projects' => Project::query()->get(),
+            'projects' => fn() => Project::query()->get(),
             'project' => $project,
-            'times' => $project->times()
+            'times' => fn() => $project->times()
                 ->with(['task', 'author'])
 //            ->with(['latestActivity.activity.author'])
 //            ->when($request->has('search'), function ($query) use ($request) {

@@ -6,6 +6,7 @@ namespace App\Models;
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,9 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Laravolt\Avatar\Avatar;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 //use Lorisleiva\LaravelSearchString\Concerns\SearchString;
 
@@ -50,7 +53,7 @@ class User extends Authenticatable
     protected $appends = [
         'avatar',
         'full_name',
-        'active_time',
+//        'active_time',
     ];
 
     public static function query(): Builder|UserQueryBuilder
@@ -86,10 +89,12 @@ class User extends Authenticatable
                     return null;
                 }
 
-                return (new Avatar([
-                    ...config('laravolt.avatar'),
-                    ...['chars' => 2]
-                ]))->create($this->full_name)->toBase64();
+                return Cache::rememberForever('avatar-' . $this->full_name, function () {
+                    return (new Avatar([
+                        ...config('laravolt.avatar'),
+                        ...['chars' => 2]
+                    ]))->create($this->full_name)->toBase64();
+                });
             },
         );
     }

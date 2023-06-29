@@ -4,15 +4,20 @@ namespace App\Models;
 
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperTime
  */
 class Time extends Model
 {
+    use Cachable;
+    protected $cacheCooldownSeconds = 300;
+
     protected $fillable = [
         'project_id',
         'task_id',

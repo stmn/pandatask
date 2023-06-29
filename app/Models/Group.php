@@ -4,16 +4,21 @@ namespace App\Models;
 
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperGroup
  */
 class Group extends Model
 {
+    use Cachable;
+    protected $cacheCooldownSeconds = 300;
+
     protected $fillable = [
         'name',
         'description',
