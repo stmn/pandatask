@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ActivityType;
+use App\Models\Traits\useLatestActivity;
 use App\QueryBuilders\ActivityQueryBuilder;
 use App\QueryBuilders\CommentQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
@@ -26,10 +28,10 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  */
 class Task extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, useLatestActivity;
 
-    use Cachable;
-    protected $cacheCooldownSeconds = 300;
+//    use Cachable;
+//    protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [
         'subject',
@@ -39,6 +41,8 @@ class Task extends Model
         'private',
         'priority_id',
         'status_id',
+        'latest_activity_id',
+        'latest_activity_at',
     ];
 
     protected $appends = [
@@ -52,6 +56,36 @@ class Task extends Model
                     ->orderBy('number', 'desc')
                     ->first()?->number) + 1;
         });
+
+        static::created(function (Task $task) {
+            $task->activities()->create([
+                'created_at' => $task->created_at,
+                'user_id' => $task->author_id,
+                'project_id' => $task->project_id,
+                'type' => ActivityType::TASK_CREATED,
+           ]);
+        });
+
+//        static::updated(function (Task $task) {
+//            $changes = $task->getChanges();
+//            dd($changes, $task->getOriginal('priority_id'));
+//            $task->activities()
+//                ->create([
+//                    'project_id' => $task->project_id,
+//                    'type' => ActivityType::TASK_CHANGED,
+//                    'details' => [
+//                        'changed' => [
+//                            'priority_id' => [$old, $new]
+//                        ],
+//                        'assigned' => [
+//                            '' => []
+//                        ],
+//                        'detached' => [
+//                            '' => []
+//                        ],
+//                    ],
+//                ]);
+//        });
     }
 
     public static function query(): Builder|TaskQueryBuilder
@@ -84,19 +118,14 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function comments(): HasManyThrough|CommentQueryBuilder
-    {
-        return $this->hasManyThrough(Comment::class, Activity::class);
-    }
+//    public function comments(): HasManyThrough|CommentQueryBuilder
+//    {
+//        return $this->hasMany(Activity::class)->where('type', ActivityType::TASK_COMMENTED);
+//    }
 
     public function activities(): HasMany|ActivityQueryBuilder
     {
         return $this->hasMany(Activity::class);
-    }
-
-    public function latestActivity(): HasOne|ActivityQueryBuilder
-    {
-        return $this->hasOne(Activity::class)->latest();
     }
 
     public function status(): BelongsTo|StatusQueryBuilder
@@ -115,4 +144,5 @@ class Task extends Model
             get: fn() => route('project.task', ['project' => $this->project_id, 'task' => $this])
         );
     }
+
 }

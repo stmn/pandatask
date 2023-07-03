@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\ActivityType;
 use App\Models\Activity;
 use App\Models\Comment;
 use App\Models\Priority;
@@ -23,9 +24,9 @@ class DemoDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $projectsNumber = 10;
-        $tasksPerProject = 25;
-        $maxCommentsNumber = 4;
+        $projectsNumber = 200/10;
+        $tasksPerProject = 800/10;
+        $maxCommentsNumber = 40/10;
 
         DB::table('comments')->truncate();
         DB::table('activities')->truncate();
@@ -101,20 +102,19 @@ class DemoDatabaseSeeder extends Seeder
                 $comments = $this->comments;
                 shuffle($comments);
                 for ($y = 0; $y < rand(0, $maxCommentsNumber); $y++) {
-                    $comment = new Comment([
+                    $comment = Comment::query()->create([
                         'content' => array_shift($comments)['comment'] . ' ' . \Arr::random(['😄', '🙂', '', '']),
                     ]);
 
-                    $activity = Activity::query()
-                        ->create([
+                    $activity = $task->activities()->create([
                             'created_at' => $faker->dateTimeBetween($task->created_at, now()),
                             'user_id' => $projectMembers->random(),
                             'project_id' => $task->project_id,
-                            'task_id' => $task->id,
-                            'private' => false,
+                            'type' => ActivityType::TASK_COMMENTED,
+                            'comment_id' => $comment->id,
                         ]);
 
-                    $activity->comment()->save($comment);
+                    $activity->comment()->associate($comment);
                 }
             }
 //            break;

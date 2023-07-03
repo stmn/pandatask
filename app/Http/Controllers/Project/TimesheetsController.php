@@ -19,15 +19,15 @@ class TimesheetsController extends Controller
         return Inertia::render('Project/Timesheets', [
             'activeTab' => 'timesheets',
             'projects' => fn() => Project::query()->get(),
-            'project' => $project,
-            'times' => fn() => $project->times()
+            'project' => fn() => $project,
+            'times' => Inertia::lazy(fn() => $project->times()
                 ->with(['task', 'author'])
 //            ->with(['latestActivity.activity.author'])
 //            ->when($request->has('search'), function ($query) use ($request) {
 //                $query->where('subject', 'like', '%'.$request->get('search').'%');
 //            })
                 ->orderByDesc('id')
-                ->paginate($this->perPage())
+                ->paginate($this->perPage()))
         ]);
     }
 
@@ -39,6 +39,11 @@ class TimesheetsController extends Controller
             'project' => $project,
             'time' => $time,
             'tasks' => $project->tasks()->get(),
+
+//            'times' => $project->times()
+//                ->with(['task', 'author'])
+//                ->orderByDesc('id')
+//                ->paginate($this->perPage())
         ])
             ->baseRoute($project ? 'project.timesheets' : 'project.timesheets', ['project' => $project]);
     }

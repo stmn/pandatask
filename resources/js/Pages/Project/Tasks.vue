@@ -1,6 +1,6 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import {CirclePlusFilled, Search} from "@element-plus/icons-vue";
@@ -41,7 +41,7 @@ const handleClick = (index) => {
 
 const tableData = props.tasks;
 
-const {query} = useList();
+const {query} = useList({only: ['tasks']});
 
 const predefinedFilters = [
     {
@@ -66,6 +66,12 @@ const filters = [];
 
 const checkboxGroup1 = ref(['Shanghai'])
 const cities = ['Not started', 'In Progress', 'Done']
+
+onMounted(() => {
+    router.reload({only: ['tasks'], onSuccess: () => {
+
+        }});
+});
 </script>
 
 <template>

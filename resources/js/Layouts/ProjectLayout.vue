@@ -1,7 +1,7 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3'
 import Layout from "@/Layouts/Layout.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 // import Edit from "@/Pages/Profile/Edit.vue";
 import {Clock, List, View} from "@element-plus/icons-vue";
 
@@ -26,16 +26,24 @@ const props = defineProps({
 
 const activeTab = ref(props.activeTab);
 
-router.on('start', (event) => {
-
-})
-
-router.on('success', (event) => {
-    activeTab.value = event.detail.page.props.activeTab;
-})
+// watch(() => props.activeTab, (value) => {
+//     console.log('newval', value)
+// })
 
 const handleClick = (index) => {
-    router.visit(route('project.' + activeTab.value, {project: props.project.id}), {})
+    // console.log('handleClick', index.paneName);
+    // console.log(route('project.' + activeTab.value, {project: props.project.id}))
+    // setTimeout(() => {
+    //     console.log('visit', activeTab.value)
+        router.visit(route('project.' + index.paneName, {project: props.project.id}), {
+            only: ['tasks', 'activities', 'times'],
+            preserveState: true,
+            onSuccess: () => {
+                activeTab.value = index.paneName;
+            }
+        })
+    // }, 5000)
+
 };
 
 const projectValue = ref('')
@@ -104,38 +112,35 @@ const onProjectChange = (value) => {
         </template>
     </el-page-header>
     <br>
-    <el-tabs v-model="activeTab" class="demo-tabs" @tab-change="handleClick">
-        <el-tab-pane name="overview" lazy>
+    <el-tabs v-model="activeTab" @tab-click="handleClick">
+        <el-tab-pane name="overview">
             <template #label>
                 <el-icon>
                     <Grid/>
                 </el-icon> &nbsp; Overview
             </template>
-            <slot/>
         </el-tab-pane>
-        <el-tab-pane name="tasks" lazy>
+        <el-tab-pane name="tasks">
             <template #label>
                 <el-icon>
                     <List/>
                 </el-icon> &nbsp; Tasks
             </template>
-            <slot/>
         </el-tab-pane>
-        <el-tab-pane name="timesheets" lazy>
+        <el-tab-pane name="timesheets">
             <template #label>
                 <el-icon>
                     <Clock/>
                 </el-icon> &nbsp; Timesheets
             </template>
-            <slot/>
         </el-tab-pane>
-        <el-tab-pane name="activity" lazy>
+        <el-tab-pane name="activity">
             <template #label>
                 <el-icon>
                     <View/>
                 </el-icon> &nbsp; Activity
             </template>
-            <slot/>
         </el-tab-pane>
     </el-tabs>
+    <slot />
 </template>

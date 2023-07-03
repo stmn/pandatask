@@ -29,6 +29,7 @@
         "@vueuse/core": "^10.1.2",
         "@vueuse/router": "^10.2.0",
         "element-plus": "^2.3.6",
-        "momentum-modal": "^0.2.1"
+        "momentum-modal": "^0.2.1",
+        "v-lazy-component": "^3.0.8"
     }
 }

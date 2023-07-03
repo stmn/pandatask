@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useForm} from "@inertiajs/vue3"
+import {router, useForm} from "@inertiajs/vue3"
 import Modal from "../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {onMounted, ref} from "vue";
@@ -38,13 +38,18 @@ const create = () => form.post(url, {
         redirect()
     }
 });
-
-onMounted(() => {
-    setTimeout(() => {
-        document.querySelector('.focus-me textarea').focus();
-        document.querySelector('.focus-me input').focus();
-    }, 100)
-})
+//
+// onMounted(() => {
+//     console.log('onMounted timesheets 333');
+//     router.reload({only: ['times'], onSuccess: () => {
+// console.log(22)
+//         }});
+//
+//     // setTimeout(() => {
+//     //     document.querySelector('.focus-me textarea').focus();
+//     //     document.querySelector('.focus-me input').focus();
+//     // }, 100)
+// })
 
 </script>
 

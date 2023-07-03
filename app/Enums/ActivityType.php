@@ -14,7 +14,7 @@ enum ActivityType: string
         return match ($this) {
             self::TASK_CREATED => 'created a task',
             self::TASK_COMMENTED => 'commented on a task',
-            self::TASK_CHANGED => 'changed a task',
+            self::TASK_CHANGED => 'updated a task',
             self::ATTACHMENT_ADDED => 'added an attachment',
         };
     }

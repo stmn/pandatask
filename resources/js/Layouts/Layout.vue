@@ -7,6 +7,7 @@ import {useDark, useToggle} from "@vueuse/core";
 import GlobalTimer from "@/Components/GlobalTimer.vue";
 import {ElMessage} from "element-plus";
 import Header from "@/Components/Layout/Header.vue";
+import usePageLoading from "@/Composables/usePageLoading.js";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -38,14 +39,22 @@ const activeIndex = ref(props.activeIndex);
 router.on('success', (event) => {
     activeIndex.value = event.detail.page.props.activeIndex;
 })
+
+const {loading} = usePageLoading();
+
+const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path>`;
 </script>
 
 <template>
     <el-container style="min-height: 100%;">
         <Header/>
         <el-main
-            style="background: var(--el-bg-color); border-radius: 15px; margin: 0 30px;">
-            <slot/>
+            v-loading="loading"
+            :element-loading-svg="svg"
+            style="background: var(--el-bg-color); border-radius: 15px; margin: 0 30px; position: relative; overflow: hidden;">
+            <div>
+                <slot/>
+            </div>
         </el-main>
         <el-footer>
             <br>

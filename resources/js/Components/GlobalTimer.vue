@@ -27,9 +27,9 @@ const time = computed(() => {
 
 <template>
     <Timer :task="activeTime?.task">
-        <template #play>
-            <el-button>PLAY</el-button>
-        </template>
+<!--        <template #play>-->
+<!--            <el-button>PLAY</el-button>-->
+<!--        </template>-->
         <template #stop>
             <el-popover
                 placement="left"

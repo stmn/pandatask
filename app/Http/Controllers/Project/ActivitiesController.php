@@ -18,9 +18,9 @@ class ActivitiesController extends Controller
             'project' => $project,
             'activities' => fn() => $project
                 ->activities()
-                ->with(['task', 'user'])
+                ->with(['task', 'user', 'comment'])
                 ->latest()
-                ->paginate($this->perPage()),
+                ->paginate($this->perPage())->appends('details'),
         ]);
     }
 }

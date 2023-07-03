@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -19,15 +20,16 @@ class TasksController extends Controller
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()->get(),
-            'project' => $project,
-            'tasks' => fn() => $project->tasks()
+            'project' => fn() => $project,
+            'tasks' => Inertia::lazy(fn() => $project->tasks()
                 ->search($request->get('search'))
                 ->sortByString($request->get('sort'))
-                ->latest('latest_activity_max_created_at')
-                ->withMax('latestActivity', 'created_at')
+                ->latest('latest_activity_at')
+//                ->withMax('latestActivity', 'created_at')
                 ->with(['latestActivity.user', 'priority', 'status'])
-                ->withCount('comments')
-                ->paginate($this->perPage())
+//                ->withCount('comments')
+                ->withCount(['activities as comments_count' => fn($query) => $query->where('type', '=', ActivityType::TASK_COMMENTED)])
+                ->paginate($this->perPage()))
         ]);
     }
 
@@ -47,6 +49,10 @@ class TasksController extends Controller
 
     public function store(\App\Models\Project $project, \Illuminate\Http\Request $request)
     {
+        $this->validate($request, [
+            'subject' => ['required'],
+        ], $request->all());
+
         $task = $project->tasks()->create([
             'subject' => $request->subject,
             'description' => $request->description,
@@ -55,43 +61,14 @@ class TasksController extends Controller
             'private' => $request->private,
         ]);
 
-        // create task
-        \App\Models\Activity::query()
-            ->create([
-                'project_id' => $task->project_id,
-                'task_id' => $task->id,
-                'type' => \App\Enums\ActivityType::TASK_CREATED,
-                'activity_type' => \App\Models\Task::class,
-                'activity_id' => $task->id,
-                'private' => false,
-            ]);
+        $this->message('success', 'Task created');
 
-        // comment task
-//    \App\Models\Activity::query()
-//        ->create([
-//            'task_id' => $task->id,
-//            'type' => \App\Enums\ActivityType::TASK_COMMENTED,
-//            'activity_type' => \App\Models\Comment::class,
-//            'activity_id' => $comment->id,
-//        ]);
-//
-//    // change task
-//    \App\Models\Activity::query()
-//        ->create([
-//            'task_id' => $task->id,
-//            'type' => \App\Enums\ActivityType::TASK_CHANGED,
-//            'activity_type' => \App\Models\Change::class,
-//            'activity_id' => $change->id,
-//        ]);
-
-
-        request()->session()->flash('message', [
-            'type' => 'success',
-            'message' => 'Task created'
-        ]);
+//        return to_route('project.tasks', ['project' => $project]);
 
         if ($request->get('open') == 1) {
             return to_route('project.task', ['project' => $project, 'task' => $task]);
+        } else {
+            return redirect($request->header('X-Inertia-Modal-Redirect'));
         }
     }
 }

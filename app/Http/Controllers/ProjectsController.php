@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,7 +20,6 @@ class ProjectsController extends Controller
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()
-                ->withMax('latestActivity', 'created_at')
                 ->with([
                     'latestActivity.task',
                     'latestActivity.user'
@@ -27,7 +27,7 @@ class ProjectsController extends Controller
                 ->when($request->has('search'), function ($query) use ($request) {
                     $query->where('name', 'like', '%' . $request->get('search') . '%');
                 })
-                ->orderByDesc('latest_activity_max_created_at')
+                ->orderByDesc('latest_activity_at')
                 ->paginate($this->perPage()),
         ]);
     }

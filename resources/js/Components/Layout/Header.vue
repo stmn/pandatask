@@ -43,7 +43,7 @@ const test = () => {
             :collapse-transition="false"
         >
             <el-menu-item class="brand">
-                <Link :href="route('dashboard')">
+                <Link :href="route('dashboard')" :only="[]">
                     <img style="height: 40px;display: inline-block;" src="/logo.png"/>
                     <span style="font-weight: 400;"><b>PANDA</b>TASK</span>
                 </Link>
@@ -52,7 +52,7 @@ const test = () => {
             <!--            <div class="flex-grow" style="flex-grow: 1;" />-->
 
             <el-menu-item index="dashboard" style="border:0;" :class="{'is-active': route().current()==='dashboard'}">
-                <Link :href="route('dashboard')">
+                <Link :href="route('dashboard')" :only="[]">
                     <el-icon>
                         <HomeFilled/>
                     </el-icon>Dashboard
@@ -60,14 +60,14 @@ const test = () => {
             </el-menu-item>
 
             <el-menu-item index="projects" style="border:0;" :class="{'is-active': route().current()==='projects'}">
-                <Link :href="route('projects')">
+                <Link :href="route('projects')" :only="['projects']">
                     <el-icon>
                         <Menu/>
                     </el-icon>Projects
                 </Link>
             </el-menu-item>
             <el-menu-item index="tasks" style="border:0;" :class="{'is-active': route().current()==='tasks'}">
-                <Link :href="route('tasks')">
+                <Link :href="route('tasks')" :only="['tasks']">
                     <el-icon>
                         <List/>
                     </el-icon>Tasks

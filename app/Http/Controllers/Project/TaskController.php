@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
@@ -22,7 +22,7 @@ class TaskController extends Controller
             'project' => $project,
             'task' => $task->load('author', 'project', 'assignees'),
             'activities' => fn() => $task->activities()
-                ->with(['user', 'comments', 'media'])
+                ->with(['user', 'comment', 'media'])
                 ->latest()
                 ->get(),
             'users' => fn() => $project->members()->get(),
@@ -33,50 +33,62 @@ class TaskController extends Controller
         ]);
     }
 
-    public function update(\App\Models\Project $project, \Illuminate\Http\Request $request, Task $task)
+    public function update(Project $project, Request $request, Task $task)
     {
         $request->validate([
             'comment' => [],
             'files' => [],
             'private' => [],
             'assignees' => [],
-
+//            'task.subject' => ['required', 'string'],
             'task.priority_id' => [],
             'task.status_id' => [],
         ], $request->all());
-//dd($task->number,$request->input('task'));
-        $task->update($request->input('task'));
 
-        $activity = Activity::query()
-            ->create([
-                'user_id' => $request->user()->id,
-                'project_id' => $task->project_id,
-                'task_id' => $task->id,
-                'changes' => ['priority_id' => [1, 2]],
-                'private' => false,
-            ]);
+        $activity = [
+            'project_id' => $task->project_id,
+            'type' => ActivityType::TASK_CHANGED,
+            'details' => [
+                'changed' => [],
+                'attached' => [],
+                'detached' => [],
+            ],
+            'private' => $request->get('private', false),
+        ];
+
+        if ($request->input('task')) {
+            $original = $task->getOriginal();
+            $task->update($request->input('task'));
+            $changes = $task->getChanges();
+
+            foreach ($changes as $key => $change) {
+                $oldValues = $original[$key];
+                $activity['details']['changed'][$key] = [$oldValues, $change];
+            }
+        }
 
         if ($request->comment) {
-            $comment = new Comment([
+            $comment = Comment::create([
                 'content' => $request->comment,
             ]);
 
-//        if($request->comment || $request->files){
-            $activity = Activity::query()
-                ->create([
-                    'user_id' => $request->user()->id,
-                    'project_id' => $task->project_id,
-                    'task_id' => $task->id,
-                    'private' => $request->private,
-//                    'type' => \App\Enums\ActivityType::TASK_COMMENTED,
-//                    'activity_type' => \App\Models\Comment::class,
-//                    'activity_id' => $comment->id,
-                ]);
-//        }
-            assert($activity instanceof Activity);
-
-            $activity->comment()->save($comment);
+            $activity['comment_id'] = $comment->id;
+            $activity['type'] = ActivityType::TASK_COMMENTED;
         }
+
+        if ($request->assignees !== NULL) {
+            $result = $task->assignees()->sync(
+                collect($request->assignees)->pluck('id')
+            );
+            if ($result['attached']) {
+                $activity['details']['attached']['assignees'] = $result['attached'];
+            }
+            if ($result['detached']) {
+                $activity['details']['detached']['assignees'] = $result['detached'];
+            }
+        }
+
+        $activity = $task->activities()->create($activity);
 
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
@@ -84,39 +96,9 @@ class TaskController extends Controller
             }
         }
 
-        if ($request->assignees !== NULL) {
-            $result = $task->assignees()->sync(
-                collect($request->assignees)->pluck('id')
-            );
-        }
+        $this->message('success', 'Task updated successfully.');
 
-        if (0) {
-            if ($result['attached'] || $result['detached']) {
-                $activity = Activity::query()
-                    ->create([
-                        'user_id' => $request->user()->id,
-                        'project_id' => $task->project_id,
-                        'task_id' => $task->id,
-                        'private' => $request->private,
-
-                        'action' => '', // attached, detached, changed, commented
-                        'field' => '', // assignees, status, priority, null
-                        'meta' => [],
-
-//                    'type' => \App\Enums\ActivityType::TASK_CHANGED,
-//                    'activity_type' => \App\Models\Comment::class,
-//                    'activity_id' => $comment->id,
-                        'changes' => [
-                            [
-                                'field' => 'assignees',
-                                'from' => $result['detached'],
-                                'text' => 'changed :field from :old to :new',
-                            ]
-                        ]
-                    ]);
-            }
-        }
-
-//        return to_route('project.task', ['project' => $project, 'task' => $task]);
+//        return to_route('project.tasks', ['project' => $project]);
+        return to_route('project.task', ['project' => $project, 'task' => $task]);
     }
 }

@@ -1,16 +1,33 @@
 <script lang="ts" setup>
 import {useModal} from "momentum-modal"
+import {router, usePage} from "@inertiajs/vue3"
 
 const props = defineProps({
     width: {
         type: String,
         default: '80%',
     },
+    times: {
+        type: Array,
+        required: true
+    },
 })
 const {show, close, redirect} = useModal()
 const handleClose = (done: () => void) => {
-    redirect();
+    // redirect({only: ['times']});
+
     // close();
+    // redirect();
+    console.log(usePage().url, usePage()?.props?.modal.redirectURL, location.href, usePage())
+
+    if(location.href !== usePage()?.props?.modal.redirectURL) {
+        router.visit(usePage()?.props?.modal.redirectURL, {
+            preserveScroll: true,
+            preserveState: true,
+            only: ['times', 'tasks'],
+        })
+    }
+
     // close();
     // ElMessageBox.confirm('Are you sure to close this dialog?')
     //     .then(() => {
@@ -20,17 +37,13 @@ const handleClose = (done: () => void) => {
     //         // catch error
     //     })
 }
-
-// import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue"
-
-
 </script>
 
 <template>
     <el-dialog
         v-model="show"
        :width="width"
-        @close="handleClose"
+        @closed="handleClose"
         draggable
     >
         <template #title>
@@ -41,26 +54,4 @@ const handleClose = (done: () => void) => {
             <slot name="footer"/>
         </template>
     </el-dialog>
-    <!--    <TransitionRoot appear as="template" :show="show">-->
-    <!--        <Dialog as="div" class="relative z-10" @close="close">-->
-    <!--            <TransitionChild-->
-    <!--                @after-leave="redirect"-->
-    <!--                as="template"-->
-    <!--            </TransitionChild>-->
-
-    <!--            <div class="fixed inset-0 overflow-y-auto">-->
-    <!--                <div class="flex min-h-full items-center justify-center p-4 text-center">-->
-    <!--                    <TransitionChild-->
-    <!--                        as="template"-->
-    <!--                        <DialogPanel class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">-->
-    <!--                            <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">-->
-    <!--                                <slot name="title" />-->
-    <!--                            </DialogTitle>-->
-    <!--                            <slot />-->
-    <!--                        </DialogPanel>-->
-    <!--                    </TransitionChild>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </Dialog>-->
-    <!--    </TransitionRoot>-->
 </template>

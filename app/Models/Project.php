@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\useLatestActivity;
 use App\QueryBuilders\ActivityQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
@@ -25,7 +26,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  */
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, useLatestActivity;
 
     use Cachable;
     protected $cacheCooldownSeconds = 300;
@@ -34,9 +35,13 @@ class Project extends Model
         'name',
         'description',
         'client_id',
+        'latest_activity_id',
+        'latest_activity_at',
     ];
 
-    protected $appends = ['avatar'];
+    protected $appends = [
+        'avatar'
+    ];
 
     public static function query(): Builder|ProjectQueryBuilder
     {
@@ -71,11 +76,6 @@ class Project extends Model
     public function members(): BelongsToMany|UserQueryBuilder
     {
         return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
-    }
-
-    public function latestActivity(): HasOne|ActivityQueryBuilder
-    {
-        return $this->hasOne(Activity::class)->latest();
     }
 
     protected function avatar(): Attribute

@@ -1,7 +1,7 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3'
 import {computed, ref} from "vue";
-import {EditPen, Operation, Setting} from "@element-plus/icons-vue";
+import {CirclePlus, EditPen, Operation, Setting} from "@element-plus/icons-vue";
 
 const props = defineProps({
     activity: {
@@ -31,6 +31,7 @@ const url = ref(route('project.task', {project: props.activity.project_id, task:
             <el-tooltip :content="activity.description">
             <el-icon class="activity">
                 <EditPen v-if="activity.type === 'task_commented'"/>
+                <CirclePlus v-if="activity.type === 'task_created'"/>
                 <Operation v-else />
             </el-icon> &nbsp;
         </el-tooltip>

@@ -1,6 +1,6 @@
 <script setup>
 import {Link, usePage, router} from '@inertiajs/vue3'
-import {computed, ref} from "vue";
+import {computed, inject, provide, ref} from "vue";
 import {useDateFormat, useStorage, useTimeAgo} from "@vueuse/core";
 import Time from "@/Components/Time.vue";
 import Timer from "@/Components/Timer.vue";
@@ -12,6 +12,11 @@ import Activity from "@/Components/Activity.vue";
 const props = defineProps({
     tasks: {
         required: true
+    },
+    showProject: {
+        type: Boolean,
+        required: false,
+        default: false
     },
     onlyAvatar: {
         type: Boolean,
@@ -25,15 +30,27 @@ const props = defineProps({
     }
 })
 
-const tasksRows = computed(() => props.tasks.data || props.tasks)
+const tasksRows = computed(() => props.tasks?.data || props.tasks)
 
-const showProject = ref(tasksRows.value?.[0]?.project)
+// const showProject = computed(() => tasksRows.value?.[0]?.project)
+
+const handleTasks = inject('handleTasks');
 
 const updateTask = ({task, data}) => {
+    console.log(
+        'updateTask', usePage().props.projectsOrder
+    )
     router.post(
         route('project.task', {task: task.number, project: task.project_id}),
         {task: data},
-        {preserveScroll: true, preserveState: true, only: ['projects', 'tasks']},
+        {preserveScroll: true, preserveState: true, headers: {'projects-order': usePage().props.projectsOrder},
+            only: ['tasks', 'flash'],
+            onSuccess: (response) => {
+                // console.log('onSuccess', response)
+                handleTasks(response);
+                // tasksRows.value = response.props.tasks.data
+            },
+        },
     )
 }
 </script>
@@ -42,6 +59,14 @@ const updateTask = ({task, data}) => {
 
 <!--    {{ JSON.stringify(usePage().props.statuses) }}-->
     <el-table :data="tasksRows" stripe style="width: 100%">
+        <template #empty>
+            <div v-if="tasks">No Data</div>
+            <div v-else>
+                <el-icon class="is-loading" size="32" style="margin-top: 22px;">
+                    <Loading />
+                </el-icon>
+            </div>
+        </template>
 <!--        <el-table-column fixed prop="number" label="#" width="64">-->
 <!--            <template #default="{row}">-->
 <!--                <b>{{ row.number }}</b>-->
@@ -85,7 +110,7 @@ const updateTask = ({task, data}) => {
         </el-table-column>
         <el-table-column prop="status" label="Status" width="150" align="center">
             <template #default="{row}">
-                <el-dropdown style="width: 100%;" size="default" trigger="click" @command="updateTask">
+                <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click" @command="updateTask">
                     <el-tag v-if="row.status"
                             class="status-tag"
                             size="small"
@@ -105,7 +130,7 @@ const updateTask = ({task, data}) => {
         </el-table-column>
         <el-table-column prop="priority" label="Priority" width="120" align="center">
             <template #default="{row}">
-                <el-dropdown style="width: 100%;" size="default" trigger="click" @command="updateTask">
+                <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click" @command="updateTask">
                     <el-tag v-if="row.priority"
                             class="priority-tag"
                             size="small"
@@ -130,8 +155,6 @@ const updateTask = ({task, data}) => {
                         <User :user="row.latest_activity.user"/> &nbsp;
                         <Activity :activity="row.latest_activity" :task="row" only-icon style="margin: 0 5px;"/>
                         <Time :time="row.latest_activity.created_at"/>
-<!-- -&#45;&#45;-->
-<!--                        {{ row.latest_activity.id }} &#45;&#45; <Time :time="row.latest_activity_created_at "/>-->
                     </div>
                 </template>
                 <template v-else>
@@ -142,7 +165,7 @@ const updateTask = ({task, data}) => {
     </el-table>
     <br>
 
-    <Pagination :data="tasks"/>
+    <Pagination :data="tasks" :only="['tasks']"/>
 </template>
 
 <style lang="scss" scoped>

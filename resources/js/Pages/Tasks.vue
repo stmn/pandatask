@@ -4,12 +4,15 @@ import Layout from "@/Layouts/Layout.vue";
 import {List, Search} from "@element-plus/icons-vue";
 import TasksTable from "@/Components/TasksTable.vue";
 import useList from "@/Composables/useList.js";
+import usePageLoading from "@/Composables/usePageLoading.js";
+import {onMounted, ref} from "vue";
 
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
     tasks: {
         required: true,
+        // default: () => []
     },
     search: {
         type: String,
@@ -18,7 +21,16 @@ const props = defineProps({
     },
 });
 
-const {query} = useList();
+const {query} = useList({only: ['tasks']});
+
+// usePageLoading().loading.value = true;
+const tableLoading = ref(true);
+onMounted(() => {
+    router.reload({only: ['tasks'], onSuccess: () => {
+            // usePageLoading().loading.value = false;
+            tableLoading.value = false;
+        }});
+});
 </script>
 
 <template>
@@ -47,7 +59,13 @@ const {query} = useList();
 
     <br><br>
 
-    <TasksTable :tasks="tasks"/>
+<!--    <div v-if="tableLoading">-->
+<!--        <el-icon class="is-loading" size="50">-->
+<!--            <Loading />-->
+<!--        </el-icon>-->
+<!--    </div>-->
+<!--    <TasksTable v-else-if="tasks" :tasks="tasks"/>-->
+    <TasksTable :tasks="tasks" show-project/>
 </template>
 
 <style>

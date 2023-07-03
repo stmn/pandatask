@@ -1,5 +1,5 @@
 <template>
-    <div v-if="data.per_page" style="margin-top: 15px;">
+    <div v-if="data?.per_page" style="margin-top: 15px;">
         <el-pagination background
                        :page-count="Math.ceil(data.total/data.per_page)"
                        :current-page="data.current_page"
@@ -16,13 +16,15 @@
 import {router} from '@inertiajs/vue3'
 import {ref} from "vue";
 
-const props = defineProps(['data'])
+const props = defineProps(['data', 'only'])
 
 const pageSize = ref(parseInt(route().params.per_page || 25))
 
 const change = (page) => {
     router.visit(location.href, {
-        data: {page}
+        data: {page},
+        only: props.only,
+        preserveState: true,
     })
 }
 
@@ -30,7 +32,9 @@ const handleSizeChange = (size) => {
     pageSize.value = size;
 
     router.visit(location.href, {
-        data: {per_page: size, page: 1}
+        data: {per_page: size, page: 1},
+        only: props.only,
+        preserveState: true,
     })
 }
 </script>

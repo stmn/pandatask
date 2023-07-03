@@ -1,6 +1,6 @@
 <script setup>
-import {Head, Link} from '@inertiajs/vue3';
-import {ref} from "vue";
+import {Head, Link, router} from '@inertiajs/vue3';
+import {onActivated, onBeforeMount, onMounted, onUpdated, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import Time from "@/Components/Time.vue";
@@ -37,6 +37,23 @@ const handleClick = (index) => {
     //
     // })
 };
+
+console.log('timesheets');
+onMounted(() => {
+    console.log('onMounted timesheets');
+    router.reload({only: ['times'], onSuccess: () => {
+
+        }});
+});
+onUpdated(() => {
+    console.log('onUpdated timesheets');
+});
+onBeforeMount(() => {
+    console.log('onBeforeMount timesheets');
+});
+onActivated(() => {
+    console.log('onActivated timesheets');
+});
 </script>
 
 <template>

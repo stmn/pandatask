@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import {useForm} from "@inertiajs/vue3"
+import {router, useForm, usePage} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import {onMounted, onUpdated, ref} from "vue";
+import {inject, onMounted, onUpdated, ref} from "vue";
 import {useFocus} from "@vueuse/core";
+import InputError from "@/Components/InputError.vue";
 
 const props = defineProps({
     project: {
@@ -11,6 +12,7 @@ const props = defineProps({
         required: true
     },
 });
+
 const form = useForm({
     subject: '',
     description: null,
@@ -19,13 +21,30 @@ const form = useForm({
     // last_name: props.contact.last_name,
 })
 
-const {close, redirect} = useModal()
+const handleTasks = inject('handleTasks');
+
+const {close, redirect, show} = useModal()
 
 const url = route('project.tasks.create', {project: props.project.id});
 
 const create = (open = 0) => form.post(url+'?open='+open, {
-    onSuccess: () => {
-        redirect()
+    preserveState: true,
+    preserveScroll: true,
+    only: ['projects', 'tasks', 'errors'],
+    onFinish: () => {
+
+    },
+    onSuccess: (response) => {
+        console.log('onSuccess11', response);
+        // handleTasks(response);
+        // redirect()
+        close();
+        // show.value = false;
+        // router.visit(usePage()?.props?.modal.redirectURL, {
+        //     preserveScroll: true,
+        //     preserveState: true,
+        //     only: ['tasks'],
+        // })
     }
 });
 
@@ -37,14 +56,14 @@ onMounted(() => {
     }, 100)
 })
 </script>
-
 <template>
     <Modal>
         <template #title>Create a new task</template>
-
+<!--        {{ JSON.stringify(form.errors) }}-->
         <el-form label-width="120px">
-            <el-form-item label="Subject">
+            <el-form-item label="Subject" :class="{'is-error':form.errors.subject}">
                 <el-input v-model="form.subject" class="focus-me" placeholder="Describe shortly your task..." />
+                <InputError :message="form.errors.subject"/>
             </el-form-item>
             <el-form-item label="Description">
                 <el-input v-model="form.description" type="textarea" placeholder="Write description for more informations..." />
@@ -75,7 +94,7 @@ onMounted(() => {
         <el-button type="success" @click="createAndOpen">
           Create and open
         </el-button>
-          <el-button type="success" @click="create">
+          <el-button type="success" @click="create(0)">
           Create
         </el-button>
       </span>

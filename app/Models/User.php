@@ -10,6 +10,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,6 +32,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
+        'active_time_id',
         'first_name',
         'last_name',
         'email',
@@ -53,7 +55,6 @@ class User extends Authenticatable
     protected $appends = [
         'avatar',
         'full_name',
-//        'active_time',
     ];
 
     public static function query(): Builder|UserQueryBuilder
@@ -74,6 +75,11 @@ class User extends Authenticatable
     public function groups(): BelongsToMany|GroupQueryBuilder
     {
         return $this->belongsToMany(Group::class, 'group_users');
+    }
+
+    public function activeTime(): BelongsTo|TimeQueryBuilder
+    {
+        return $this->belongsTo(Time::class, 'active_time_id');
     }
 
     public function isAdmin(): bool
@@ -103,16 +109,6 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn() => trim($this->first_name . ' ' . $this->last_name)
-        );
-    }
-
-    protected function activeTime(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->times()
-                ->with('task.project')
-                ->whereNull('end_at')
-                ->first(),
         );
     }
 

@@ -5,6 +5,7 @@ import {createApp, h} from 'vue';
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import {modal} from "momentum-modal"
+import LazyComponent from 'v-lazy-component'
 
 // import 'element-plus/dist/index.css'
 // import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -21,7 +22,7 @@ const app = createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     progress: {
         // The delay after which the progress bar will appear, in milliseconds...
-        delay: 250,
+        delay: 0,
         // The color of the progress bar...
         color: '#fff',
         // Whether to include the default NProgress styles...
@@ -39,6 +40,7 @@ const app = createInertiaApp({
             })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(LazyComponent)
             .use(ElementPlus);
 
         for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -56,7 +58,7 @@ const app = createInertiaApp({
 
         return app.mount(el);
     },
-    progress: {
-        color: '#4B5563',
-    },
+    // progress: {
+    //     color: '#4B5563',
+    // },
 });

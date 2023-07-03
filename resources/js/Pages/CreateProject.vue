@@ -30,7 +30,7 @@ const url = route(`projects.${props.project ? 'edit' : 'create'}`, {project: pro
 
 const create = () => form.post(url, {
     onSuccess: () => {
-        redirect()
+        // redirect()
     }
 });
 
@@ -50,7 +50,7 @@ const activeTab = ref('general');
         <el-tabs v-model="activeTab">
             <el-tab-pane label="General" name="general">
                 <el-form label-width="120px">
-                    <el-form-item label="Name" :class="{'is-error':true}">
+                    <el-form-item label="Name" :class="{'is-error':form.errors.name}">
                         <el-input v-model="form.name" class="focus-me"/>
                         <InputError :message="form.errors.name"/>
                     </el-form-item>

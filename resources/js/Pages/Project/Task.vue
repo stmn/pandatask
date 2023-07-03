@@ -10,6 +10,7 @@ import Time from "@/Components/Time.vue";
 import Timesheets from "@/Components/Timesheets.vue";
 import Activities from "@/Components/Activities.vue";
 import Editor from "@/Components/Editor.vue";
+import {useStorage} from "@vueuse/core";
 
 // import { useEditor, EditorContent } from '@tiptap/vue-3'
 // import StarterKit from '@tiptap/starter-kit'
@@ -57,7 +58,7 @@ const uploadRef = ref(null);
 //     comment.value = value
 // }, {deep: true});
 
-console.log('abc', props.task)
+// console.log('abc', props.task)
 
 const form = useForm({
     comment: '',
@@ -113,6 +114,8 @@ onMounted(() => {
 const canSubmit = computed(() => {
     return form.comment || form.files.length || detailsForm.isDirty;
 })
+
+const onlyComments = useStorage('onlyComments', false);
 </script>
 
 <template>
@@ -166,6 +169,8 @@ const canSubmit = computed(() => {
                     <el-form-item label="Description" prop="desc">
                         {{ task.description }}
                     </el-form-item>
+
+                    {{ JSON.stringify(form.errors) }}
 
                     <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
                         <el-tab-pane name="comment">
@@ -277,7 +282,9 @@ const canSubmit = computed(() => {
                             Activity
                         </template>
 
-                        <Activities :activities="activities"/>
+                        <el-switch v-model="onlyComments" active-text="Only comments" size="small" style="margin-bottom: 15px;"/>
+
+                        <Activities :only-comments="onlyComments" :activities="activities"/>
                     </el-tab-pane>
                     <el-tab-pane name="timesheet">
                         <template #label>

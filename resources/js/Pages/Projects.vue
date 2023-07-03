@@ -7,6 +7,8 @@ import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Activity from "@/Components/Activity.vue";
 import useList from "@/Composables/useList.js";
+import {onMounted, ref} from "vue";
+import usePageLoading from "@/Composables/usePageLoading.js";
 
 defineOptions({layout: [Layout]})
 
@@ -22,7 +24,15 @@ const props = defineProps({
     },
 });
 
-const {query} = useList();
+const {query} = useList({only: ['projects']});
+
+// usePageLoading().loading.value = true;
+
+// onMounted(() => {
+//     router.reload({only: ['projects'], onSuccess: () => {
+//             // usePageLoading().loading.value = false;
+//         }});
+// });
 </script>
 
 <template>
@@ -59,8 +69,8 @@ const {query} = useList();
 
     <br><br>
 
-    <div>
-        <div v-if="projects.data.length > 0" v-for="item in projects.data" :key="item.id">
+    <div v-if="projects?.data.length > 0">
+        <div v-for="item in projects.data" :key="item.id">
             <el-card class="box-card project-card">
                 <template #header>
                     <div class="card-header">
@@ -107,12 +117,11 @@ const {query} = useList();
             </el-card>
             <br>
         </div>
-        <div v-else>
-            <el-empty description="Projects not found"/>
-        </div>
+        <pagination :data="projects"/>
     </div>
-
-    <pagination :data="projects"/>
+    <div v-else>
+        <el-empty description="Projects not found"/>
+    </div>
 </template>
 
 <style lang="scss" scoped>

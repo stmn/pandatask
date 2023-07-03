@@ -48,8 +48,8 @@ Route::middleware('auth')->group(callback: function () {
 
     Route::get('/projects/create', [ProjectsController::class, 'form'])->name('projects.create');
     Route::get('/projects/{project}/edit', [ProjectsController::class, 'form'])->name('projects.edit');
-    Route::post('/projects/create', [ProjectsController::class, 'save'])->name('projects.create');
-    Route::post('/projects/{project}/edit', [ProjectsController::class, 'save'])->name('projects.edit');
+    Route::post('/projects/create', [ProjectsController::class, 'save'])->name('projects.store');
+    Route::post('/projects/{project}/edit', [ProjectsController::class, 'save'])->name('projects.update');
 
     Route::get('/tasks', [TasksController::class, 'index'])->name('tasks');
 
@@ -78,19 +78,19 @@ Route::middleware('auth')->group(callback: function () {
         Route::get('tasks', [ProjectTasksController::class, 'index'])->name('tasks');
 
         Route::get('tasks/create', [ProjectTasksController::class, 'create'])->name('tasks.create');
-        Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('tasks.create');
+        Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('tasks.store');
 
         Route::get('timesheets', [TimesheetsController::class, 'index'])->name('timesheets');
         Route::get('timesheets/create', [TimesheetsController::class, 'form'])->name('timesheets.create');
-        Route::post('timesheets/create', [TimesheetsController::class, 'save'])->name('timesheets.create');
+        Route::post('timesheets/create', [TimesheetsController::class, 'save'])->name('timesheets.store');
         Route::get('timesheets/{time}/edit', [TimesheetsController::class, 'form'])->name('timesheets.edit');
-        Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('timesheets.edit');
+        Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('timesheets.update');
 
 
         Route::get('activities', [ActivitiesController::class, 'index'])->name('activity');
 
         Route::get('tasks/{task:number}', [TaskController::class, 'index'])->name('task');
-        Route::post('tasks/{task:number}', [TaskController::class, 'update'])->name('task');
+        Route::post('tasks/{task:number}', [TaskController::class, 'update'])->name('task.update');
     });
 });
 

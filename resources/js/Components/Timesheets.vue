@@ -52,6 +52,14 @@ const timeBetweenTwoDates = (date1, date2) => {
 
 <template>
     <el-table :data="times?.data || times" stripe style="width: 100%">
+        <template #empty>
+            <div v-if="times">No Data</div>
+            <div v-else>
+                <el-icon class="is-loading" size="32" style="margin-top: 22px;">
+                    <Loading />
+                </el-icon>
+            </div>
+        </template>
         <!--        <el-table-column v-if="cols.includes('timer') && !task" prop="timer" width="43">-->
         <!--            <template #default="{row}">-->
         <!--                <Timer :task="row.task" />-->
@@ -99,7 +107,8 @@ const timeBetweenTwoDates = (date1, date2) => {
         </el-table-column>
         <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">
             <template #default="{row}">
-                <Link :preserve-state="true" :href="route('project.timesheets.edit', {project: row.project_id, time: row.id})">
+                <Link preserve-state preserve-scroll :only="['modal', 'times']"
+                      :href="route('project.timesheets.edit', {project: row.project_id, time: row.id})">
                     <el-button type="primary" circle :icon="Edit"></el-button>
                 </Link>
             </template>

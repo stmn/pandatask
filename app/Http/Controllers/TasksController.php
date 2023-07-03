@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ActivityType;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,19 +18,21 @@ class TasksController extends Controller
         return Inertia::render('Tasks', [
             'activeIndex' => 'tasks',
             'search' => $request->get('search'),
-            'tasks' => fn() => Task::query()
+            'tasks' => Inertia::lazy(fn() => Task::query()
                 ->with([
                     'project',
                     'latestActivity.user',
-                    'status', 'priority',
+                    'status',
+                    'priority',
                 ])
-                ->withCount('comments')
+//                ->withCount('comments')
+                ->withCount(['activities as comments_count' => fn($query) => $query->where('type', '=', ActivityType::TASK_COMMENTED)])
                 ->when($request->has('search'), function ($query) use ($request) {
                     $query->where('subject', 'like', '%' . $request->get('search') . '%');
                 })
-                ->latest('latest_activity_max_created_at')
-                ->withMax('latestActivity', 'created_at')
-                ->paginate($this->perPage()),
+                ->latest('latest_activity_at')
+//                ->where('id', -1)
+                ->paginate($this->perPage())),
         ]);
     }
 }

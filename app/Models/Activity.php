@@ -13,10 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -28,6 +25,7 @@ class Activity extends Model implements HasMedia
     use InteractsWithMedia;
 
     use Cachable;
+
     protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [
@@ -36,21 +34,40 @@ class Activity extends Model implements HasMedia
         'task_id',
         'comment_id',
         'type',
-        'changes',
-        'activity_type',
-        'activity_id',
+        'details',
+//        'activity_type',
+//        'activity_id',
         'private',
     ];
 
     protected $casts = [
         'type' => ActivityType::class,
         'private' => 'boolean',
-        'changes' => 'array',
+        'details' => 'array',
     ];
 
     protected $appends = [
         'description',
     ];
+
+    // saved event
+    protected static function booted(): void
+    {
+        static::creating(function (Activity $activity) {
+            if (!$activity->user_id) {
+                $activity->user_id = auth()->id();
+            }
+        });
+
+        static::created(function (Activity $activity) {
+            $latest = [
+                'latest_activity_id' => $activity->id,
+                'latest_activity_at' => $activity->created_at,
+            ];
+            $activity->task->update($latest);
+            $activity->project->update($latest);
+        });
+    }
 
     public static function query(): Builder|ActivityQueryBuilder
     {
@@ -82,14 +99,14 @@ class Activity extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    public function comments(): HasMany|CommentQueryBuilder
-    {
-        return $this->hasMany(Comment::class);
-    }
+//    public function comments(): HasMany|CommentQueryBuilder
+//    {
+//        return $this->hasMany(Comment::class);
+//    }
 
-    public function comment(): HasOne|CommentQueryBuilder
+    public function comment(): BelongsTo|CommentQueryBuilder
     {
-        return $this->hasOne(Comment::class);
+        return $this->belongsTo(Comment::class);
     }
 
     public function activity(): MorphTo
@@ -100,7 +117,58 @@ class Activity extends Model implements HasMedia
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn() => ' [activity_info] ',
+            get: fn() => $this->type->getDescription(),
+        );
+    }
+
+    protected function details(): Attribute
+    {
+        return Attribute::make(
+            get: function ($details) {
+                $details = json_decode($details, true);
+
+                $collection = collect([]);
+
+                foreach (\Arr::get($details, 'changed', []) as $key => $change) {
+                    if($key === 'priority_id') {
+                        $old = Priority::find($change[0]);
+                        $new = Priority::find($change[1]);
+                        $collection->push([
+                            'field' => $key,
+                            'old' => $old->only('name', 'color'),
+                            'new' => $new->only('name', 'color'),
+                        ]);
+                    } elseif($key === 'status_id') {
+                        $old = Status::find($change[0]);
+                        $new = Status::find($change[1]);
+                        $collection->push([
+                            'field' => $key,
+                            'old' => $old->only('name', 'color'),
+                            'new' => $new->only('name', 'color'),
+                        ]);
+                    }
+                }
+                foreach (\Arr::get($details, 'attached', []) as $key => $attached) {
+                    if($key === 'assignees') {
+                        $users = User::find($attached);
+                        $collection->push([
+                            'field' => $key,
+                            'attached' => $users,
+                        ]);
+                    }
+                }
+                foreach (\Arr::get($details, 'detached', []) as $key => $attached) {
+                    if($key === 'assignees') {
+                        $users = User::find($attached);
+                        $collection->push([
+                            'field' => $key,
+                            'detached' => $users,
+                        ]);
+                    }
+                }
+
+                return $collection;
+            },
         );
     }
 }
