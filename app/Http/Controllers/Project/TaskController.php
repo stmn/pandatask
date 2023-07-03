@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Project;
 use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Priority;
 use App\Models\Project;
+use App\Models\Status;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,20 +31,25 @@ class TaskController extends Controller
             'times' => fn() => $task->times()
                 ->with(['author'])
                 ->latest()
-                ->get()
+                ->get(),
+            'statuses' => fn() => Status::all(),
+            'priorities' => fn() => Priority::all(),
         ]);
     }
 
     public function update(Project $project, Request $request, Task $task)
     {
         $request->validate([
-            'comment' => [],
-            'files' => [],
-            'private' => [],
-            'assignees' => [],
-//            'task.subject' => ['required', 'string'],
-            'task.priority_id' => [],
-            'task.status_id' => [],
+            'activity.comment' => [],
+            'activity.files' => [],
+            'activity.private' => [],
+            'task.assignees' => ['array'],
+            'task.subject' => ['required', 'nullable'],
+            'task.description' => [],
+            'task.priority_id' => ['required', 'exists:priorities,id'],
+            'task.status_id' => ['required', 'exists:statuses,id'],
+            'task.private' => ['boolean'],
+            'task.tags' => ['array'],
         ], $request->all());
 
         $activity = [
@@ -76,9 +83,9 @@ class TaskController extends Controller
             $activity['type'] = ActivityType::TASK_COMMENTED;
         }
 
-        if ($request->assignees !== NULL) {
+        if ($request->task['assignees'] !== NULL) {
             $result = $task->assignees()->sync(
-                collect($request->assignees)->pluck('id')
+                collect($request->task['assignees'])->pluck('id')
             );
             if ($result['attached']) {
                 $activity['details']['attached']['assignees'] = $result['attached'];

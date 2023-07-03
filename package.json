@@ -30,6 +30,7 @@
         "@vueuse/router": "^10.2.0",
         "element-plus": "^2.3.6",
         "momentum-modal": "^0.2.1",
-        "v-lazy-component": "^3.0.8"
+        "v-lazy-component": "^3.0.8",
+        "worker-timers": "^7.0.72"
     }
 }

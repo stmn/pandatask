@@ -1,35 +1,55 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3'
-import {computed} from "vue";
+import {ref} from "vue";
 import Timer from "@/Components/Timer.vue";
-import {useNow} from "@vueuse/core";
-
+import useTaskTimer from "@/Composables/useTaskTimer.js";
+import {clearInterval, setInterval} from 'worker-timers';
 
 const page = usePage()
 
-const auth = computed(() => page.props.auth)
-const activeTime = computed(() => page.props.auth.user.active_time)
+const {auth, activeTime, time, seconds} = useTaskTimer();
 
-const time = computed(() => {
-    if (!activeTime.value) {
-        return 0;
+// Timer in Title
+
+const originalTitle = ref();
+const workerId = ref();
+window.addEventListener('blur', function () {
+    if (!workerId.value && seconds.value > 0) {
+        originalTitle.value = document.title;
+
+        const newSeconds = ref(seconds.value);
+
+        const func = () => {
+            newSeconds.value++;
+
+            const s = newSeconds.value;
+            const m = Math.floor(s / 60);
+            const h = Math.floor(m / 60);
+
+            const time = `${h.toString().padStart(2, '0')}:${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
+            document.title = `[${time}] ${originalTitle.value}`;
+        };
+
+        func();
+
+        workerId.value = setInterval(func, 1000);
     }
+});
 
-    const now = useNow();
-
-    const seconds = Math.floor((now.value - Date.parse(activeTime.value?.start_at)) / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
-    return `${hours.toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+window.addEventListener('focus', function () {
+    if (workerId.value) {
+        clearInterval(workerId.value);
+        workerId.value = null;
+        document.title = originalTitle.value;
+    }
 });
 </script>
 
 <template>
     <Timer :task="activeTime?.task">
-<!--        <template #play>-->
-<!--            <el-button>PLAY</el-button>-->
-<!--        </template>-->
+        <!--        <template #play>-->
+        <!--            <el-button>PLAY</el-button>-->
+        <!--        </template>-->
         <template #stop>
             <el-popover
                 placement="left"

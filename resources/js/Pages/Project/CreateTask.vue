@@ -1,24 +1,38 @@
 <script lang="ts" setup>
-import {router, useForm, usePage} from "@inertiajs/vue3"
+import {useForm} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import {inject, onMounted, onUpdated, ref} from "vue";
-import {useFocus} from "@vueuse/core";
+import {inject, onMounted} from "vue";
 import InputError from "@/Components/InputError.vue";
+import TaskForm from "@/Components/Task/TaskForm.vue";
 
 const props = defineProps({
     project: {
         type: Object,
         required: true
     },
+    priorities: {
+        type: Array,
+        required: true
+    },
+    statuses: {
+        type: Array,
+        required: true
+    },
+    users: {
+        type: Array,
+        required: true
+    },
 });
 
 const form = useForm({
-    subject: '',
+    subject: null,
     description: null,
-    private: false,
-    // first_name: props.contact.first_name,
-    // last_name: props.contact.last_name,
+    assignees: null,
+    private: null,
+    status_id: props.statuses[0].id,
+    priority_id: props.priorities[Math.floor(props.priorities.length / 2)].id,
+    tags: null,
 })
 
 const handleTasks = inject('handleTasks');
@@ -27,7 +41,7 @@ const {close, redirect, show} = useModal()
 
 const url = route('project.tasks.create', {project: props.project.id});
 
-const create = (open = 0) => form.post(url+'?open='+open, {
+const create = (open = 0) => form.post(url + '?open=' + open, {
     preserveState: true,
     preserveScroll: true,
     only: ['projects', 'tasks', 'errors'],
@@ -59,24 +73,33 @@ onMounted(() => {
 <template>
     <Modal>
         <template #title>Create a new task</template>
-<!--        {{ JSON.stringify(form.errors) }}-->
-        <el-form label-width="120px">
-            <el-form-item label="Subject" :class="{'is-error':form.errors.subject}">
-                <el-input v-model="form.subject" class="focus-me" placeholder="Describe shortly your task..." />
-                <InputError :message="form.errors.subject"/>
-            </el-form-item>
-            <el-form-item label="Description">
-                <el-input v-model="form.description" type="textarea" placeholder="Write description for more informations..." />
-            </el-form-item>
-            <el-form-item label="Is private">
-                <el-switch
-                    v-model="form.private"
-                    size="small"
-                    active-text="Yes"
-                    inactive-text="No"
-                />
-            </el-form-item>
+                {{ JSON.stringify(form.errors) }}
+
+        <el-form label-width="120px" label-position="top">
+        <TaskForm :priorities="priorities"
+                  :statuses="statuses"
+                  :users="users"
+                  v-model="form" />
         </el-form>
+
+<!--        <el-form label-width="120px">-->
+<!--            <el-form-item label="Subject" :class="{'is-error':form.errors.subject}">-->
+<!--                <el-input v-model="form.subject" class="focus-me" placeholder="Describe shortly your task..."/>-->
+<!--                <InputError :message="form.errors.subject"/>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="Description">-->
+<!--                <el-input v-model="form.description" type="textarea"-->
+<!--                          placeholder="Write description for more informations..."/>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="Is private">-->
+<!--                <el-switch-->
+<!--                    v-model="form.private"-->
+<!--                    size="small"-->
+<!--                    active-text="Yes"-->
+<!--                    inactive-text="No"-->
+<!--                />-->
+<!--            </el-form-item>-->
+<!--        </el-form>-->
 
         <!--        <form class="mt-6" @submit.prevent="update">-->
         <!--            <div class="grid grid-cols-2 gap-x-6 gap-y-8">-->

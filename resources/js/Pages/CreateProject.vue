@@ -47,8 +47,8 @@ const activeTab = ref('general');
     <Modal>
         <template #title>{{ project ? 'Edit project' : 'Create a new project' }}</template>
 
-        <el-tabs v-model="activeTab">
-            <el-tab-pane label="General" name="general">
+<!--        <el-tabs v-model="activeTab">-->
+<!--            <el-tab-pane label="General" name="general">-->
                 <el-form label-width="120px">
                     <el-form-item label="Name" :class="{'is-error':form.errors.name}">
                         <el-input v-model="form.name" class="focus-me"/>
@@ -86,46 +86,46 @@ const activeTab = ref('general');
                         </el-select>
                     </el-form-item>
 
-                    STATUS (tags) - START DATE (date) - DUE DATA (date) - PRIOTIY (tags) - HOURLY RATE (number) - ESTIMATION (number) - BILLABLE (boolean) - TAGS -
+<!--                    STATUS (tags) - START DATE (date) - DUE DATA (date) - PRIOTIY (tags) - HOURLY RATE (number) - ESTIMATION (number) - BILLABLE (boolean) - TAGS - -->
 
-                    <el-form-item label="Fields">
-                        <el-checkbox>Billable fields</el-checkbox>
-                        <el-checkbox>Billable fields</el-checkbox>
-                    </el-form-item>
+<!--                    <el-form-item label="Fields">-->
+<!--                        <el-checkbox>Billable fields</el-checkbox>-->
+<!--                        <el-checkbox>Billable fields</el-checkbox>-->
+<!--                    </el-form-item>-->
                 </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="Custom fields" name="fields">
+<!--            </el-tab-pane>-->
+<!--            <el-tab-pane label="Custom fields" name="fields">-->
 
-                <el-config-provider size="small">
-                    <el-card>
-                        <el-form label-position="top">
-                            <div style="display: flex; width:100%;">
-                                <el-form-item label="Key">
-                                    <el-input model-value="Field name" placeholder="Add a new field"
-                                              suffix-icon="el-icon-plus"/>
-                                </el-form-item>
-                                <el-form-item label="Type">
-                                    <el-select model-value="text">
-                                        <el-option label="Text" value="text"></el-option>
-                                        <el-option label="Number" value="number"></el-option>
-                                        <el-option label="Date" value="date"></el-option>
-                                        <el-option label="Select" value="select"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="Value">
-                                    <el-input model-value="P" placeholder="Add a new field" suffix-icon="el-icon-plus"/>
-                                </el-form-item>
-                                <el-form-item label="&nbsp;">
-                                    <el-button type="danger">Remove</el-button>
-                                </el-form-item>
-                            </div>
-                        </el-form>
-                    </el-card>
-                </el-config-provider>
-                <el-button type="success">Add field</el-button>
+<!--                <el-config-provider size="small">-->
+<!--                    <el-card>-->
+<!--                        <el-form label-position="top">-->
+<!--                            <div style="display: flex; width:100%;">-->
+<!--                                <el-form-item label="Key">-->
+<!--                                    <el-input model-value="Field name" placeholder="Add a new field"-->
+<!--                                              suffix-icon="el-icon-plus"/>-->
+<!--                                </el-form-item>-->
+<!--                                <el-form-item label="Type">-->
+<!--                                    <el-select model-value="text">-->
+<!--                                        <el-option label="Text" value="text"></el-option>-->
+<!--                                        <el-option label="Number" value="number"></el-option>-->
+<!--                                        <el-option label="Date" value="date"></el-option>-->
+<!--                                        <el-option label="Select" value="select"></el-option>-->
+<!--                                    </el-select>-->
+<!--                                </el-form-item>-->
+<!--                                <el-form-item label="Value">-->
+<!--                                    <el-input model-value="P" placeholder="Add a new field" suffix-icon="el-icon-plus"/>-->
+<!--                                </el-form-item>-->
+<!--                                <el-form-item label="&nbsp;">-->
+<!--                                    <el-button type="danger">Remove</el-button>-->
+<!--                                </el-form-item>-->
+<!--                            </div>-->
+<!--                        </el-form>-->
+<!--                    </el-card>-->
+<!--                </el-config-provider>-->
+<!--                <el-button type="success">Add field</el-button>-->
 
-            </el-tab-pane>
-        </el-tabs>
+<!--            </el-tab-pane>-->
+<!--        </el-tabs>-->
 
         <template #footer>
       <span class="dialog-footer">

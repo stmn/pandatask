@@ -9,6 +9,7 @@ import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Timesheets from "@/Components/Timesheets.vue";
 import Activities from "@/Components/Activities.vue";
+import TaskForm from "@/Components/Task/TaskForm.vue";
 import Editor from "@/Components/Editor.vue";
 import {useStorage} from "@vueuse/core";
 
@@ -38,6 +39,14 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    priorities: {
+        type: Array,
+        required: true
+    },
+    statuses: {
+        type: Array,
+        required: true
+    },
 });
 
 const uploadRef = ref(null);
@@ -60,44 +69,43 @@ const uploadRef = ref(null);
 
 // console.log('abc', props.task)
 
-const form = useForm({
+const activityForm = useForm({
     comment: '',
     files: [],
     private: false,
 });
-
-// const editor = useEditor({
-//     content: 'ABC',
-//     extensions: [
-//         StarterKit,
-//     ],
-// })
-
-const detailsForm = useForm({
+// alert(props.task.private)
+const taskForm = useForm({
+    subject: props.task.subject,
+    description: props.task.description,
     assignees: props.task.assignees,
+    private: props.task.private,
+    status_id: props.task.status_id,
+    priority_id: props.task.priority_id,
+    tags: props.task.tags,
 });
 
 const submit = () => {
     // router.post(route('project.task', {project: props.project, task: props.task}), {...commentForm, ...settingsForm})
-    console.log(form.data(), detailsForm.data(), {
-        ...form.data(),
-        ...detailsForm.data(),
+    console.log(activityForm.data(), taskForm.data(), {
+        ...activityForm.data(),
+        ...taskForm.data(),
     })
-    form.transform((data) => ({
-        ...form.data(),
-        ...detailsForm.data(),
+    activityForm.transform((data) => ({
+        task: taskForm.data(),
+        activity: activityForm.data(),
     }))
         .post('', {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
-                form.reset();
+                activityForm.reset();
                 // settingsForm.reset();
                 document.querySelector('textarea')?.focus();
-                ElMessage({
-                    message: 'Form submitted successfully!',
-                    type: 'success',
-                })
+                // ElMessage({
+                //     message: 'Form submitted successfully!',
+                //     type: 'success',
+                // })
                 activeTab2.value = 'activity'
             },
         })
@@ -112,7 +120,7 @@ onMounted(() => {
 })
 
 const canSubmit = computed(() => {
-    return form.comment || form.files.length || detailsForm.isDirty;
+    return activityForm.comment || activityForm.files.length || taskForm.isDirty;
 })
 
 const onlyComments = useStorage('onlyComments', false);
@@ -142,7 +150,7 @@ const onlyComments = useStorage('onlyComments', false);
                     style="margin: 0 10px;"
                     :src="task.project.avatar"
                 />
-                <span style="margin-right: 5px;">{{ task.subject }} <b>#{{ task.number }}</b></span>
+                <span style="margin-right: 5px;">{{ task.subject }} <b>#{{ task.number }}</b> {{ task.id }}</span>
                 &nbsp;<el-tag v-if="task.private">Private</el-tag>
             </div>
         </template>
@@ -170,12 +178,12 @@ const onlyComments = useStorage('onlyComments', false);
                         {{ task.description }}
                     </el-form-item>
 
-                    {{ JSON.stringify(form.errors) }}
+                    {{ JSON.stringify(activityForm.errors) }}
 
                     <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
                         <el-tab-pane name="comment">
                             <template #label>
-                                <el-badge :is-dot="form.comment.length">
+                                <el-badge :is-dot="activityForm.comment.length">
                                     <el-icon>
                                         <EditPen/>
                                     </el-icon> &nbsp;
@@ -183,27 +191,27 @@ const onlyComments = useStorage('onlyComments', false);
                                 </el-badge>
                             </template>
 
-                            <!--                            <editor-content v-model="form.comment"-->
+                            <!--                            <editor-content v-model="activityForm.comment"-->
                             <!--                                            :editor="editor"-->
                             <!--                                            style="height: 100px; width: 100%;"-->
                             <!--                                            class="editor-content" />-->
 
-                            <editor v-model="form.comment"/>
+                            <editor v-model="activityForm.comment"/>
                             <br>
                             <el-form-item>
-                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="form.comment"
+                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="activityForm.comment"
                                           placeholder="Add comment..."/>
 
 
-                                <div v-if="form.errors.comment" class="el-form-item__error"
+                                <div v-if="activityForm.errors.comment" class="el-form-item__error"
                                      style="padding: 5px 0; position: relative;">
-                                    {{ form.errors.comment }}
+                                    {{ activityForm.errors.comment }}
                                 </div>
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane name="attachments">
                             <template #label>
-                                <el-badge :is-dot="form.files.length">
+                                <el-badge :is-dot="activityForm.files.length">
                                     <el-icon>
                                         <Upload/>
                                     </el-icon> &nbsp;
@@ -215,7 +223,7 @@ const onlyComments = useStorage('onlyComments', false);
                                 drag
                                 multiple
                                 ref="uploadRef"
-                                v-model:file-list="form.files"
+                                v-model:file-list="activityForm.files"
                                 :auto-upload="false"
                             >
                                 <el-icon class="el-icon--upload">
@@ -233,42 +241,31 @@ const onlyComments = useStorage('onlyComments', false);
                         </el-tab-pane>
                         <el-tab-pane name="settings">
                             <template #label>
-                                <el-badge :is-dot="detailsForm.isDirty">
+                                <el-badge :is-dot="taskForm.isDirty">
                                     <el-icon>
                                         <Operation/>
                                     </el-icon> &nbsp;
                                     Details
                                 </el-badge>
                             </template>
-                            <el-form-item label="Assignees">
-                                <el-select v-model="detailsForm.assignees"
-                                           value-key="id"
-                                           filterable multiple
-                                           placeholder="Select"
-                                           style="width: 100%;"
-                                           fit-input-width>
-                                    <el-option
-                                        v-for="item in users"
-                                        :key="item.id"
-                                        :label="item.full_name"
-                                        :value="item"
-                                    >
-                                        <User :user="item" disable-popover/>
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
+                            <el-config-provider size="default">
+                                <TaskForm v-model="taskForm"
+                                          :statuses="statuses"
+                                          :priorities="priorities"
+                                          :users="users" />
+                            </el-config-provider>
                         </el-tab-pane>
                     </el-tabs>
                     <el-switch
-                        v-model="form.private"
+                        v-model="activityForm.private"
                         size="small"
                         active-text="Is private"
                     />
                     <br><br>
                     <el-form-item>
                         <el-button type="success" @click="submit"
-                                   :loading="form.processing"
-                                   :disabled="form.processing || !canSubmit"
+                                   :loading="activityForm.processing"
+                                   :disabled="activityForm.processing || !canSubmit"
                         :icon="Check">Submit</el-button>
                     </el-form-item>
                 </el-form>

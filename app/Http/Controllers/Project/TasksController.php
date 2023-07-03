@@ -37,6 +37,9 @@ class TasksController extends Controller
     {
         return Inertia::modal('Project/CreateTask', [
             'project' => $project,
+            'statuses' => fn() => \App\Models\Status::all(),
+            'priorities' => fn() => \App\Models\Priority::all(),
+            'users' => fn() => $project->members()->get(),
 //            'times' => fn() => $project->tasks()
 //                ->with(['latestActivity.activity.author'])
 //                ->when($request->has('search'), function ($query) use ($request) {
@@ -49,17 +52,17 @@ class TasksController extends Controller
 
     public function store(\App\Models\Project $project, \Illuminate\Http\Request $request)
     {
-        $this->validate($request, [
-            'subject' => ['required'],
+        $request->validate([
+            'assignees' => ['array'],
+            'subject' => ['required', 'nullable'],
+            'description' => [],
+            'priority_id' => ['required', 'exists:priorities,id'],
+            'status_id' => ['required', 'exists:statuses,id'],
+            'private' => ['boolean'],
+            'tags' => ['array'],
         ], $request->all());
 
-        $task = $project->tasks()->create([
-            'subject' => $request->subject,
-            'description' => $request->description,
-            'author_id' => auth()->user()->id,
-            'number' => rand(1, 99999),
-            'private' => $request->private,
-        ]);
+        $task = $project->tasks()->create($request->all());
 
         $this->message('success', 'Task created');
 

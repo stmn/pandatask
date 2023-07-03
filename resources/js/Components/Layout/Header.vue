@@ -24,9 +24,7 @@ router.on('success', (event) => {
     activeIndex.value = event.detail.page.props.activeIndex;
 })
 
-const handleSelect = ({index}, middleClick = false) => {
-
-}
+const handleSelect = ({index}, middleClick = false) => {}
 
 const test = () => {
     console.log('test');

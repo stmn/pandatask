@@ -43,10 +43,16 @@ class Task extends Model
         'status_id',
         'latest_activity_id',
         'latest_activity_at',
+        'tags'
     ];
 
     protected $appends = [
         'url',
+    ];
+
+    protected $casts = [
+        'private' => 'boolean',
+        'tags' => 'array',
     ];
 
     protected static function booted(): void
