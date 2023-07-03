@@ -44,7 +44,7 @@ const updateTask = ({task, data}) => {
         route('project.task', {task: task.number, project: task.project_id}),
         {task: data},
         {preserveScroll: true, preserveState: true, headers: {'projects-order': usePage().props.projectsOrder},
-            only: ['tasks', 'flash'],
+            only: ['tasks', 'flash', 'errors'],
             onSuccess: (response) => {
                 // console.log('onSuccess', response)
                 handleTasks(response);
@@ -57,7 +57,7 @@ const updateTask = ({task, data}) => {
 
 <template>
 
-<!--    {{ JSON.stringify(usePage().props.statuses) }}-->
+    {{ JSON.stringify(usePage().props.errors) }}
     <el-table :data="tasksRows" stripe style="width: 100%">
         <template #empty>
             <div v-if="tasks">No Data</div>

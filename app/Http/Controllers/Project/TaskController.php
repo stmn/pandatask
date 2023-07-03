@@ -44,10 +44,10 @@ class TaskController extends Controller
             'activity.files' => [],
             'activity.private' => [],
             'task.assignees' => ['array'],
-            'task.subject' => ['required', 'nullable'],
+            'task.subject' => ['required', 'sometimes'],
             'task.description' => [],
-            'task.priority_id' => ['required', 'exists:priorities,id'],
-            'task.status_id' => ['required', 'exists:statuses,id'],
+            'task.priority_id' => ['required', 'exists:priorities,id', 'sometimes'],
+            'task.status_id' => ['required', 'exists:statuses,id', 'sometimes'],
             'task.private' => ['boolean'],
             'task.tags' => ['array'],
         ], $request->all());
@@ -83,7 +83,7 @@ class TaskController extends Controller
             $activity['type'] = ActivityType::TASK_COMMENTED;
         }
 
-        if ($request->task['assignees'] !== NULL) {
+        if ($request->has('task.assignees') && $request->task['assignees'] !== NULL) {
             $result = $task->assignees()->sync(
                 collect($request->task['assignees'])->pluck('id')
             );
@@ -106,6 +106,6 @@ class TaskController extends Controller
         $this->message('success', 'Task updated successfully.');
 
 //        return to_route('project.tasks', ['project' => $project]);
-        return to_route('project.task', ['project' => $project, 'task' => $task]);
+//        return to_route('project.task', ['project' => $project, 'task' => $task]);
     }
 }

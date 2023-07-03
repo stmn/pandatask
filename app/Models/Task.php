@@ -58,6 +58,7 @@ class Task extends Model
     protected static function booted(): void
     {
         static::creating(function (Task $task) {
+            $task->author_id = $task->author_id ?? auth()->id();
             $task->number = intval(Task::whereProjectId($task->project_id)
                     ->orderBy('number', 'desc')
                     ->first()?->number) + 1;
