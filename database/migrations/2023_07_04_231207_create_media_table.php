@@ -6,13 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->id();
-
-            $table->morphs('model');
-            $table->uuid('uuid')->nullable()->unique();
+            $table->bigIncrements('id');
+            $table->string('model_type');
+            $table->unsignedBigInteger('model_id');
+            $table->char('uuid', 36)->nullable()->unique();
             $table->string('collection_name');
             $table->string('name');
             $table->string('file_name');
@@ -25,8 +30,19 @@ return new class extends Migration
             $table->json('generated_conversions');
             $table->json('responsive_images');
             $table->unsignedInteger('order_column')->nullable()->index();
+            $table->timestamps();
 
-            $table->nullableTimestamps();
+            $table->index(['model_type', 'model_id']);
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('media');
     }
 };
