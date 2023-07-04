@@ -1,0 +1,11 @@
+{
+    "name": "acton",
+    "description": "",
+    "keywords": [],
+    "scripts": {
+        "dokku": {
+            "predeploy": "deploy/predeploy.sh",
+            "postdeploy": "deploy/postdeploy.sh"
+        }
+    }
+}
