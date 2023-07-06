@@ -41,7 +41,7 @@ const {query} = useList({only: ['projects']});
     <el-page-header @back="() => router.visit(route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <el-icon style="margin-right: 5px;">
+                <el-icon style="margin-right: 10px; margin-top: -2px;">
                     <Menu/>
                 </el-icon>
                 <span>Projects</span>
@@ -50,7 +50,7 @@ const {query} = useList({only: ['projects']});
         <template #extra>
             <div class="flex items-center">
                 <Link preserve-state preserve-scroll :only="['modal']" :href="route('projects.create')">
-                    <el-button type="success" :icon="CirclePlusFilled">Create</el-button>
+                    <el-button type="success" :icon="CirclePlusFilled" style="">Create</el-button>
                 </Link>
             </div>
         </template>
@@ -109,10 +109,7 @@ const {query} = useList({only: ['projects']});
                     </div>
                 </template>
                 <div class="text item">
-                    {{ item.description || 'No description' }}
-                    <div style="float: right; width: 300px;">
-                        <el-progress :percentage="50"/>
-                    </div>
+                    {{ item.description || '&nbsp;' }}
                 </div>
             </el-card>
             <br>
@@ -126,10 +123,6 @@ const {query} = useList({only: ['projects']});
 
 <style lang="scss" scoped>
 .project-card {
-    //a {
-    //    color: var(--el-color-primary);
-    //}
-
     .last-activity {
         display: flex;
         align-items: center;
@@ -141,16 +134,6 @@ const {query} = useList({only: ['projects']});
         }
     }
 }
-
-//.el-page-header {
-//    background: var(--el-color-primary-light-9);
-//    padding: 15px 20px;
-//    margin: -20px -20px 0px -20px;
-//}
-//
-//.el-menu {
-//    border: 0;
-//}
 
 .card-header {
     display: flex;

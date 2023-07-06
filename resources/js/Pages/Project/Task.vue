@@ -123,7 +123,7 @@ const canSubmit = computed(() => {
     return activityForm.comment || activityForm.files.length || taskForm.isDirty;
 })
 
-const onlyComments = useStorage('onlyComments', false);
+const onlyComments = useStorage('onlyComments', true);
 </script>
 
 <template>
@@ -150,7 +150,7 @@ const onlyComments = useStorage('onlyComments', false);
                     style="margin: 0 10px;"
                     :src="task.project.avatar"
                 />
-                <span style="margin-right: 5px;">{{ task.subject }} <b>#{{ task.number }}</b> {{ task.id }}</span>
+                <span style="margin-right: 5px;">{{ task.subject }}<span class="task-number">#{{ task.number }}</span></span>
                 &nbsp;<el-tag v-if="task.private">Private</el-tag>
             </div>
         </template>
@@ -174,10 +174,11 @@ const onlyComments = useStorage('onlyComments', false);
                     </div>
                     <br>
 
-                    <el-form-item label="Description" prop="desc">
+                    <el-form-item label="Description" prop="desc" v-if="task.description">
                         {{ task.description }}
                     </el-form-item>
 
+<!--                    {{ JSON.stringify(task) }}-->
                     {{ JSON.stringify(activityForm.errors) }}
 
                     <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">

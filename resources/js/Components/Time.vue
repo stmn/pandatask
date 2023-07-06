@@ -45,6 +45,8 @@ const toggleTimeType = () => {
 .time.not-forced {
     cursor: pointer;
 
+    color: var(--el-text-color-secondary);
+
     &:hover {
         text-decoration: underline;
     }

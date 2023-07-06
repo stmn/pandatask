@@ -39,7 +39,7 @@ onMounted(() => {
     <el-page-header @back="() => router.visit(route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <el-icon style="margin-right: 5px;">
+                <el-icon style="margin-right: 10px; margin-top: -2px;">
                     <List/>
                 </el-icon>
                 <span>Tasks</span>

@@ -67,7 +67,7 @@ const onProjectChange = (value) => {
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-avatar
-                    :size="32"
+                    :size="24"
                     style="margin-right: 10px;"
                     :src="project.avatar"
                 />

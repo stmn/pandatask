@@ -69,7 +69,9 @@ const timeBetweenTwoDates = (date1, date2) => {
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
+                    <el-text truncated>
                     <Link :href="row.task.url">{{ row.task.subject }}</Link>
+                    </el-text>
                 </div>
             </template>
         </el-table-column>

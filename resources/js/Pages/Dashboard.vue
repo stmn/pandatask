@@ -26,7 +26,6 @@ const projects = ref(props.projects);
 const tasks = ref(props.tasks);
 
 function handleTasks(response) {
-    console.log('handleTasks', response)
     for (let i = 0; i < projects.value.length; i++) {
         projects.value[i].tasks = response.props.tasks['project_' + projects.value[i].id];
     }
@@ -35,8 +34,7 @@ function handleTasks(response) {
 provide('handleTasks', handleTasks);
 
 router.on('success', (event) => {
-    console.log('success', event.detail.page)
-    if(event.detail.page.props.tasks) {
+    if (event.detail.page.props.tasks) {
         handleTasks(event.detail.page);
     }
 })
@@ -48,10 +46,7 @@ onMounted(() => {
 
             router.reload({
                 only: ['tasks'], onSuccess: (response) => {
-                    console.log('onSuccess', response)
-
                     handleTasks(response);
-
                     usePageLoading().loading.value = false;
                 }
             });
@@ -60,18 +55,11 @@ onMounted(() => {
         }
     });
 });
-
-const optionalDispatch = () => {
-    console.log('optionalDispatch')
-}
 </script>
 
 <template>
     <Head title="Dashboard"/>
 
-    <!--    <div style="top: 0; bottom: 0; left: 0; width: 100%; height: 100%; position: absolute;" v-loading="loading"></div>-->
-
-    <!--    1{{ JSON.stringify(tasks) }}2-->
     <div class="el-page-header__header">
         <div class="el-page-header__left">
             <div class="el-page-header__content">
@@ -104,7 +92,7 @@ const optionalDispatch = () => {
                 <el-skeleton :rows="9" animated/>
             </div>
             <div v-else-if="project.tasks.length">
-                <lazy-component @intersected="optionalDispatch">
+                <lazy-component>
                     <template #placeholder>
                         <el-skeleton :rows="9" animated/>
                     </template>
@@ -134,19 +122,3 @@ const optionalDispatch = () => {
         </div>
     </el-config-provider>
 </template>
-
-<style lang="scss">
-/*.el-menu {*/
-/*    border: 0;*/
-/*}*/
-
-/*.bg-dots-darker {*/
-/*    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");*/
-/*}*/
-
-/*@media (prefers-color-scheme: dark) {*/
-/*    .dark\:bg-dots-lighter {*/
-/*        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");*/
-/*    }*/
-//}
-</style>

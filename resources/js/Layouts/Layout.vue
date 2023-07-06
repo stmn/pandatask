@@ -51,7 +51,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
         <el-main
             v-loading="loading"
             :element-loading-svg="svg"
-            style="background: var(--el-bg-color); border-radius: 15px; margin: 0 30px; position: relative; overflow: hidden;">
+            style="background: var(--el-bg-color); border-radius: 15px; margin: 0 20px; position: relative; overflow: hidden;">
             <div>
                 <slot/>
             </div>

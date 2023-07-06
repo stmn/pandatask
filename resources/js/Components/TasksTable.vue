@@ -1,7 +1,6 @@
 <script setup>
-import {Link, usePage, router} from '@inertiajs/vue3'
-import {computed, inject, provide, ref} from "vue";
-import {useDateFormat, useStorage, useTimeAgo} from "@vueuse/core";
+import {Link, router, usePage} from '@inertiajs/vue3'
+import {computed, inject} from "vue";
 import Time from "@/Components/Time.vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
@@ -32,23 +31,17 @@ const props = defineProps({
 
 const tasksRows = computed(() => props.tasks?.data || props.tasks)
 
-// const showProject = computed(() => tasksRows.value?.[0]?.project)
-
 const handleTasks = inject('handleTasks');
 
 const updateTask = ({task, data}) => {
-    console.log(
-        'updateTask', usePage().props.projectsOrder
-    )
     router.post(
         route('project.task', {task: task.number, project: task.project_id}),
         {task: data},
-        {preserveScroll: true, preserveState: true, headers: {'projects-order': usePage().props.projectsOrder},
+        {
+            preserveScroll: true, preserveState: true, headers: {'projects-order': usePage().props.projectsOrder},
             only: ['tasks', 'flash', 'errors'],
             onSuccess: (response) => {
-                // console.log('onSuccess', response)
                 handleTasks(response);
-                // tasksRows.value = response.props.tasks.data
             },
         },
     )
@@ -56,27 +49,15 @@ const updateTask = ({task, data}) => {
 </script>
 
 <template>
-
-    {{ JSON.stringify(usePage().props.errors) }}
     <el-table :data="tasksRows" stripe style="width: 100%">
         <template #empty>
             <div v-if="tasks">No Data</div>
             <div v-else>
                 <el-icon class="is-loading" size="32" style="margin-top: 22px;">
-                    <Loading />
+                    <Loading/>
                 </el-icon>
             </div>
         </template>
-<!--        <el-table-column fixed prop="number" label="#" width="64">-->
-<!--            <template #default="{row}">-->
-<!--                <b>{{ row.number }}</b>-->
-<!--            </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column width="43">-->
-<!--            <template #default="{row}">-->
-<!--                <Timer :task="row"/>-->
-<!--            </template>-->
-<!--        </el-table-column>-->
         <el-table-column prop="subject" min-width="300">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
@@ -84,9 +65,11 @@ const updateTask = ({task, data}) => {
 
                     <span style="display: contents;">
                         <el-text truncated>
-                        <Link :href="route('project.task', {project: row.project_id, task: row.number})">{{ row.subject }}</Link>
+                        <Link :href="route('project.task', {project: row.project_id, task: row.number})">{{
+                                row.subject
+                            }}</Link>
                         </el-text>
-                        <span style="background: var(--el-bg-color); padding: 0 3px; margin-left: 5px; word-break: keep-all;">#{{ row.number }}</span>
+                        <span class="task-number">#{{ row.number }}</span>
                         <template v-if="row.comments_count">
                         <el-icon size="14" style="margin: 0 2px 0 5px;">
                             <Comment/>
@@ -110,13 +93,15 @@ const updateTask = ({task, data}) => {
         </el-table-column>
         <el-table-column prop="status" label="Status" width="150" align="center">
             <template #default="{row}">
-                <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click" @command="updateTask">
+                <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
+                             @command="updateTask">
                     <el-tag v-if="row.status"
                             class="status-tag"
                             size="small"
                             :color="row.status.color"
                             :style="`border-color: ${row.status.color};`"
-                            effect="dark">{{ row.status.name }}</el-tag>
+                            effect="dark">{{ row.status.name }}
+                    </el-tag>
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item v-for="status in usePage().props.statuses"
@@ -130,13 +115,15 @@ const updateTask = ({task, data}) => {
         </el-table-column>
         <el-table-column prop="priority" label="Priority" width="120" align="center">
             <template #default="{row}">
-                <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click" @command="updateTask">
+                <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
+                             @command="updateTask">
                     <el-tag v-if="row.priority"
                             class="priority-tag"
                             size="small"
                             :color="row.priority.color"
                             :style="`border-color: ${row.priority.color};`"
-                            effect="plain">{{ row.priority.name }}</el-tag>
+                            effect="plain">{{ row.priority.name }}
+                    </el-tag>
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item v-for="priority in usePage().props.priorities"
@@ -153,7 +140,7 @@ const updateTask = ({task, data}) => {
                 <template v-if="row.latest_activity">
                     <div v-if="row.latest_activity" style="display: flex; align-items: center;">
                         <User :user="row.latest_activity.user"/> &nbsp;
-                        <Activity :activity="row.latest_activity" :task="row" only-icon style="margin: 0 5px;"/>
+                        <Activity :activity="row.latest_activity" :task="row" only-icon style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
                         <Time :time="row.latest_activity.created_at"/>
                     </div>
                 </template>
@@ -167,6 +154,3 @@ const updateTask = ({task, data}) => {
 
     <Pagination :data="tasks" :only="['tasks']"/>
 </template>
-
-<style lang="scss" scoped>
-</style>

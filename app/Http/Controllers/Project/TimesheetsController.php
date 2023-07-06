@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Time;
@@ -22,6 +23,7 @@ class TimesheetsController extends Controller
             'project' => fn() => $project,
             'times' => Inertia::lazy(fn() => $project->times()
                 ->with(['task', 'author'])
+//                ->withCount(['activities as comments_count' => fn($query) => $query->where('type', '=', ActivityType::TASK_COMMENTED)])
 //            ->with(['latestActivity.activity.author'])
 //            ->when($request->has('search'), function ($query) use ($request) {
 //                $query->where('subject', 'like', '%'.$request->get('search').'%');

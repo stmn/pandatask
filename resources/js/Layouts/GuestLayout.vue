@@ -7,10 +7,14 @@ import {Link} from '@inertiajs/vue3'
         <div>
             <h1 class="logo">
                 <Link href="/">
-                    <img style="width: 100px;display: inline-block;" src="/logo.png"/>
+                    <img style="height:100px;display: inline-block;" src="/logo.png"/>
                     <br><span style="font-weight: 400;"><b>PANDA</b>TASK</span>
                 </Link>
             </h1>
+
+            <img
+                style="transform: rotate(-45deg);z-index: -1;height: 512px;right:-40px;bottom:-40px;display:inline-block;opacity: 0.03;position: absolute;"
+                src="/logo.png"/>
 
             <el-config-provider size="large">
                 <slot/>
@@ -20,6 +24,10 @@ import {Link} from '@inertiajs/vue3'
 </template>
 
 <style lang="scss">
+body {
+    overflow: hidden;
+}
+
 .guest {
     display: flex;
     align-items: center;
@@ -46,6 +54,7 @@ import {Link} from '@inertiajs/vue3'
     .auth-card {
         width: 335px;
         padding: 5px 5px 5px 5px;
+        margin-bottom: 60%;
 
         :deep(.el-card__body) {
             padding-top: 0;
