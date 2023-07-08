@@ -77,21 +77,21 @@ onMounted(() => {
 <template>
     <Head :title="project.name + ' - Tasks'"/>
 
-    <el-dropdown style="margin-bottom: 10px;">
-    <span class="el-dropdown-link">
-      Saved filters
-      <el-icon class="el-icon--right">
-        <arrow-down/>
-      </el-icon>
-    </span>
-        <template #dropdown>
-            <el-dropdown-menu>
-                <el-dropdown-item v-for="filter in predefinedFilters" @click="changeFilter(filter.value)">
-                    {{ filter.text }}
-                </el-dropdown-item>
-            </el-dropdown-menu>
-        </template>
-    </el-dropdown>
+<!--    <el-dropdown style="margin-bottom: 10px;">-->
+<!--    <span class="el-dropdown-link">-->
+<!--      Saved filters-->
+<!--      <el-icon class="el-icon&#45;&#45;right">-->
+<!--        <arrow-down/>-->
+<!--      </el-icon>-->
+<!--    </span>-->
+<!--        <template #dropdown>-->
+<!--            <el-dropdown-menu>-->
+<!--                <el-dropdown-item v-for="filter in predefinedFilters" @click="changeFilter(filter.value)">-->
+<!--                    {{ filter.text }}-->
+<!--                </el-dropdown-item>-->
+<!--            </el-dropdown-menu>-->
+<!--        </template>-->
+<!--    </el-dropdown>-->
 
     <el-input
         :prefix-icon="Search"
@@ -101,10 +101,10 @@ onMounted(() => {
         size="large"
         class="w-full"></el-input>
 
-    <el-switch
-        size="small"
-        active-text="Advanced search"
-    />
+<!--    <el-switch-->
+<!--        size="small"-->
+<!--        active-text="Advanced search"-->
+<!--    />-->
 
 <!--    <br><br>-->
 <!--    <el-config-provider size="small">-->

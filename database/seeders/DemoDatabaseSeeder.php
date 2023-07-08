@@ -83,6 +83,12 @@ class DemoDatabaseSeeder extends Seeder
                 $task['subject'] .= ' ' . \Arr::random(['🚀', '', '', '', '', '', '', '', '', '', '']);
                 $task['status_id'] = Status::query()->inRandomOrder()->first()->id;
                 $task['priority_id'] = Priority::query()->inRandomOrder()->first()->id;
+
+                $task['description'] .= '<p></p><pre><code>// This is a code example
+while($task->isNotCompleted()){
+   $user->workOnTask($task);
+}</code></pre>';
+
                 $project->tasks()->save($task);
             }
 
@@ -103,7 +109,7 @@ class DemoDatabaseSeeder extends Seeder
                 shuffle($comments);
                 for ($y = 0; $y < rand(0, $maxCommentsNumber); $y++) {
                     $comment = Comment::query()->create([
-                        'content' => array_shift($comments)['comment'] . ' ' . \Arr::random(['😄', '🙂', '', '']),
+                        'content' => array_shift($comments)['comment'],
                     ]);
 
                     $activity = $task->activities()->create([
@@ -319,50 +325,50 @@ class DemoDatabaseSeeder extends Seeder
         ['subject' => 'Design product labels and packaging artwork', 'description' => 'Create visually appealing labels and artwork for product packaging']
     ];
 
-    public $comments = [
-        ['comment' => 'Great progress on this task. Keep up the good work!'],
-        ['comment' => 'I have a few suggestions to improve this task. Let\'s discuss them in the next meeting.'],
-        ['comment' => 'This task is taking longer than expected. Are there any blockers?'],
-        ['comment' => 'I just completed my part of the task. Waiting for others to finish their work.'],
-        ['comment' => 'Let\'s prioritize this task as it is critical for the project\'s success.'],
-        ['comment' => 'Good job on completing this task ahead of schedule!'],
-        ['comment' => 'I encountered a technical issue while working on this task. Need assistance.'],
-        ['comment' => 'I\'m stuck on this task. Can someone help me out?'],
-        ['comment' => 'We need to allocate more resources to this task to meet the deadline.'],
-        ['comment' => 'I suggest breaking down this task into smaller subtasks for better tracking.'],
-        ['comment' => 'This task seems redundant. Can we eliminate it to save time and effort?'],
-        ['comment' => 'The requirements for this task have changed. We need to update our approach.'],
-        ['comment' => 'I need more information to proceed with this task.'],
-        ['comment' => 'Let\'s set up a meeting to discuss the progress of this task.'],
-        ['comment' => 'We should document the steps involved in completing this task for future reference.'],
-        ['comment' => 'I have some concerns about the feasibility of this task.'],
-        ['comment' => 'This task is critical for the upcoming client presentation. Let\'s give it high priority.'],
-        ['comment' => 'The deadline for this task needs to be extended due to unexpected delays.'],
-        ['comment' => 'I propose assigning additional team members to this task to speed up the progress.'],
-        ['comment' => 'The quality of the output for this task needs improvement.'],
-        ['comment' => 'Let\'s allocate some time for research and brainstorming before starting this task.'],
-        ['comment' => 'This task requires further testing and validation before marking it as complete.'],
-        ['comment' => 'I found a more efficient way to accomplish this task. Shall I proceed with the changes?'],
-        ['comment' => 'I\'m facing a resource constraint that is affecting the progress of this task.'],
-        ['comment' => 'We should involve the client in the decision-making process for this task.'],
-        ['comment' => 'I recommend adding this task to the backlog for future iterations.'],
-        ['comment' => 'The scope of this task seems to be expanding. We need to revisit the estimates.'],
-        ['comment' => 'I have successfully completed my part of the task.'],
-        ['comment' => 'This task is blocking the progress of other dependent tasks.'],
-        ['comment' => 'Let\'s break down this task into milestones and track the progress accordingly.'],
-        ['comment' => 'I\'m impressed with the teamwork exhibited on this task.'],
-        ['comment' => 'The requirements for this task are unclear. We need to seek clarification.'],
-        ['comment' => 'We should archive this task as it is no longer relevant to the project.'],
-        ['comment' => 'I\'m experiencing some technical difficulties while working on this task.'],
-        ['comment' => 'Let\'s conduct a retrospective to analyze the challenges faced during this task.'],
-        ['comment' => 'We need to reassign this task to another team member due to their expertise.'],
-        ['comment' => 'This task can be automated to save time and effort.'],
-        ['comment' => 'I recommend documenting the lessons learned from this task for future projects.'],
-        ['comment' => 'We should create a knowledge base entry for this task to share insights.'],
-        ['comment' => 'I\'m unable to reproduce the issue mentioned in this task. Need more details.'],
-        ['comment' => 'This task has dependencies on external factors. Let\'s coordinate with the respective teams.'],
-        ['comment' => 'The estimated effort for this task was underestimated. We need to adjust the timeline.'],
-        ['comment' => 'Let\'s celebrate the successful completion of this task!']
+    public array $comments = [
+        ['comment' => '<p>Great progress on this task. Keep up the good work!</p>'],
+        ['comment' => '<p>I have a few suggestions to improve this task. Let\'s discuss them in the next meeting.</p>'],
+        ['comment' => '<p>This task is taking longer than expected. Are there any blockers?</p>'],
+        ['comment' => '<p>I just completed my part of the task. Waiting for others to finish their work.</p>'],
+        ['comment' => '<p>Let\'s prioritize this task as it is critical for the project\'s success.</p>'],
+        ['comment' => '<p>Good job on completing this task ahead of schedule!</p>'],
+        ['comment' => '<p>I encountered a technical issue while working on this task. Need assistance.</p>'],
+        ['comment' => '<p>I\'m stuck on this task. Can someone help me out?</p>'],
+        ['comment' => '<p>We need to allocate more resources to this task to meet the deadline.</p>'],
+        ['comment' => '<p>I suggest breaking down this task into smaller subtasks for better tracking.</p>'],
+        ['comment' => '<p>This task seems redundant. Can we eliminate it to save time and effort?</p>'],
+        ['comment' => '<p>The requirements for this task have changed. We need to update our approach.</p>'],
+        ['comment' => '<p>I need more information to proceed with this task.</p>'],
+        ['comment' => '<p>Let\'s set up a meeting to discuss the progress of this task.</p>'],
+        ['comment' => '<p>We should document the steps involved in completing this task for future reference.</p>'],
+        ['comment' => '<p>I have some concerns about the feasibility of this task.</p>'],
+        ['comment' => '<p>This task is critical for the upcoming client presentation. Let\'s give it high priority.</p>'],
+        ['comment' => '<p>The deadline for this task needs to be extended due to unexpected delays.</p>'],
+        ['comment' => '<p>I propose assigning additional team members to this task to speed up the progress.</p>'],
+        ['comment' => '<p>The quality of the output for this task needs improvement.</p>'],
+        ['comment' => '<p>Let\'s allocate some time for research and brainstorming before starting this task.</p>'],
+        ['comment' => '<p>This task requires further testing and validation before marking it as complete.</p>'],
+        ['comment' => '<p>I found a more efficient way to accomplish this task. Shall I proceed with the changes?</p>'],
+        ['comment' => '<p>I\'m facing a resource constraint that is affecting the progress of this task.</p>'],
+        ['comment' => '<p>We should involve the client in the decision-making process for this task.</p>'],
+        ['comment' => '<p>I recommend adding this task to the backlog for future iterations.</p>'],
+        ['comment' => '<p>The scope of this task seems to be expanding. We need to revisit the estimates.</p>'],
+        ['comment' => '<p>I have successfully completed my part of the task.</p>'],
+        ['comment' => '<p>This task is blocking the progress of other dependent tasks.</p>'],
+        ['comment' => '<p>Let\'s break down this task into milestones and track the progress accordingly.</p>'],
+        ['comment' => '<p>I\'m impressed with the teamwork exhibited on this task.</p>'],
+        ['comment' => '<p>The requirements for this task are unclear. We need to seek clarification.</p>'],
+        ['comment' => '<p>We should archive this task as it is no longer relevant to the project.</p>'],
+        ['comment' => '<p>I\'m experiencing some technical difficulties while working on this task.</p>'],
+        ['comment' => '<p>Let\'s conduct a retrospective to analyze the challenges faced during this task.</p>'],
+        ['comment' => '<p>We need to reassign this task to another team member due to their expertise.</p>'],
+        ['comment' => '<p>This task can be automated to save time and effort.</p>'],
+        ['comment' => '<p>I recommend documenting the lessons learned from this task for future projects.</p>'],
+        ['comment' => '<p>We should create a knowledge base entry for this task to share insights.</p>'],
+        ['comment' => '<p>I\'m unable to reproduce the issue mentioned in this task. Need more details.</p>'],
+        ['comment' => '<p>This task has dependencies on external factors. Let\'s coordinate with the respective teams.</p>'],
+        ['comment' => '<p>The estimated effort for this task was underestimated. We need to adjust the timeline.</p>'],
+        ['comment' => '<p>Let\'s celebrate the successful completion of this task!</p>']
     ];
 
 }

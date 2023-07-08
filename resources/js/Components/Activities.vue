@@ -4,6 +4,7 @@ import {computed} from "vue";
 import Time from "@/Components/Time.vue";
 import User from "@/Components/User.vue";
 import Pagination from "@/Components/Pagination.vue";
+import EditorContent from "@/Components/EditorContent.vue";
 
 const props = defineProps({
     task: {
@@ -50,10 +51,11 @@ const auth = computed(() => page.props.auth)
                     <el-tag v-if="event.private" style="margin-right: 5px;">Private</el-tag>
                     <Time class="el-timeline-item__timestamp" :time="event.created_at"/>
                 </div>
-                <el-card v-if="event?.comment" style="margin-top: 15px;">
-                    <div v-html="event.comment.content"></div>
+                <el-card v-if="event?.comment" style="margin-top: 15px;" shadow="never">
+<!--                    <div v-html="event.comment.content" class="ProseMirror"></div>-->
+                    <EditorContent :content="event.comment.content"/>
 
-                    <ul class="el-upload-list el-upload-list--text">
+                    <ul class="el-upload-list el-upload-list--text" v-if="event.media?.length">
                         <li class="el-upload-list__item is-success" tabindex="0" v-for="file in event.media">
                             <div class="el-upload-list__item-info"><a :href="file.original_url" target="_blank"
                                                                       class="el-upload-list__item-name"><i

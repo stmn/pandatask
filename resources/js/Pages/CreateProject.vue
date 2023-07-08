@@ -31,6 +31,8 @@ const url = route(`projects.${props.project ? 'edit' : 'create'}`, {project: pro
 const create = () => form.post(url, {
     onSuccess: () => {
         // redirect()
+        close();
+
     }
 });
 

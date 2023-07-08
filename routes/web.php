@@ -72,25 +72,27 @@ Route::middleware('auth')->group(callback: function () {
     });
 
     // Project routes
+//dd(1);
+    Route::group(['as' => 'project', 'prefix' => '/project/{project}/'], function () {
+        Route::get('', fn() => redirect()->route('project.tasks', ['project' => request()->route('project')]));
 
-    Route::group(['as' => 'project.', 'prefix' => '/project/{project}/'], function () {
-        Route::get('overview', [OverviewController::class, 'index'])->name('overview');
-        Route::get('tasks', [ProjectTasksController::class, 'index'])->name('tasks');
+        Route::get('overview', [OverviewController::class, 'index'])->name('.overview');
+        Route::get('tasks', [ProjectTasksController::class, 'index'])->name('.tasks');
 
-        Route::get('tasks/create', [ProjectTasksController::class, 'create'])->name('tasks.create');
-        Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('tasks.store');
+        Route::get('tasks/create', [ProjectTasksController::class, 'create'])->name('.tasks.create');
+        Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('.tasks.store');
 
-        Route::get('timesheets', [TimesheetsController::class, 'index'])->name('timesheets');
-        Route::get('timesheets/create', [TimesheetsController::class, 'form'])->name('timesheets.create');
-        Route::post('timesheets/create', [TimesheetsController::class, 'save'])->name('timesheets.store');
-        Route::get('timesheets/{time}/edit', [TimesheetsController::class, 'form'])->name('timesheets.edit');
-        Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('timesheets.update');
+        Route::get('timesheets', [TimesheetsController::class, 'index'])->name('.timesheets');
+        Route::get('timesheets/create', [TimesheetsController::class, 'form'])->name('.timesheets.create');
+        Route::post('timesheets/create', [TimesheetsController::class, 'save'])->name('.timesheets.store');
+        Route::get('timesheets/{time}/edit', [TimesheetsController::class, 'form'])->name('.timesheets.edit');
+        Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('.timesheets.update');
 
 
-        Route::get('activities', [ActivitiesController::class, 'index'])->name('activity');
+        Route::get('activities', [ActivitiesController::class, 'index'])->name('.activity');
 
-        Route::get('tasks/{task:number}', [TaskController::class, 'index'])->name('task');
-        Route::post('tasks/{task:number}', [TaskController::class, 'update'])->name('task.update');
+        Route::get('tasks/{task:number}', [TaskController::class, 'index'])->name('.task');
+        Route::post('tasks/{task:number}', [TaskController::class, 'update'])->name('.task.update');
     });
 });
 

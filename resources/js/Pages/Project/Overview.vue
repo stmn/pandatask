@@ -89,16 +89,16 @@ const handleClick = (index) => {
         <br>
 
         <el-row :gutter="12">
-            <el-col :span="12">
+            <el-col :span="24">
                 <el-divider content-position="left">Latest activity</el-divider>
                 <Activities :activities="activities" show-task/>
             </el-col>
-            <el-col :span="12">
-                <el-divider content-position="left">Latest timesheets</el-divider>
-                <Timesheets :times="times"
-                            only-avatar
-                            :cols="['timer', 'task_id', 'start_at', 'end_at', 'author_id']"/>
-            </el-col>
+<!--            <el-col :span="12">-->
+<!--                <el-divider content-position="left">Latest timesheets</el-divider>-->
+<!--                <Timesheets :times="times"-->
+<!--                            only-avatar-->
+<!--                            :cols="['timer', 'task_id', 'start_at', 'end_at', 'author_id']"/>-->
+<!--            </el-col>-->
         </el-row>
     </el-config-provider>
 </template>

@@ -19,6 +19,8 @@
         "@element-plus/icons-vue": "^2.1.0",
         "@headlessui/vue": "^1.7.14",
         "@inertiajs/vue3": "^1.0.7",
+        "@tiptap/extension-code-block-lowlight": "^2.0.3",
+        "@tiptap/extension-hard-break": "^2.0.3",
         "@tiptap/extension-placeholder": "^2.0.3",
         "@tiptap/pm": "^2.0.3",
         "@tiptap/starter-kit": "^2.0.3",
@@ -26,6 +28,9 @@
         "@vueuse/core": "^10.1.2",
         "@vueuse/router": "^10.2.0",
         "element-plus": "^2.3.6",
+        "hast-util-to-html": "^8.0.4",
+        "highlight.js": "^11.8.0",
+        "lowlight": "^2.9.0",
         "momentum-modal": "^0.2.1",
         "v-lazy-component": "^3.0.8",
         "worker-timers": "^7.0.72"

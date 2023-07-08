@@ -12,6 +12,10 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
+    private $hello = [
+        'Hello', 'Hola', 'Witaj', 'Bonjour', 'Ciao', 'Xin chào', 'Hallo'
+    ];
+
     /**
      * Display the user's profile form.
      */
@@ -25,6 +29,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'activeIndex' => 'dashboard',
+            'hello' => $this->hello[array_rand($this->hello)],
             'projects' => Inertia::lazy(function () use ($request) {
                 $projects = Project::query()
 //                    ->when($projectsOrder, fn($query) => $query->orderByRaw('FIELD(projects.id, ' . $projectsOrder . ')'))

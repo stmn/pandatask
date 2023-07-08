@@ -46,7 +46,7 @@ class ProjectsController extends Controller
             }),
             'users' => User::query()->get(),
         ])
-            ->baseRoute($project ? 'project.overview' : 'projects', ['project' => $project]);
+            ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);
     }
 
     public function save(Request $request, ?Project $project = null)

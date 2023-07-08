@@ -113,13 +113,6 @@ const onProjectChange = (value) => {
     </el-page-header>
     <br>
     <el-tabs v-model="activeTab" @tab-click="handleClick">
-        <el-tab-pane name="overview">
-            <template #label>
-                <el-icon>
-                    <Grid/>
-                </el-icon> &nbsp; Overview
-            </template>
-        </el-tab-pane>
         <el-tab-pane name="tasks">
             <template #label>
                 <el-icon>
@@ -141,6 +134,19 @@ const onProjectChange = (value) => {
                 </el-icon> &nbsp; Activity
             </template>
         </el-tab-pane>
+
+        <el-tab-pane name="overview" style="margin-left: auto; left: auto;">
+            <template #label>
+                <el-icon>
+                    <Grid/>
+                </el-icon> &nbsp; Overview
+            </template>
+        </el-tab-pane>
     </el-tabs>
     <slot />
 </template>
+
+<style>
+//.el-tabs__nav { width: 100% }
+//#tab-overview { margin-left: auto; }
+</style>

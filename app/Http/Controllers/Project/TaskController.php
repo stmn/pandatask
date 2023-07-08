@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -65,7 +66,11 @@ class TaskController extends Controller
 
         if ($request->input('task')) {
             $original = $task->getOriginal();
-            $task->update($request->input('task'));
+            $data = $request->get('task');
+            if($data['description'] === '<p></p>') {
+                $data['description'] = str_replace("<p></p>", "", $data['description']);
+            }
+            $task->update($data);
             $changes = $task->getChanges();
 
             foreach ($changes as $key => $change) {
@@ -74,9 +79,11 @@ class TaskController extends Controller
             }
         }
 
-        if ($request->comment) {
+        $commentBody = $request->collect('activity.comment')->first();
+        $commentBody = $commentBody === '<p></p>' ? str_replace("<p></p>", "", $commentBody) : $commentBody;
+        if ($commentBody) {
             $comment = Comment::create([
-                'content' => $request->comment,
+                'content' => $commentBody
             ]);
 
             $activity['comment_id'] = $comment->id;

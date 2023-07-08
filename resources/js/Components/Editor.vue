@@ -1,17 +1,36 @@
 <template>
-    <editor-content
-        class="el-textarea__inner"
-        :editor="editor" />
+    <div class="el-textarea">
+        <div class="el-textarea__inner">
+            <el-scrollbar :min-size="minHeight" :height="height" :max-height="maxHeight" always>
+                <editor-content
+                    :style="`min-height:${minHeight}px;`"
+                    :editor="editor">
+                </editor-content>
+            </el-scrollbar>
+        </div>
+    </div>
 </template>
 
 <script>
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from '@tiptap/starter-kit'
-import {Editor, EditorContent} from '@tiptap/vue-3'
+// import {HardBreak} from "@tiptap/extension-hard-break";
+import {Editor, EditorContent, VueNodeViewRenderer} from '@tiptap/vue-3'
 
-// import Document from '@tiptap/extension-document'
-// import Paragraph from '@tiptap/extension-paragraph'
-// import Text from '@tiptap/extension-text'
+
+import { lowlight } from 'lowlight'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import CodeBlockComponent from './CodeBlockComponent.vue'
+// import css from 'highlight.js/lib/languages/css'
+// import js from 'highlight.js/lib/languages/javascript'
+// import ts from 'highlight.js/lib/languages/typescript'
+import html from 'highlight.js/lib/languages/xml'
+// import php from 'highlight.js/lib/languages/php'
+lowlight.registerLanguage('html', html)
+// lowlight.registerLanguage('css', css)
+// lowlight.registerLanguage('js', js)
+// lowlight.registerLanguage('ts', ts)
+// lowlight.registerLanguage('php', php)
 
 export default {
     components: {
@@ -20,6 +39,26 @@ export default {
 
     props: {
         modelValue: {
+            type: String,
+            default: '',
+        },
+        height: {
+            type: Number,
+            default: null,
+        },
+        minHeight: {
+            type: Number,
+            default: 0,
+        },
+        maxHeight: {
+            type: Number,
+            default: 300,
+        },
+        proseStyle: {
+            type: String,
+            default: '',
+        },
+        placeholder: {
             type: String,
             default: '',
         },
@@ -54,14 +93,37 @@ export default {
             extensions: [
                 StarterKit,
                 Placeholder.configure({
-                    placeholder: 'Add comment...',
-                })
+                    placeholder: this.placeholder,
+                }),
+                CodeBlockLowlight
+                    .extend({
+                        addNodeView() {
+                            return VueNodeViewRenderer(CodeBlockComponent)
+                        },
+                        // addKeyboardShortcuts() {
+                        //     return {
+                        //         'Tab': (data) => {
+                        //             // add 2 spaces on tab
+                        //             console.log(this.editor.chain(), 'kurwa')
+                        //             this.editor.chain().focus().insertContent('  ').run()
+                        //
+                        //
+                        //             // prevent default tab behaviour
+                        //             // event.preventDefault();
+                        //             // return false
+                        //         }
+                        //     }
+                        // },
+                    })
+                    .configure({ lowlight }),
+                // HardBreak,
             ],
             content: this.modelValue,
 
             emptyEditorClass: 'is-editor-empty',
             emptyNodeClass: 'my-custom-is-empty-class',
             placeholder: 'My Custom Placeholder',
+            // autofocus: true,
 
             onUpdate: () => {
                 // HTML
@@ -80,54 +142,7 @@ export default {
 </script>
 
 <style lang="scss">
-/* Basic editor styles */
-.ProseMirror p.is-editor-empty:first-child::before {
-    color: #adb5bd;
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
+.el-scrollbar__bar.is-horizontal {
+    display: none !important;
 }
-
-.ProseMirror {
-    font-size: 14px;
-    min-height: 60px;
-    &-focused {
-        outline: none;
-        //border: 1px solid var(--el-border-color);
-    }
-    p {
-        margin: 0;
-    }
-    //> * + * {
-    //    margin-top: 0.75em;
-    //}
-    //
-    //code {
-    //    background-color: rgba(#616161, 0.1);
-    //    color: #616161;
-    //}
-}
-
-//.content {
-//    padding: 1rem 0 0;
-//
-//    h3 {
-//        margin: 1rem 0 0.5rem;
-//    }
-//
-//    pre {
-//        border-radius: 5px;
-//        color: #333;
-//    }
-//
-//    code {
-//        display: block;
-//        white-space: pre-wrap;
-//        font-size: 0.8rem;
-//        padding: 0.75rem 1rem;
-//        background-color:#e9ecef;
-//        color: #495057;
-//    }
-//}
 </style>

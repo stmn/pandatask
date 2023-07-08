@@ -41,15 +41,18 @@ const {close, redirect, show} = useModal()
 
 const url = route('project.tasks.create', {project: props.project.id});
 
-const create = (open = 0) => form.post(url + '?open=' + open, {
+const create = (open = 0) => form.transform((data) => ({
+    task: form.data(),
+})).post(url + '?open=' + open, {
     preserveState: true,
     preserveScroll: true,
     only: ['projects', 'tasks', 'errors'],
+
     onFinish: () => {
 
     },
     onSuccess: (response) => {
-        console.log('onSuccess11', response);
+        // console.log('onSuccess11', response);
         // handleTasks(response);
         // redirect()
         close();
@@ -66,14 +69,14 @@ const createAndOpen = () => create(1)
 
 onMounted(() => {
     setTimeout(() => {
-        document.querySelector('.focus-me input').focus();
+        document.querySelector('.focus-me input')?.focus();
     }, 100)
 })
 </script>
 <template>
     <Modal>
         <template #title>Create a new task</template>
-                {{ JSON.stringify(form.errors) }}
+<!--                {{ JSON.stringify(form.errors) }}-->
 
         <el-form label-width="120px" label-position="top">
         <TaskForm :priorities="priorities"

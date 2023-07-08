@@ -38,22 +38,22 @@ const handleClick = (index) => {
     // })
 };
 
-console.log('timesheets');
+// console.log('timesheets');
 onMounted(() => {
-    console.log('onMounted timesheets');
+    // console.log('onMounted timesheets');
     router.reload({only: ['times'], onSuccess: () => {
 
         }});
 });
-onUpdated(() => {
-    console.log('onUpdated timesheets');
-});
-onBeforeMount(() => {
-    console.log('onBeforeMount timesheets');
-});
-onActivated(() => {
-    console.log('onActivated timesheets');
-});
+// onUpdated(() => {
+//     console.log('onUpdated timesheets');
+// });
+// onBeforeMount(() => {
+//     console.log('onBeforeMount timesheets');
+// });
+// onActivated(() => {
+//     console.log('onActivated timesheets');
+// });
 </script>
 
 <template>

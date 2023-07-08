@@ -18,10 +18,11 @@ const handleClose = (done: () => void) => {
 
     // close();
     // redirect();
-    console.log(usePage().url, usePage()?.props?.modal.redirectURL, location.href, usePage())
+    // console.log(usePage().url, usePage()?.props?.modal.redirectURL, location.href, usePage())
 
-    if(location.href !== usePage()?.props?.modal.redirectURL) {
-        router.visit(usePage()?.props?.modal.redirectURL, {
+    const redirectURL = usePage()?.props?.modal?.redirectURL;
+    if(redirectURL && location.href !== redirectURL) {
+        router.visit(redirectURL, {
             preserveScroll: true,
             preserveState: true,
             only: ['times', 'tasks'],

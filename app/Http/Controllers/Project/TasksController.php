@@ -53,16 +53,16 @@ class TasksController extends Controller
     public function store(\App\Models\Project $project, \Illuminate\Http\Request $request)
     {
         $request->validate([
-            'assignees' => ['array'],
-            'subject' => ['required', 'nullable'],
-            'description' => [],
-            'priority_id' => ['required', 'exists:priorities,id'],
-            'status_id' => ['required', 'exists:statuses,id'],
-            'private' => ['boolean'],
-            'tags' => ['array'],
+            'task.assignees' => ['array'],
+            'task.subject' => ['required', 'nullable'],
+            'task.description' => [],
+            'task.priority_id' => ['required', 'exists:priorities,id'],
+            'task.status_id' => ['required', 'exists:statuses,id'],
+            'task.private' => ['boolean'],
+            'task.tags' => ['array'],
         ], $request->all());
 
-        $task = $project->tasks()->create($request->all());
+        $task = $project->tasks()->create($request->get('task'));
 
         $this->message('success', 'Task created');
 

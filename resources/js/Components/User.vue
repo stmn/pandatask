@@ -61,7 +61,7 @@ const fullName = computed(() => {
             </div>
             <div v-if="user.active_time" style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">
                 Working on
-                <Link :href="route('project.overview', {project: user.active_time.task.project_id})" style="margin-right: 5px;">
+                <Link :href="route('project', {project: user.active_time.task.project_id})" style="margin-right: 5px;">
                     {{ user.active_time.task.project.name }}
                 </Link>
                 <el-tooltip :content="user.active_time.task.subject">

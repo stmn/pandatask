@@ -9,12 +9,15 @@ import usePageLoading from "@/Composables/usePageLoading.js";
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
+    hello: {
+        type: String,
+        required: false,
+        default: 'Hello'
+    },
     projects: {
-        type: Array,
         required: true
     },
     tasks: {
-        type: Array,
         required: false,
         default: () => []
     }
@@ -64,7 +67,7 @@ onMounted(() => {
         <div class="el-page-header__left">
             <div class="el-page-header__content">
                 <div>
-                    <span><b>Hello</b>, {{ usePage().props.auth.user.first_name }}!</span>
+                    <span><b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!</span>
                 </div>
             </div>
         </div>
@@ -76,7 +79,7 @@ onMounted(() => {
         <div v-for="project in projects" :key="project.id">
             <el-divider content-position="left">
                 <div class="flex items-center">
-                    <Link :href="route('project.overview', {project: project.id})"
+                    <Link :href="route('project', {project: project.id})"
                           style="display: flex; align-items: center;">
                         <el-avatar
                             :size="24"

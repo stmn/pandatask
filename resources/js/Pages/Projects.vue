@@ -7,14 +7,11 @@ import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Activity from "@/Components/Activity.vue";
 import useList from "@/Composables/useList.js";
-import {onMounted, ref} from "vue";
-import usePageLoading from "@/Composables/usePageLoading.js";
 
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
     projects: {
-        type: Array,
         required: true
     },
     search: {
@@ -25,14 +22,6 @@ const props = defineProps({
 });
 
 const {query} = useList({only: ['projects']});
-
-// usePageLoading().loading.value = true;
-
-// onMounted(() => {
-//     router.reload({only: ['projects'], onSuccess: () => {
-//             // usePageLoading().loading.value = false;
-//         }});
-// });
 </script>
 
 <template>
@@ -75,17 +64,14 @@ const {query} = useList({only: ['projects']});
                 <template #header>
                     <div class="card-header">
                         <div style="display: flex; align-items:center;">
-                            <!--                    <el-space :size="5" spacer="|">-->
-                            <!--                        <div>-->
                             <el-avatar
                                 :size="32"
                                 style="margin-right: 10px; margin-top: -2px;"
                                 :src="item.avatar"
                             />
-                            <Link :href="route('project.overview', {project: item.id})">
+                            <Link :href="route('project', {project: item.id})">
                                 {{ item.name }}
                             </Link>
-                            <!--                        </div>-->
 
                             <template v-if="item.latest_activity">
                                 <el-divider direction="vertical"></el-divider>
@@ -95,14 +81,14 @@ const {query} = useList({only: ['projects']});
                                     <Time :time="item.latest_activity.created_at"/>
                                 </div>
                             </template>
-                            <!--                    </el-space>-->
                         </div>
                         <div>
                             <Link :href="route('project.tasks', {project: item.id})">
                                 <el-button class="button" type="primary" :icon="List">Tasks</el-button>
                             </Link>
                             &nbsp;
-                            <Link preserve-state preserve-scroll :only="['modal']" :href="route('project.tasks.create', {project: item.id})">
+                            <Link preserve-state preserve-scroll :only="['modal']"
+                                  :href="route('project.tasks.create', {project: item.id})">
                                 <el-button class="button" type="success" :icon="CirclePlusFilled">Add task</el-button>
                             </Link>
                         </div>
@@ -139,16 +125,5 @@ const {query} = useList({only: ['projects']});
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-
-.bg-dots-darker {
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-}
-
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-dots-lighter {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-    }
 }
 </style>

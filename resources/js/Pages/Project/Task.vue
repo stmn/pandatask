@@ -12,6 +12,7 @@ import Activities from "@/Components/Activities.vue";
 import TaskForm from "@/Components/Task/TaskForm.vue";
 import Editor from "@/Components/Editor.vue";
 import {useStorage} from "@vueuse/core";
+import EditorContent from "@/Components/EditorContent.vue";
 
 // import { useEditor, EditorContent } from '@tiptap/vue-3'
 // import StarterKit from '@tiptap/starter-kit'
@@ -82,15 +83,15 @@ const taskForm = useForm({
     private: props.task.private,
     status_id: props.task.status_id,
     priority_id: props.task.priority_id,
-    tags: props.task.tags,
+    tags: props.task.tags || [],
 });
 
 const submit = () => {
     // router.post(route('project.task', {project: props.project, task: props.task}), {...commentForm, ...settingsForm})
-    console.log(activityForm.data(), taskForm.data(), {
-        ...activityForm.data(),
-        ...taskForm.data(),
-    })
+    // console.log(activityForm.data(), taskForm.data(), {
+    //     ...activityForm.data(),
+    //     ...taskForm.data(),
+    // })
     activityForm.transform((data) => ({
         task: taskForm.data(),
         activity: activityForm.data(),
@@ -99,6 +100,9 @@ const submit = () => {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
+                // console.log(123);
+                // taskForm.errors = {subject: 'test 123'};
+                // taskForm.setError({subject: 'test'});
                 activityForm.reset();
                 // settingsForm.reset();
                 document.querySelector('textarea')?.focus();
@@ -108,6 +112,12 @@ const submit = () => {
                 // })
                 activeTab2.value = 'activity'
             },
+            onError: () => {
+                taskForm.setError({
+                    ...taskForm.errors,
+                    ...activityForm.errors,
+                });
+            }
         })
 };
 
@@ -115,7 +125,7 @@ const activeTab = ref('comment');
 const activeTab2 = ref('activity');
 
 onMounted(() => {
-    document.querySelector('textarea').focus()
+    document.querySelector('textarea')?.focus()
     // timeline.value.push(...props.timeline.slice(timeline.value.length, timeline.value.length + 1))
 })
 
@@ -161,25 +171,46 @@ const onlyComments = useStorage('onlyComments', true);
             <el-main>
                 <el-form
                     ref="ruleFormRef"
+                    label-width="90px"
+                    label-position="left"
+                    label-suffix=":"
+                >
+                    <el-form-item label="Created by">
+                        <div style="display: flex; align-items: center; font-size: 14px;">
+                            <span style="margin: 0 10px 0 0;"><User :user="task.author"/></span>
+                            <Time :time="task.created_at"/>
+                        </div>
+                    </el-form-item>
+<!--                    {{ JSON.stringify(task.description)}}-->
+                    <el-form-item label="Description" prop="desc" v-if="task.description">
+                        <el-card shadow="never">
+                            <EditorContent :content="task.description"/>
+                        </el-card>
+                    </el-form-item>
+                </el-form>
+                <el-form
+                    ref="ruleFormRef"
                     label-width="120px"
                     class="demo-ruleForm"
                     status-icon
                     label-position="top"
                     @submit.prevent="submit"
                 >
-                    <div style="display: flex; align-items: center; font-size: 14px;">
-                        <span>Created by</span>
-                        <span style="margin: 0 10px;"><User :user="task.author"/></span>
-                        <Time :time="task.created_at"/>
-                    </div>
-                    <br>
+<!--                    <div style="display: flex; align-items: center; font-size: 14px;">-->
+<!--                        <span>Created by</span>-->
+<!--                        <span style="margin: 0 10px;"><User :user="task.author"/></span>-->
+<!--                        <Time :time="task.created_at"/>-->
+<!--                    </div>-->
+<!--                    <br>-->
 
-                    <el-form-item label="Description" prop="desc" v-if="task.description">
-                        {{ task.description }}
-                    </el-form-item>
+
+<!--                    <el-form-item label="Description" prop="desc" v-if="task.description">-->
+<!--                        <el-card class="ProseMirror">-->
+<!--                            <div v-html="task.description"></div>-->
+<!--                        </el-card>-->
+<!--                    </el-form-item>-->
 
 <!--                    {{ JSON.stringify(task) }}-->
-                    {{ JSON.stringify(activityForm.errors) }}
 
                     <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
                         <el-tab-pane name="comment">
@@ -197,18 +228,23 @@ const onlyComments = useStorage('onlyComments', true);
                             <!--                                            style="height: 100px; width: 100%;"-->
                             <!--                                            class="editor-content" />-->
 
-                            <editor v-model="activityForm.comment"/>
+                            <editor v-model="activityForm.comment" placeholder="Write comment..."/>
                             <br>
-                            <el-form-item>
-                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="activityForm.comment"
-                                          placeholder="Add comment..."/>
+<!--                            <el-form-item>-->
+<!--                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="activityForm.comment"-->
+<!--                                          placeholder="Add comment..."/>-->
 
 
-                                <div v-if="activityForm.errors.comment" class="el-form-item__error"
-                                     style="padding: 5px 0; position: relative;">
-                                    {{ activityForm.errors.comment }}
-                                </div>
-                            </el-form-item>
+<!--                                <div v-if="activityForm.errors.comment" class="el-form-item__error"-->
+<!--                                     style="padding: 5px 0; position: relative;">-->
+<!--                                    {{ activityForm.errors.comment }}-->
+<!--                                </div>-->
+<!--                            </el-form-item>-->
+
+                            <div v-if="activityForm.errors.comment" class="el-form-item__error"
+                                 style="padding: 5px 0; position: relative;">
+                                {{ activityForm.errors.comment }}
+                            </div>
                         </el-tab-pane>
                         <el-tab-pane name="attachments">
                             <template #label>
@@ -260,9 +296,11 @@ const onlyComments = useStorage('onlyComments', true);
                     <el-switch
                         v-model="activityForm.private"
                         size="small"
+                        style="margin-top: 5px;"
                         active-text="Is private"
                     />
                     <br><br>
+<!--                    {{ JSON.stringify(activityForm.errors) }}-->
                     <el-form-item>
                         <el-button type="success" @click="submit"
                                    :loading="activityForm.processing"
@@ -337,11 +375,6 @@ const onlyComments = useStorage('onlyComments', true);
 .el-menu {
     border: 0;
 }
-
-.el-col {
-    text-align: center;
-}
-
 
 .bg-dots-darker {
     background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");

@@ -1,5 +1,7 @@
 <script setup>
 import User from "@/Components/User.vue";
+import Editor from "@/Components/Editor.vue";
+import InputError from "@/Components/InputError.vue";
 
 const props = defineProps({
     modelValue: {
@@ -20,19 +22,22 @@ const props = defineProps({
     },
 })
 
-console.log(111, props.modelValue)
+// console.log(111, props.modelValue)
 
 </script>
 
 <template>
     <el-row :gutter="15">
+<!--        {{ JSON.stringify(modelValue) }}-->
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Subject">
-                <el-input v-model="modelValue.subject" />
+                <el-input v-model="modelValue.subject" class="focus-me" />
+                <InputError :message="modelValue.errors['task.subject']"/>
             </el-form-item>
         </el-col>
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Tags">
+<!--                {{ JSON.stringify(modelValue.tags) }}-->
                 <el-select v-model="modelValue.tags"
                            multiple
                            filterable
@@ -41,12 +46,6 @@ console.log(111, props.modelValue)
                            placeholder="Select"
                            style="width: 100%;"
                            fit-input-width>
-                    <!--                                                <el-option-->
-                    <!--                                                    v-for="item in value.tags"-->
-                    <!--                                                    :key="item.id"-->
-                    <!--                                                    :label="item"-->
-                    <!--                                                    :value="item"-->
-                    <!--                                                ></el-option>-->
                 </el-select>
             </el-form-item>
         </el-col>
@@ -54,7 +53,9 @@ console.log(111, props.modelValue)
     <el-row :gutter="15">
         <el-col :lg="24">
             <el-form-item label="Description">
-                <el-input v-model="modelValue.description" type="textarea" rows="1" :autosize="{ minRows: 1, maxRows: 4 }" />
+                <editor v-model="modelValue.description"
+                        placeholder="Write description..."
+                        prose-style="min-height: 100px; max-height: 200px;"/>
             </el-form-item>
         </el-col>
     </el-row>
