@@ -34,7 +34,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME, 302, [], true);
+        return redirect(
+            str_replace('http://', config('app.url_scheme'), redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl())
+        );
     }
 
     /**
