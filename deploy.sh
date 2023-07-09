@@ -2,11 +2,11 @@
 
 echo "Running postdeploy.sh"
 
-sudo apt update
+apt update
 
-sudo apt install -y nodejs
+apt install -y nodejs
 
-sudo apt install -y npm
+apt install -y npm
 
 npm install
 
