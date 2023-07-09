@@ -1,4 +1,4 @@
-FROM bitnami/laravel:10-debian-11
+FROM systemsdk/docker-nginx-php-laravel:latest
 
 #EXPOSE 8000
 
