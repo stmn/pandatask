@@ -35,6 +35,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return redirect(
+            // This fix cloudflare flexible ssl issue
             str_replace('http://', config('app.url_scheme').'://', redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl())
         );
     }
