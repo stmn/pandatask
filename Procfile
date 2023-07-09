@@ -1,3 +1,3 @@
-web: deploy.sh
+web: /app/deploy.sh
 queue: php artisan queue:work --tries=1 --no-ansi
 cron: chmod a+x ./cron.sh && ./cron.sh
