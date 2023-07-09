@@ -1,0 +1,215 @@
+providers = []
+buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1687824202'
+
+[variables]
+IS_LARAVEL = 'yes'
+NIXPACKS_METADATA = 'php'
+NIXPACKS_PHP_ROOT_DIR = '/app/public'
+PORT = '80'
+
+[staticAssets]
+"Nixpacks/Config/Template.pm" = '''
+package Nixpacks::Config::Template;
+
+use Nixpacks::Nix;
+
+sub if_stmt {
+    my ($condition, $value, $else) = @_;
+
+    if($ENV{$condition} ne "") {
+        return $value;
+    } else {
+        return $else;
+    }
+}
+
+sub compile_template {
+    my ($infile, $outfile) = @_;
+    open(FH, '<', $infile) or die "Could not open configuration file '$infile' $!";
+    my $out = '';
+    while (<FH>) {
+
+        # If statements
+        s{
+            \$if\s*\((\w+)\)\s*\(
+                ([\s\S]*?)
+            \)\s*else\s*\(
+                ([\s\S]*?)
+            \)
+        }{if_stmt($1, $2, $3)}egx;
+
+        # Variables
+        s/\$\{(\w+)\}/$ENV{$1}/eg;
+
+        # Nix paths
+        s/\$\!\{(\w+)\}/Nixpacks::Nix::get_nix_path($1)/eg;
+
+        $out .= $_;
+    }
+    close(FH);
+    open(FH, '>', $outfile) or die "Could not write configuration file '$outfile' $!";
+    print FH $out;
+    close(FH);
+}
+
+1;'''
+"Nixpacks/Nix.pm" = '''
+package Nixpacks::Nix;
+
+sub get_nix_path {
+    my ($exe) = @_;
+
+    my $path = `which $exe`;
+    $path =~ s/\n//;
+    my $storePath = `nix-store -q $path`;
+    $storePath =~ s/\n//;
+    return $storePath;
+}
+
+1;'''
+"Nixpacks/Util/ChmodRecursive.pm" = '''
+# https://stackoverflow.com/a/3738367
+package Nixpacks::Util::ChmodRecursive;
+
+use File::Find;
+
+sub chmod_recursive {
+    my ($dir) = @_;
+    sub wanted
+    {
+        my $perm = -d $File::Find::name ? 0777 : 0666;
+        chmod $perm, $File::Find::name;
+    }
+    find(\&wanted, $dir);
+}
+
+1;'''
+"nginx.template.conf" = '''
+worker_processes 5;
+daemon off;
+
+worker_rlimit_nofile 8192;
+
+events {
+  worker_connections  4096;  # Default: 1024
+}
+
+http {
+    include    $!{nginx}/conf/mime.types;
+    index    index.html index.htm index.php;
+
+    default_type application/octet-stream;
+    log_format   main '$remote_addr - $remote_user [$time_local]  $status '
+        '"$request" $body_bytes_sent "$http_referer" '
+        '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log /dev/stdout;
+    error_log /dev/stdout;
+    sendfile     on;
+    tcp_nopush   on;
+    server_names_hash_bucket_size 128; # this seems to be required for some vhosts
+
+    server {
+        listen ${PORT};
+        listen [::]:${PORT};
+        server_name localhost;
+
+        $if(NIXPACKS_PHP_ROOT_DIR) (
+            root ${NIXPACKS_PHP_ROOT_DIR};
+        ) else (
+            root /app;
+        )
+
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+
+        index index.php;
+
+        charset utf-8;
+
+        $if(IS_LARAVEL) (
+            location / {
+                try_files $uri $uri/ /index.php?$query_string;
+            }
+        ) else ()
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+
+        $if(IS_LARAVEL) (
+            error_page 404 /index.php;
+        ) else ()
+
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+            include $!{nginx}/conf/fastcgi_params;
+            include $!{nginx}/conf/fastcgi.conf;
+        }
+
+        location ~ /\.(?!well-known).* {
+            deny all;
+        }
+    }
+}'''
+"php-fpm.conf" = '''
+[www]
+listen = 127.0.0.1:9000
+user = nobody
+pm = dynamic
+pm.max_children = 50
+pm.min_spare_servers = 4
+pm.max_spare_servers = 32
+pm.start_servers = 18
+clear_env = no
+'''
+"prestart.pl" = '''
+#!/usr/bin/env perl
+
+undef $/;
+
+use FindBin;
+use lib ("$FindBin::RealBin");
+
+use File::Find;
+use Nixpacks::Config::Template;
+use Nixpacks::Util::ChmodRecursive;
+
+
+Nixpacks::Util::ChmodRecursive::chmod_recursive("/app/storage") if -e "/app/storage";
+
+if ($#ARGV != 1) {
+    print STDERR "Usage: $0 <config-file> <output-file>\n";
+    exit 1;
+}
+
+Nixpacks::Config::Template::compile_template($ARGV[0], $ARGV[1]);
+my $port = $ENV{"PORT"};
+print "Server starting on port $port\n";'''
+[phases.build]
+dependsOn = ['install']
+cmds = ['yarn run build']
+
+[phases.install]
+dependsOn = ['setup']
+cmds = [
+    'mkdir -p /var/log/nginx && mkdir -p /var/cache/nginx',
+    'composer install --ignore-platform-reqs',
+    'yarn install --frozen-lockfile',
+]
+
+[phases.setup]
+nixPkgs = [
+    '(php82.withExtensions (pe: pe.enabled ++ []))',
+    'perl',
+    'nginx',
+    'libmysqlclient',
+    'php82Packages.composer',
+    'nodejs-16_x',
+    'yarn-1_x',
+]
+nixLibs = ['libmysqlclient']
+nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
+nixpkgsArchive = '293a28df6d7ff3dec1e61e37cc4ee6e6c0fb0847'
+
+[start]
+cmd = 'perl /assets/prestart.pl /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)'
