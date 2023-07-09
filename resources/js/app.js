@@ -21,19 +21,13 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 const app = createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     progress: {
-        // The delay after which the progress bar will appear, in milliseconds...
         delay: 0,
-        // The color of the progress bar...
         color: '#fff',
-        // Whether to include the default NProgress styles...
         includeCSS: true,
-        // Whether the NProgress spinner will be shown...
         showSpinner: true,
     },
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({el, App, props, plugin}) {
-
-
         const app = createApp({render: () => h(App, props)})
             .use(modal, {
                 resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
@@ -55,10 +49,6 @@ const app = createInertiaApp({
             },
         })
 
-
         return app.mount(el);
     },
-    // progress: {
-    //     color: '#4B5563',
-    // },
 });

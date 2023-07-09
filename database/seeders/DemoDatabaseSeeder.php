@@ -11,6 +11,8 @@ use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\User;
+use Arr;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -24,9 +26,9 @@ class DemoDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $projectsNumber = 200/10;
-        $tasksPerProject = 800/10;
-        $maxCommentsNumber = 40/10;
+        $projectsNumber = 200 / 10;
+        $tasksPerProject = 800 / 10;
+        $maxCommentsNumber = 40 / 10;
 
         DB::table('comments')->truncate();
         DB::table('activities')->truncate();
@@ -43,7 +45,7 @@ class DemoDatabaseSeeder extends Seeder
         $this->call(PrioritiesSeeder::class);
         $this->call(StatusesSeeder::class);
 
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         User::factory()->create([
             'first_name' => 'Adam',
@@ -67,6 +69,8 @@ class DemoDatabaseSeeder extends Seeder
 
             // Create and assign client user
             $client = User::factory()->create();
+            assert($client instanceof User);
+
             $client->groups()->attach(2);
             $project->client_id = $client->id;
             $project->save();
@@ -79,8 +83,8 @@ class DemoDatabaseSeeder extends Seeder
             for ($x = 0; $x < min($tasksPerProject, count($this->tasks)); $x++) {
                 $task = new Task($this->tasks[$x]);
                 $task['author_id'] = $projectMembers->random();
-                $task['created_at'] = $faker->dateTimeBetween('-90 days', 'now');
-                $task['subject'] .= ' ' . \Arr::random(['🚀', '', '', '', '', '', '', '', '', '', '']);
+                $task['created_at'] = $faker->dateTimeBetween('-90 days');
+                $task['subject'] .= ' ' . Arr::random(['🚀', '', '', '', '', '', '', '', '', '', '']);
                 $task['status_id'] = Status::query()->inRandomOrder()->first()->id;
                 $task['priority_id'] = Priority::query()->inRandomOrder()->first()->id;
 
@@ -112,18 +116,21 @@ while($task->isNotCompleted()){
                         'content' => array_shift($comments)['comment'],
                     ]);
 
+                    assert($comment instanceof Comment);
+
                     $activity = $task->activities()->create([
-                            'created_at' => $faker->dateTimeBetween($task->created_at, now()),
-                            'user_id' => $projectMembers->random(),
-                            'project_id' => $task->project_id,
-                            'type' => ActivityType::TASK_COMMENTED,
-                            'comment_id' => $comment->id,
-                        ]);
+                        'created_at' => $faker->dateTimeBetween($task->created_at, now()),
+                        'user_id' => $projectMembers->random(),
+                        'project_id' => $task->project_id,
+                        'type' => ActivityType::TASK_COMMENTED,
+                        'comment_id' => $comment->id,
+                    ]);
+
+                    assert($activity instanceof Activity);
 
                     $activity->comment()->associate($comment);
                 }
             }
-//            break;
         }
     }
 

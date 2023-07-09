@@ -14,9 +14,6 @@ import Editor from "@/Components/Editor.vue";
 import {useStorage} from "@vueuse/core";
 import EditorContent from "@/Components/EditorContent.vue";
 
-// import { useEditor, EditorContent } from '@tiptap/vue-3'
-// import StarterKit from '@tiptap/starter-kit'
-
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
@@ -52,30 +49,12 @@ const props = defineProps({
 
 const uploadRef = ref(null);
 
-// const defaultComment = {
-//     comment: '',
-//     files: [],
-//     private: false,
-// };
-
-// const comment = useStorage('comment', defaultComment);
-// const commentForm = useForm(defaultComment);
-//
-// commentForm.comment = comment.value.comment;
-// commentForm.private = comment.value.private;
-//
-// watch(commentForm, (value) => {
-//     comment.value = value
-// }, {deep: true});
-
-// console.log('abc', props.task)
-
 const activityForm = useForm({
     comment: '',
     files: [],
     private: false,
 });
-// alert(props.task.private)
+
 const taskForm = useForm({
     subject: props.task.subject,
     description: props.task.description,
@@ -87,11 +66,6 @@ const taskForm = useForm({
 });
 
 const submit = () => {
-    // router.post(route('project.task', {project: props.project, task: props.task}), {...commentForm, ...settingsForm})
-    // console.log(activityForm.data(), taskForm.data(), {
-    //     ...activityForm.data(),
-    //     ...taskForm.data(),
-    // })
     activityForm.transform((data) => ({
         task: taskForm.data(),
         activity: activityForm.data(),
@@ -100,16 +74,8 @@ const submit = () => {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
-                // console.log(123);
-                // taskForm.errors = {subject: 'test 123'};
-                // taskForm.setError({subject: 'test'});
                 activityForm.reset();
-                // settingsForm.reset();
                 document.querySelector('textarea')?.focus();
-                // ElMessage({
-                //     message: 'Form submitted successfully!',
-                //     type: 'success',
-                // })
                 activeTab2.value = 'activity'
             },
             onError: () => {
@@ -126,7 +92,6 @@ const activeTab2 = ref('activity');
 
 onMounted(() => {
     document.querySelector('textarea')?.focus()
-    // timeline.value.push(...props.timeline.slice(timeline.value.length, timeline.value.length + 1))
 })
 
 const canSubmit = computed(() => {
@@ -366,23 +331,3 @@ const onlyComments = useStorage('onlyComments', true);
         <!--        </el-aside>-->
     </el-container>
 </template>
-
-<style>
-.affix-container {
-//text-align: center; //height: 400px; //border-radius: 4px; background: var(--el-color-primary-light-9);
-}
-
-.el-menu {
-    border: 0;
-}
-
-.bg-dots-darker {
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-}
-
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-dots-lighter {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-    }
-}
-</style>

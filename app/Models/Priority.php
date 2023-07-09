@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
- * @mixin IdeHelperComment
+ * @mixin IdeHelperPriority
  */
 class Priority extends Model
 {
     use SoftDeletes;
 
     use Cachable;
+
     protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [

@@ -24,6 +24,16 @@ class Controller extends BaseController
         ]);
     }
 
+    public function error(string $message): void
+    {
+        $this->message('error', $message);
+    }
+
+    public function success(string $message): void
+    {
+        $this->message('success', $message);
+    }
+
     public function perPage(): int
     {
         return request()->per_page ?? 25;

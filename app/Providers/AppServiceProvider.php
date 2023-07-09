@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\Priority;
 use App\Models\Status;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 use URL;

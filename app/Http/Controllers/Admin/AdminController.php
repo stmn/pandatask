@@ -19,16 +19,16 @@ abstract class AdminController extends Controller
 
     public function afterStore(): void
     {
-        $this->message('success', 'Created successfully.');
+        $this->success('Created successfully.');
     }
 
     public function afterUpdate(): void
     {
-        $this->message('success', 'Updated successfully.');
+        $this->success('Updated successfully.');
     }
 
     public function afterDestroy(): void
     {
-        $this->message('success', 'Deleted successfully.');
+        $this->success('Deleted successfully.');
     }
 }

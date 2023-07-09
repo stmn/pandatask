@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-import {router, useForm} from "@inertiajs/vue3"
+import {useForm} from "@inertiajs/vue3"
 import Modal from "../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import {onMounted, ref} from "vue";
-import User from "@/Components/User.vue";
 import InputError from "@/Components/InputError.vue";
-import {useNow} from "@vueuse/core";
 
 const props = defineProps({
     project: {
@@ -18,6 +15,7 @@ const props = defineProps({
         type: Array,
     },
 });
+
 const form = useForm(Object.assign({
     comment: null,
     start_at: new Date(),
@@ -25,39 +23,27 @@ const form = useForm(Object.assign({
     task: {},
 }, props.time))
 
-if(form.end_at === null) {
+if (form.end_at === null) {
     form.end_at = new Date()
 }
 
 const {close, redirect} = useModal()
 
-const url = route(`project.timesheets.${props.time ? 'edit' : 'create'}`, {project: props.project?.id, time: props.time?.id});
+const url = route(`project.timesheets.${props.time ? 'edit' : 'create'}`, {
+    project: props.project?.id,
+    time: props.time?.id
+});
 
 const create = () => form.post(url, {
     onSuccess: () => {
         redirect()
     }
 });
-//
-// onMounted(() => {
-//     console.log('onMounted timesheets 333');
-//     router.reload({only: ['times'], onSuccess: () => {
-// console.log(22)
-//         }});
-//
-//     // setTimeout(() => {
-//     //     document.querySelector('.focus-me textarea').focus();
-//     //     document.querySelector('.focus-me input').focus();
-//     // }, 100)
-// })
-
 </script>
 
 <template>
     <Modal>
         <template #title>{{ time ? 'Edit time' : 'Create a new time' }}</template>
-
-<!--        {{ JSON.stringify(form) }}-->
 
         <el-form label-width="120px">
             <el-form-item label="Task" :class="{'is-error': form.errors.task}">
@@ -69,25 +55,25 @@ const create = () => form.post(url, {
                         :value="item"
                     ></el-option>
                 </el-select>
-                <InputError :message="form.errors.task" />
+                <InputError :message="form.errors.task"/>
             </el-form-item>
             <el-form-item label="Start">
                 <el-date-picker
                     v-model="form.start_at"
                     type="datetime"
                 />
-                <InputError :message="form.errors.start_at" />
+                <InputError :message="form.errors.start_at"/>
             </el-form-item>
             <el-form-item label="End">
                 <el-date-picker
                     v-model="form.end_at"
                     type="datetime"
                 />
-                <InputError :message="form.errors.end_at" />
+                <InputError :message="form.errors.end_at"/>
             </el-form-item>
             <el-form-item label="Comment">
-                <el-input v-model="form.comment" type="textarea" class="focus-me" autosize />
-                <InputError :message="form.errors.comment" />
+                <el-input v-model="form.comment" type="textarea" class="focus-me" autosize/>
+                <InputError :message="form.errors.comment"/>
             </el-form-item>
         </el-form>
         <template #footer>

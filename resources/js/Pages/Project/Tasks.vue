@@ -4,7 +4,6 @@ import {onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import {CirclePlusFilled, Search} from "@element-plus/icons-vue";
-import {watchDebounced} from "@vueuse/core";
 import TasksTable from "@/Components/TasksTable.vue";
 import useList from "@/Composables/useList.js";
 
@@ -32,12 +31,6 @@ const props = defineProps({
 });
 
 const activeTab = ref(props.activeTab);
-
-const handleClick = (index) => {
-    // router.visit('/project/1/'+activeTab.value, {
-    //
-    // })
-};
 
 const tableData = props.tasks;
 
@@ -68,30 +61,28 @@ const checkboxGroup1 = ref(['Shanghai'])
 const cities = ['Not started', 'In Progress', 'Done']
 
 onMounted(() => {
-    router.reload({only: ['tasks'], onSuccess: () => {
-
-        }});
+    router.reload({only: ['tasks']});
 });
 </script>
 
 <template>
     <Head :title="project.name + ' - Tasks'"/>
 
-<!--    <el-dropdown style="margin-bottom: 10px;">-->
-<!--    <span class="el-dropdown-link">-->
-<!--      Saved filters-->
-<!--      <el-icon class="el-icon&#45;&#45;right">-->
-<!--        <arrow-down/>-->
-<!--      </el-icon>-->
-<!--    </span>-->
-<!--        <template #dropdown>-->
-<!--            <el-dropdown-menu>-->
-<!--                <el-dropdown-item v-for="filter in predefinedFilters" @click="changeFilter(filter.value)">-->
-<!--                    {{ filter.text }}-->
-<!--                </el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--        </template>-->
-<!--    </el-dropdown>-->
+    <!--    <el-dropdown style="margin-bottom: 10px;">-->
+    <!--    <span class="el-dropdown-link">-->
+    <!--      Saved filters-->
+    <!--      <el-icon class="el-icon&#45;&#45;right">-->
+    <!--        <arrow-down/>-->
+    <!--      </el-icon>-->
+    <!--    </span>-->
+    <!--        <template #dropdown>-->
+    <!--            <el-dropdown-menu>-->
+    <!--                <el-dropdown-item v-for="filter in predefinedFilters" @click="changeFilter(filter.value)">-->
+    <!--                    {{ filter.text }}-->
+    <!--                </el-dropdown-item>-->
+    <!--            </el-dropdown-menu>-->
+    <!--        </template>-->
+    <!--    </el-dropdown>-->
 
     <el-input
         :prefix-icon="Search"
@@ -101,25 +92,25 @@ onMounted(() => {
         size="large"
         class="w-full"></el-input>
 
-<!--    <el-switch-->
-<!--        size="small"-->
-<!--        active-text="Advanced search"-->
-<!--    />-->
+    <!--    <el-switch-->
+    <!--        size="small"-->
+    <!--        active-text="Advanced search"-->
+    <!--    />-->
 
-<!--    <br><br>-->
-<!--    <el-config-provider size="small">-->
-<!--    <el-card>-->
-<!--        <el-checkbox-group v-model="checkboxGroup1">-->
-<!--            <el-checkbox-button v-for="city in cities" :key="city" :label="city">-->
-<!--                {{ city }}-->
-<!--            </el-checkbox-button>-->
-<!--        </el-checkbox-group>-->
-<!--        <br>-->
-<!--        <el-input-->
-<!--            :clearable="true"-->
-<!--            placeholder="Cost"></el-input>-->
-<!--    </el-card>-->
-<!--    </el-config-provider>-->
+    <!--    <br><br>-->
+    <!--    <el-config-provider size="small">-->
+    <!--    <el-card>-->
+    <!--        <el-checkbox-group v-model="checkboxGroup1">-->
+    <!--            <el-checkbox-button v-for="city in cities" :key="city" :label="city">-->
+    <!--                {{ city }}-->
+    <!--            </el-checkbox-button>-->
+    <!--        </el-checkbox-group>-->
+    <!--        <br>-->
+    <!--        <el-input-->
+    <!--            :clearable="true"-->
+    <!--            placeholder="Cost"></el-input>-->
+    <!--    </el-card>-->
+    <!--    </el-config-provider>-->
 
     <br><br>
 
@@ -131,21 +122,10 @@ onMounted(() => {
 </template>
 
 <style>
-.el-menu {
-    border: 0;
+.el-dropdown {
+    cursor: pointer;
 }
 
-.bg-dots-darker {
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-}
-
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-dots-lighter {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-    }
-}
-
-.el-dropdown { cursor: pointer;}
 .el-dropdown span:focus-visible {
     outline: 0;
 }

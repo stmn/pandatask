@@ -4,7 +4,7 @@ namespace App\QueryBuilders;
 
 class GroupQueryBuilder extends Builder
 {
-    protected $searchFields = [
+    protected array $searchFields = [
         'name'
     ];
 }

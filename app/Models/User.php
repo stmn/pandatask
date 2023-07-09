@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,12 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Sanctum\HasApiTokens;
-use Laravel\Scout\Searchable;
 use Laravolt\Avatar\Avatar;
-use Rennokki\QueryCache\Traits\QueryCacheable;
-
-//use Lorisleiva\LaravelSearchString\Concerns\SearchString;
 
 /**
  * @mixin IdeHelperUser
@@ -67,6 +60,8 @@ class User extends Authenticatable
         return new UserQueryBuilder($query);
     }
 
+    // Relations
+
     public function times(): HasMany|TimeQueryBuilder
     {
         return $this->hasMany(Time::class, 'author_id');
@@ -82,10 +77,14 @@ class User extends Authenticatable
         return $this->belongsTo(Time::class, 'active_time_id');
     }
 
+    // Actions
+
     public function isAdmin(): bool
     {
         return $this->groups()->where('id', 1)->exists();
     }
+
+    // Attributes
 
     protected function avatar(): Attribute
     {
@@ -112,7 +111,7 @@ class User extends Authenticatable
         );
     }
 
-    protected function getCanAttribute()
+    protected function getCanAttribute(): array
     {
         return [];
     }

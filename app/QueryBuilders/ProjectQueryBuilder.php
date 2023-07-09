@@ -4,7 +4,7 @@ namespace App\QueryBuilders;
 
 class ProjectQueryBuilder extends Builder
 {
-    protected $searchFields = [
+    protected array $searchFields = [
         'name',
         'description'
     ];

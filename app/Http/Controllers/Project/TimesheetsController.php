@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Project;
 
-use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Time;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Momentum\Modal\Modal;
 
 class TimesheetsController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function index(Request $request, Project $project): Response
+    public function index(Project $project): Response
     {
         return Inertia::render('Project/Timesheets', [
             'activeTab' => 'timesheets',
@@ -23,17 +20,12 @@ class TimesheetsController extends Controller
             'project' => fn() => $project,
             'times' => Inertia::lazy(fn() => $project->times()
                 ->with(['task', 'author'])
-//                ->withCount(['activities as comments_count' => fn($query) => $query->where('type', '=', ActivityType::TASK_COMMENTED)])
-//            ->with(['latestActivity.activity.author'])
-//            ->when($request->has('search'), function ($query) use ($request) {
-//                $query->where('subject', 'like', '%'.$request->get('search').'%');
-//            })
-                ->orderByDesc('id')
+                ->latest('created_at')
                 ->paginate($this->perPage()))
         ]);
     }
 
-    public function form(Request $request, Project $project, ?Time $time = null)
+    public function form(Project $project, ?Time $time = null): Modal
     {
         $time?->load('task');
 
@@ -41,25 +33,19 @@ class TimesheetsController extends Controller
             'project' => $project,
             'time' => $time,
             'tasks' => $project->tasks()->get(),
-
-//            'times' => $project->times()
-//                ->with(['task', 'author'])
-//                ->orderByDesc('id')
-//                ->paginate($this->perPage())
         ])
-            ->baseRoute($project ? 'project.timesheets' : 'project.timesheets', ['project' => $project]);
+            ->baseRoute('project.timesheets', ['project' => $project]);
     }
 
-    public function save(Request $request, Project $project, ?Time $time = null)
+    public function save(Request $request, Project $project, ?Time $time = null): void
     {
         $request->validate([
             'task' => 'required',
             'start_at' => 'required',
-//            'end_at' => 'required',
         ]);
-//dd($request->all());
-        $time = Time::query()->updateOrCreate([
-            'id' => $time ? $time->id : null,
+
+        Time::query()->updateOrCreate([
+            'id' => $time?->id,
         ], [
             'project_id' => $project->id,
             'task_id' => $request->task['id'],
@@ -67,15 +53,6 @@ class TimesheetsController extends Controller
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
             'author_id' => $request->user()->id,
-//            'client_id' => $request->client_id,
         ]);
-
-//        $time->members()->sync(
-//            collect($request->members)->pluck('id')
-//        );
-
-//        if ($time->wasRecentlyCreated) {
-//            return to_route('project.timesheets', ['project' => $project]);
-//        }
     }
 }

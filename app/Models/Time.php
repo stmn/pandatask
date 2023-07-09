@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\QueryBuilders\TaskQueryBuilder;
+use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperTime
@@ -16,6 +16,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 class Time extends Model
 {
     use Cachable;
+
     protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [
@@ -33,15 +34,17 @@ class Time extends Model
         'end_at' => 'datetime',
     ];
 
-    public static function query(): Builder|TaskQueryBuilder
+    public static function query(): Builder|TimeQueryBuilder
     {
         return parent::query();
     }
 
-    public function newEloquentBuilder($query): TaskQueryBuilder
+    public function newEloquentBuilder($query): TimeQueryBuilder
     {
-        return new TaskQueryBuilder($query);
+        return new TimeQueryBuilder($query);
     }
+
+    // Relations
 
     public function task(): BelongsTo|TaskQueryBuilder
     {
@@ -51,5 +54,28 @@ class Time extends Model
     public function author(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Actions
+
+    public function stop(): bool
+    {
+        $minimumTime = 60;
+
+        if ($this->start_at->diffInSeconds(now()) < $minimumTime) {
+            $this->delete();
+
+            return false;
+        }
+
+        $this->update([
+            'end_at' => now(),
+        ]);
+
+        $this->author->update([
+            'active_time_id' => null
+        ]);
+
+        return true;
     }
 }

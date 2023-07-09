@@ -15,11 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravolt\Avatar\Avatar;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperProject
@@ -29,6 +27,7 @@ class Project extends Model
     use SoftDeletes, useLatestActivity;
 
     use Cachable;
+
     protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [

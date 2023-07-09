@@ -6,17 +6,14 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Builder extends EloquentBuilder
 {
+    protected array $searchFields = [];
 
-    protected $searchFields = [];
-
-//    protected $defaultSort = '-id';
-
-    public function search(?string $phrase = null)
+    public function search(?string $phrase = null): static
     {
         if ($phrase) {
             $this->where(function ($query) use ($phrase) {
                 foreach ($this->searchFields as $field) {
-                    $query->orWhere($field, 'LIKE', "%{$phrase}%");
+                    $query->orWhere($field, 'LIKE', "%$phrase%");
                 }
             });
         }

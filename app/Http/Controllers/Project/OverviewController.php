@@ -4,16 +4,12 @@ namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class OverviewController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function index(Request $request, Project $project): Response
+    public function index(Project $project): Response
     {
         $project->load('client', 'members');
 

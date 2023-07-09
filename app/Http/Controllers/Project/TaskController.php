@@ -4,22 +4,21 @@ namespace App\Http\Controllers\Project;
 
 use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Comment;
 use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class TaskController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function index(Request $request, Project $project, Task $task): Response
+    public function index(Project $project, Task $task): Response
     {
         return Inertia::render('Project/Task', [
             'project' => $project,
@@ -38,7 +37,11 @@ class TaskController extends Controller
         ]);
     }
 
-    public function update(Project $project, Request $request, Task $task)
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function update(Request $request, Task $task): void
     {
         $request->validate([
             'activity.comment' => [],
@@ -67,7 +70,7 @@ class TaskController extends Controller
         if ($request->input('task')) {
             $original = $task->getOriginal();
             $data = $request->get('task');
-            if($data['description'] === '<p></p>') {
+            if (isset($data['description']) && $data['description'] === '<p></p>') {
                 $data['description'] = str_replace("<p></p>", "", $data['description']);
             }
             $task->update($data);
@@ -103,6 +106,7 @@ class TaskController extends Controller
         }
 
         $activity = $task->activities()->create($activity);
+        assert($activity instanceof Activity);
 
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
@@ -110,9 +114,6 @@ class TaskController extends Controller
             }
         }
 
-        $this->message('success', 'Task updated successfully.');
-
-//        return to_route('project.tasks', ['project' => $project]);
-//        return to_route('project.task', ['project' => $project, 'task' => $task]);
+        $this->success('Task updated successfully.');
     }
 }

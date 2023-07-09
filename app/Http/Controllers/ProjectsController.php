@@ -5,34 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Momentum\Modal\Modal;
 
 class ProjectsController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function index(Request $request): Response
     {
         return Inertia::render('Projects', [
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()
+                ->search($request->get('search'))
                 ->with([
                     'latestActivity.task',
                     'latestActivity.user'
                 ])
-                ->when($request->has('search'), function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->get('search') . '%');
-                })
                 ->orderByDesc('latest_activity_at')
                 ->paginate($this->perPage()),
         ]);
     }
 
-    public function form(Request $request, ?Project $project = null)
+    public function form(?Project $project = null): Modal
     {
         $project?->load('members');
 
@@ -56,12 +51,14 @@ class ProjectsController extends Controller
         ]);
 
         $project = Project::query()->updateOrCreate([
-            'id' => $project ? $project->id : null,
+            'id' => $project?->id,
         ], [
             'name' => $request->name,
             'description' => $request->description,
             'client_id' => $request->client_id,
         ]);
+
+        assert($project instanceof Project);
 
         $project->members()->sync(
             collect($request->members)->pluck('id')
@@ -70,5 +67,7 @@ class ProjectsController extends Controller
         if ($project->wasRecentlyCreated) {
             return to_route('project.tasks', ['project' => $project]);
         }
+
+        return null;
     }
 }

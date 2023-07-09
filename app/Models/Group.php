@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * @mixin IdeHelperGroup
@@ -17,6 +16,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 class Group extends Model
 {
     use Cachable;
+
     protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [

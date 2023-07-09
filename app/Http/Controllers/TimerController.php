@@ -5,37 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Time;
 use Illuminate\Http\Request;
-use Inertia\Response;
 
 class TimerController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function start(Request $request)
+    const MESSAGE_STARTED = 'Timer started';
+    const MESSAGE_STOPPED = 'Timer stopped';
+    const MESSAGE_REJECTED = 'Required at least 60 seconds, time canceled';
+
+    public function start(Request $request): void
     {
-        $time = Time::query()->where('author_id', loggedUser()->id)->whereNull('end_at')->first();
-        if ($time) {
-            if ($time->start_at->diffInMinutes(now()) < 1) {
-                $time->delete();
+        /** @var Time|null $time */
+        $time = loggedUser()->times()->pending()->first();
+        $time?->stop();
 
-                request()->session()->flash('message', [
-                    'type' => 'error',
-                    'message' => 'Required at least 60 seconds, time canceled'
-                ]);
-            } else {
-                $time->update([
-                    'end_at' => now()
-                ]);
-            }
-        }
-
+        /** @var Task $task */
         $task = Task::query()->findOrFail($request->get('task'));
 
-        $time = Time::query()->create([
-            'author_id' => 1,
+        /** @var Time $time */
+        $time = loggedUser()->times()->create([
             'project_id' => $task->project_id,
-            'task_id' => $request->get('task'),
+            'task_id' => $task->id,
             'start_at' => now()
         ]);
 
@@ -43,37 +32,18 @@ class TimerController extends Controller
             'active_time_id' => $time->id
         ]);
 
-        request()->session()->flash('message', [
-            'type' => 'success',
-            'message' => 'Timer started'
-        ]);
+        $this->success(self::MESSAGE_STARTED);
     }
 
-    public function stop()
+    public function stop(): void
     {
-        $time = Time::query()->where('author_id', 1)->whereNull('end_at')->first();
-        if ($time) {
-            if ($time->start_at->diffInMinutes(now()) < 1) {
-                $time->delete();
+        /** @var Time $time */
+        $time = loggedUser()->times()->pending()->firstOrFail();
 
-                request()->session()->flash('message', [
-                    'type' => 'error',
-                    'message' => 'Required at least 60 seconds, time canceled'
-                ]);
-            } else {
-                $time->update([
-                    'end_at' => now()
-                ]);
-
-                request()->session()->flash('message', [
-                    'type' => 'success',
-                    'message' => 'Timer stopped'
-                ]);
-            }
+        if ($time->stop()) {
+            $this->success(self::MESSAGE_STOPPED);
+        } else {
+            $this->error(self::MESSAGE_REJECTED);
         }
-
-        loggedUser()->update([
-            'active_time_id' => null
-        ]);
     }
 }

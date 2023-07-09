@@ -6,9 +6,6 @@ use App\Models\User;
 
 class PriorityPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
     public function __construct()
     {
         //

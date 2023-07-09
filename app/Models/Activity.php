@@ -8,6 +8,7 @@ use App\QueryBuilders\CommentQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
+use Arr;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -35,8 +36,6 @@ class Activity extends Model implements HasMedia
         'comment_id',
         'type',
         'details',
-//        'activity_type',
-//        'activity_id',
         'private',
     ];
 
@@ -50,7 +49,6 @@ class Activity extends Model implements HasMedia
         'description',
     ];
 
-    // saved event
     protected static function booted(): void
     {
         static::creating(function (Activity $activity) {
@@ -99,11 +97,6 @@ class Activity extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-//    public function comments(): HasMany|CommentQueryBuilder
-//    {
-//        return $this->hasMany(Comment::class);
-//    }
-
     public function comment(): BelongsTo|CommentQueryBuilder
     {
         return $this->belongsTo(Comment::class);
@@ -127,10 +120,10 @@ class Activity extends Model implements HasMedia
             get: function ($details) {
                 $details = json_decode($details, true);
 
-                $collection = collect([]);
+                $collection = collect();
 
-                foreach (\Arr::get($details, 'changed', []) as $key => $change) {
-                    if($key === 'priority_id') {
+                foreach (Arr::get($details, 'changed', []) as $key => $change) {
+                    if ($key === 'priority_id') {
                         $old = Priority::find($change[0]);
                         $new = Priority::find($change[1]);
                         $collection->push([
@@ -138,7 +131,7 @@ class Activity extends Model implements HasMedia
                             'old' => $old->only('name', 'color'),
                             'new' => $new->only('name', 'color'),
                         ]);
-                    } elseif($key === 'status_id') {
+                    } elseif ($key === 'status_id') {
                         $old = Status::find($change[0]);
                         $new = Status::find($change[1]);
                         $collection->push([
@@ -148,8 +141,8 @@ class Activity extends Model implements HasMedia
                         ]);
                     }
                 }
-                foreach (\Arr::get($details, 'attached', []) as $key => $attached) {
-                    if($key === 'assignees') {
+                foreach (Arr::get($details, 'attached', []) as $key => $attached) {
+                    if ($key === 'assignees') {
                         $users = User::find($attached);
                         $collection->push([
                             'field' => $key,
@@ -157,8 +150,8 @@ class Activity extends Model implements HasMedia
                         ]);
                     }
                 }
-                foreach (\Arr::get($details, 'detached', []) as $key => $attached) {
-                    if($key === 'assignees') {
+                foreach (Arr::get($details, 'detached', []) as $key => $attached) {
+                    if ($key === 'assignees') {
                         $users = User::find($attached);
                         $collection->push([
                             'field' => $key,

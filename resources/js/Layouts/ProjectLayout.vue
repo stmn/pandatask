@@ -120,18 +120,20 @@ const onProjectChange = (value) => {
                 </el-icon> &nbsp; Tasks
             </template>
         </el-tab-pane>
-        <el-tab-pane name="timesheets">
-            <template #label>
-                <el-icon>
-                    <Clock/>
-                </el-icon> &nbsp; Timesheets
-            </template>
-        </el-tab-pane>
+
         <el-tab-pane name="activity">
             <template #label>
                 <el-icon>
                     <View/>
                 </el-icon> &nbsp; Activity
+            </template>
+        </el-tab-pane>
+
+        <el-tab-pane name="timesheets">
+            <template #label>
+                <el-icon>
+                    <Clock/>
+                </el-icon> &nbsp; Timesheets
             </template>
         </el-tab-pane>
 
