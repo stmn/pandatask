@@ -3,6 +3,7 @@ import {useForm} from "@inertiajs/vue3"
 import Modal from "../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import InputError from "@/Components/InputError.vue";
+import {Clock} from "@element-plus/icons-vue";
 
 const props = defineProps({
     project: {
@@ -22,10 +23,6 @@ const form = useForm(Object.assign({
     end_at: new Date(),
     task: {},
 }, props.time))
-
-if (form.end_at === null) {
-    form.end_at = new Date()
-}
 
 const {close, redirect} = useModal()
 
@@ -72,6 +69,7 @@ const create = () => form.post(url, {
                     v-model="form.end_at"
                     type="datetime"
                 />
+                <el-button @click="form.end_at = new Date()" :icon="Clock" style="margin-left: 15px;">Now</el-button>
                 <InputError :message="form.errors.end_at"/>
             </el-form-item>
             <el-form-item label="Comment">

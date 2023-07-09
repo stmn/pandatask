@@ -5,7 +5,7 @@ import Time from "@/Components/Time.vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
 import Pagination from "@/Components/Pagination.vue";
-import {Edit, EditPen} from "@element-plus/icons-vue";
+import {Comment, Edit} from "@element-plus/icons-vue";
 
 const props = defineProps({
     task: {
@@ -38,10 +38,10 @@ const timeBetweenTwoDates = (date1, date2) => {
     const hours = Math.floor(minutes / 60);
 
     let parts = [];
-    if(hours) {
+    if (hours) {
         parts.push(`${hours.toString().padStart(1, '0')}<span style="opacity: 0.5;">h</span>`)
     }
-    if((minutes % 60)) {
+    if ((minutes % 60)) {
         parts.push(`${(minutes % 60).toString().padStart(2, '0')}<span style="opacity: 0.5;">m</span>`)
     }
     parts.push(`${(seconds % 60).toString().padStart(2, '0')}<span style="opacity: 0.5;">s</span>`)
@@ -56,7 +56,7 @@ const timeBetweenTwoDates = (date1, date2) => {
             <div v-if="times">No Data</div>
             <div v-else>
                 <el-icon class="is-loading" size="32" style="margin-top: 22px;">
-                    <Loading />
+                    <Loading/>
                 </el-icon>
             </div>
         </template>
@@ -70,7 +70,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
                     <el-text truncated>
-                    <Link :href="row.task.url">{{ row.task.subject }}</Link>
+                        <Link :href="row.task.url">{{ row.task.subject }}</Link>
                     </el-text>
                 </div>
             </template>
@@ -102,9 +102,21 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </template>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="100">
+        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="60">
             <template #default="{row}">
-                {{ row.comment }}
+                <el-popover
+                    v-if="row.comment"
+                    placement="left"
+                    :width="200"
+                    trigger="click"
+                >
+                    <template #reference>
+                        <el-button :icon="Comment" circle></el-button>
+                    </template>
+                    <template #default>
+                        <small>{{ row.comment }}</small>
+                    </template>
+                </el-popover>
             </template>
         </el-table-column>
         <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">

@@ -53,24 +53,31 @@ window.addEventListener('focus', function () {
         <template #stop>
             <el-popover
                 placement="left"
-                :width="200"
+                :width="260"
                 trigger="hover"
                 show-after="600"
             >
                 <template #default>
-                    <b>Task:</b>
-                    <Link
-                        :href="activeTime?.task.url">{{
-                            activeTime?.task?.subject
-                        }}
-                    </Link>
-                    <br>
-                    <b>Time:</b> {{ time }}
-
-                    <Link preserve-state
-                          :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
-                        <el-button type="primary" size="small">Edit</el-button>
-                    </Link>
+                    <div style="line-height: 20px;">
+                        <el-text truncated>
+                        <Link
+                            :href="activeTime?.task.url">{{
+                                activeTime?.task?.subject
+                            }}
+                        </Link>
+                        </el-text>
+                        <br>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <b>Time:</b> {{ time }}
+                            </div>
+                            <Link preserve-state
+                                  preserve-scroll :only="['modal', 'tasks']"
+                                  :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
+                                <el-button type="primary" size="small">Edit</el-button>
+                            </Link>
+                        </div>
+                    </div>
                 </template>
                 <template #reference>
                     <div class="timer-stop">

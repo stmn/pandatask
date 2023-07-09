@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        <!--
+           APPLICATION LICENSE
+           This application is licensed under the XYZ License.
+           All rights reserved. Unauthorized use or distribution prohibited.
+           For licensing inquiries, please contact [Your Company Name].
+        -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
