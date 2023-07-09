@@ -16,11 +16,14 @@ class TimesheetsController extends Controller
     {
         return Inertia::render('Project/Timesheets', [
             'activeTab' => 'timesheets',
-            'projects' => fn() => Project::query()->get(),
             'project' => fn() => $project,
+            'projects' => fn() => Project::query()
+                ->select('id', 'name')
+                ->get(),
             'times' => Inertia::lazy(fn() => $project->times()
+                ->select('id', 'project_id', 'task_id', 'comment', 'start_at', 'end_at', 'author_id')
                 ->with(['task', 'author'])
-                ->latest('created_at')
+                ->latest()
                 ->paginate($this->perPage()))
         ]);
     }
@@ -44,7 +47,7 @@ class TimesheetsController extends Controller
             'start_at' => 'required',
         ]);
 
-        Time::query()->updateOrCreate([
+        $time = Time::query()->updateOrCreate([
             'id' => $time?->id,
         ], [
             'project_id' => $project->id,
@@ -54,5 +57,13 @@ class TimesheetsController extends Controller
             'end_at' => $request->end_at,
             'author_id' => $request->user()->id,
         ]);
+
+        assert($time instanceof Time);
+
+        if ($time->end_at && $time->author->active_time_id === $time->id) {
+            loggedUser()->update([
+                'active_time_id' => null,
+            ]);
+        }
     }
 }

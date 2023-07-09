@@ -21,6 +21,7 @@ class DashboardController extends Controller
             'hello' => $this->hello[array_rand($this->hello)],
             'projects' => Inertia::lazy(function () use ($request) {
                 $projects = Project::query()
+                    ->select('id', 'name')
                     ->latest('latest_activity_at')
                     ->limit(10)
                     ->get();

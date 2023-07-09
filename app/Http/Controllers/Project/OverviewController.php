@@ -16,7 +16,9 @@ class OverviewController extends Controller
         return Inertia::render('Project/Overview', [
             'activeTab' => 'overview',
             'project' => $project,
-            'projects' => fn() => Project::query()->get(),
+            'projects' => fn() => Project::query()
+                ->select('id', 'name')
+                ->get(),
             'activities' => fn() => $project->activities()
                 ->with(['task', 'user'])
                 ->latest()

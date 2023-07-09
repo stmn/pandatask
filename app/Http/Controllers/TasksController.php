@@ -15,6 +15,7 @@ class TasksController extends Controller
             'activeIndex' => 'tasks',
             'search' => $request->get('search'),
             'tasks' => Inertia::lazy(fn() => Task::query()
+                ->select('id', 'project_id', 'subject', 'status_id', 'priority_id', 'latest_activity_id', 'number')
                 ->search($request->get('search'))
                 ->with([
                     'status', 'priority', 'latestActivity.user', 'project',

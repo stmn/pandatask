@@ -13,10 +13,13 @@ class ActivitiesController extends Controller
     {
         return Inertia::render('Project/Activities', [
             'activeTab' => 'activity',
-            'projects' => fn() => Project::query()->get(),
             'project' => $project,
+            'projects' => fn() => Project::query()
+                ->select('id', 'name')
+                ->get(),
             'activities' => fn() => $project
                 ->activities()
+                ->select('id', 'project_id', 'task_id', 'user_id', 'comment_id', 'created_at', 'type')
                 ->with(['task', 'user', 'comment'])
                 ->latest()
                 ->paginate($this->perPage())

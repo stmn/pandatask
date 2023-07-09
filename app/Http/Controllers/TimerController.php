@@ -12,6 +12,11 @@ class TimerController extends Controller
     const MESSAGE_STOPPED = 'Timer stopped';
     const MESSAGE_REJECTED = 'Required at least 60 seconds, time canceled';
 
+    /**
+     * Start a new time
+     * @param Request $request
+     * @return void
+     */
     public function start(Request $request): void
     {
         /** @var Time|null $time */
@@ -35,6 +40,10 @@ class TimerController extends Controller
         $this->success(self::MESSAGE_STARTED);
     }
 
+    /**
+     * Stop the current time
+     * @return void
+     */
     public function stop(): void
     {
         /** @var Time $time */

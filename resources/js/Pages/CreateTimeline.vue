@@ -35,8 +35,11 @@ const url = route(`project.timesheets.${props.time ? 'edit' : 'create'}`, {
 });
 
 const create = () => form.post(url, {
+    preserveState: true,
+    preserveScroll: true,
+    only: ['times', 'errors', 'auth'],
     onSuccess: () => {
-        redirect()
+        close()
     }
 });
 </script>

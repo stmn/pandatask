@@ -8,7 +8,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Project\ActivitiesController;
 use App\Http\Controllers\Project\OverviewController;
-use App\Http\Controllers\Project\TaskController;
 use App\Http\Controllers\Project\TasksController as ProjectTasksController;
 use App\Http\Controllers\Project\TimesheetsController;
 use App\Http\Controllers\ProjectsController;
@@ -91,8 +90,8 @@ Route::middleware('auth')->group(callback: function () {
 
         Route::get('activities', [ActivitiesController::class, 'index'])->name('.activity');
 
-        Route::get('tasks/{task:number}', [TaskController::class, 'index'])->name('.task');
-        Route::post('tasks/{task:number}', [TaskController::class, 'update'])->name('.task.update');
+        Route::get('tasks/{task:number}', [ProjectTasksController::class, 'show'])->name('.task');
+        Route::post('tasks/{task:number}', [ProjectTasksController::class, 'update'])->name('.task.update');
     });
 });
 

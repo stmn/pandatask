@@ -17,12 +17,13 @@ class ProjectsController extends Controller
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()
+                ->selectRaw('id,name,description,latest_activity_id')
                 ->search($request->get('search'))
                 ->with([
                     'latestActivity.task',
                     'latestActivity.user'
                 ])
-                ->orderByDesc('latest_activity_at')
+                ->latest('latest_activity_at')
                 ->paginate($this->perPage()),
         ]);
     }
@@ -39,7 +40,7 @@ class ProjectsController extends Controller
                     'label' => $user->full_name,
                 ];
             }),
-            'users' => User::query()->get(),
+            'users' => User::query()->selectRaw('id,first_name,last_name')->get(),
         ])
             ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);
     }
