@@ -19,6 +19,7 @@ use Laravolt\Avatar\Avatar;
 
 /**
  * @mixin IdeHelperUser
+ * @property array $settings
  */
 class User extends Authenticatable
 {
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'password',
         'job_title',
         'phone',
+        'settings',
     ];
 
     protected $hidden = [
@@ -43,6 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'settings' => 'array',
     ];
 
     protected $appends = [
@@ -108,6 +111,16 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn() => trim($this->first_name . ' ' . $this->last_name)
+        );
+    }
+
+    protected function settings(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => array_merge([
+                'dashboard_projects' => 10,
+                'dashboard_tasks' => 5,
+            ], json_decode($value ?? '[]', true))
         );
     }
 

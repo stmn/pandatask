@@ -42,6 +42,7 @@ Route::middleware('auth')->group(callback: function () {
     // Main routes
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/save-settings', [DashboardController::class, 'saveSettings'])->name('dashboard.save-settings');
 
     Route::get('/projects', [ProjectsController::class, 'index'])->name('projects');
 

@@ -2,9 +2,10 @@
 import {Head, Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import TasksTable from "@/Components/TasksTable.vue";
-import {CirclePlusFilled} from "@element-plus/icons-vue";
+import {CirclePlusFilled, Setting} from "@element-plus/icons-vue";
 import {onMounted, provide, ref} from "vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
+import Settings from "@/Components/Dashboard/Settings.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -20,6 +21,9 @@ const props = defineProps({
     tasks: {
         required: false,
         default: () => []
+    },
+    settings: {
+        required: true,
     }
 });
 
@@ -34,7 +38,12 @@ function handleTasks(response) {
     }
 }
 
+function handleProjects(response) {
+    projects.value = response.props.projects;
+}
+
 provide('handleTasks', handleTasks);
+provide('handleProjects', handleProjects);
 
 router.on('success', (event) => {
     if (event.detail.page.props.tasks) {
@@ -45,7 +54,7 @@ router.on('success', (event) => {
 onMounted(() => {
     router.reload({
         only: ['projects'], onSuccess: (response) => {
-            projects.value = response.props.projects;
+            handleProjects(response);
 
             router.reload({
                 only: ['tasks'], onSuccess: (response) => {
@@ -58,18 +67,37 @@ onMounted(() => {
         }
     });
 });
+
+const showSettings = ref(false);
 </script>
 
 <template>
     <Head title="Dashboard"/>
 
-    <div class="el-page-header__header">
+    <div class="el-page-header__header chuj">
         <div class="el-page-header__left">
             <div class="el-page-header__content">
-                <div>
+                <div style="display: flex; justify-content: space-around; width: 100%;">
                     <span><b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!</span>
                 </div>
             </div>
+        </div>
+        <div class="el-page-header__right">
+            <!-- Customization Button -->
+            <el-popover :visible="showSettings" trigger="click" placement="left" width="300">
+                <template #default>
+                    <Settings :settings="settings" @close="showSettings = false"/>
+                </template>
+                <template #reference>
+                    <el-button link @click="showSettings = !showSettings">
+<!--                        <el-tooltip show-after="300" :disabled="showSettings" placement="left" content="Customize">-->
+                            <el-icon size="24" style="cursor: pointer;" class="hover-rotate">
+                                <Setting/>
+                            </el-icon>
+<!--                        </el-tooltip>-->
+                    </el-button>
+                </template>
+            </el-popover>
         </div>
     </div>
 

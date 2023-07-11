@@ -11,7 +11,7 @@ use Inertia\Response;
 class DashboardController extends Controller
 {
     private array $hello = [
-        'Hello', 'Hola', 'Witaj', 'Bonjour', 'Ciao', 'Xin chào', 'Hallo'
+        'Hello', 'Hola', 'Witaj', 'Bonjour', 'Ciao', 'Xin chào', 'Hallo', 'Вітаю',
     ];
 
     public function index(Request $request): Response
@@ -19,11 +19,14 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'activeIndex' => 'dashboard',
             'hello' => $this->hello[array_rand($this->hello)],
+            'settings' => function () {
+                return loggedUser()->settings;
+            },
             'projects' => Inertia::lazy(function () use ($request) {
                 $projects = Project::query()
                     ->select('id', 'name')
                     ->latest('latest_activity_at')
-                    ->limit(10)
+                    ->limit(loggedUser()->settings['dashboard_projects'])
                     ->get();
 
                 session()->put('dashboard-projects', $projects->pluck('id')->toArray());
@@ -41,7 +44,7 @@ class DashboardController extends Controller
                         ->with(['status', 'priority', 'latestActivity.user'])
                         ->withCommentsCount()
                         ->latest('latest_activity_at')
-                        ->limit(5)
+                        ->limit(loggedUser()->settings['dashboard_tasks'])
                         ->get();
                 }
 
@@ -50,5 +53,20 @@ class DashboardController extends Controller
                 return $tasks;
             }),
         ]);
+    }
+
+    public function saveSettings(Request $request): void
+    {
+        $request->validate([
+            'dashboard_projects' => 'required|integer|min:1|max:10',
+            'dashboard_tasks' => 'required|integer|min:1|max:10',
+        ]);
+
+        $settings = loggedUser()->settings;
+        $settings['dashboard_projects'] = $request->get('dashboard_projects');
+        $settings['dashboard_tasks'] = $request->get('dashboard_tasks');
+        loggedUser()->update(['settings' => $settings]);
+
+        $this->success('Saved.');
     }
 }
