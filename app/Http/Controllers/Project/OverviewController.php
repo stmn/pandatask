@@ -7,7 +7,7 @@ use App\Models\Project;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class OverviewController extends Controller
+class OverviewController extends ProjectController
 {
     public function index(Project $project): Response
     {

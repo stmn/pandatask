@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\GroupsController;
 use App\Http\Controllers\Admin\PrioritiesController;
 use App\Http\Controllers\Admin\StatusesController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Project\ActivitiesController;
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(callback: function () {
 
     Route::group(['as' => 'admin.', 'prefix' => '/admin/', 'middleware' => 'admin'], function () {
         Route::resource('users', UsersController::class)->except(['show']);
+        Route::post('users/{user}/impersonate', [UsersController::class, 'impersonate'])->name('users.impersonate');
         Route::resource('groups', GroupsController::class)->except(['show']);
         Route::resource('priorities', PrioritiesController::class)->except(['show']);
         Route::resource('statuses', StatusesController::class)->except(['show']);
@@ -94,6 +96,8 @@ Route::middleware('auth')->group(callback: function () {
         Route::get('tasks/{task:number}', [ProjectTasksController::class, 'show'])->name('.task');
         Route::post('tasks/{task:number}', [ProjectTasksController::class, 'update'])->name('.task.update');
     });
+
+    Route::get('/leave-impersonation', [AuthenticatedSessionController::class, 'leaveImpersonation'])->name('leave-impersonation');
 });
 
 require __DIR__ . '/auth.php';

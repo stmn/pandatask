@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
 
                     return [
                         'user' => $user,
+                        'impersonated' => session()->has('impersonated'),
                         'groups' => $user->groups()->get()->keyBy('type'),
                     ];
                 }

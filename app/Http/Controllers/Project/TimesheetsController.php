@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
 
-class TimesheetsController extends Controller
+class TimesheetsController extends ProjectController
 {
     public function index(Project $project): Response
     {

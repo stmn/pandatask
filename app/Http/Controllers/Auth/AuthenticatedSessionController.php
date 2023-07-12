@@ -35,8 +35,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return redirect(
-            // This fix cloudflare flexible ssl issue
-            str_replace('http://', config('app.url_scheme').'://', redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl())
+        // This fix cloudflare flexible ssl issue
+            str_replace('http://', config('app.url_scheme') . '://', redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl())
         );
     }
 
@@ -52,5 +52,20 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function leaveImpersonation(Request $request): RedirectResponse
+    {
+        $userId = $request->session()->get('impersonated');
+
+        $request->session()->forget('impersonated');
+
+        if ($userId) {
+            auth()->loginUsingId($userId);
+
+            $this->success('You are no longer impersonating anyone.');
+        }
+
+        return to_route('dashboard');
     }
 }

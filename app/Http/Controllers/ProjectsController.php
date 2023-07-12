@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -11,8 +12,13 @@ use Momentum\Modal\Modal;
 
 class ProjectsController extends Controller
 {
+    /**
+     * @throws AuthorizationException
+     */
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', Project::class);
+
         return Inertia::render('Projects', [
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
@@ -23,13 +29,21 @@ class ProjectsController extends Controller
                     'latestActivity.task',
                     'latestActivity.user'
                 ])
+                ->forCurrentUser()
                 ->latest('latest_activity_at')
                 ->paginate($this->perPage()),
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function form(?Project $project = null): Modal
     {
+        $project
+            ? $this->authorize('update', $project)
+            : $this->authorize('create', Project::class);
+
         $project?->load('members');
 
         return Inertia::modal('CreateProject', [
@@ -45,8 +59,15 @@ class ProjectsController extends Controller
             ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function save(Request $request, ?Project $project = null)
     {
+        $project
+            ? $this->authorize('update', $project)
+            : $this->authorize('create', Project::class);
+
         $request->validate([
             'name' => 'required',
         ]);

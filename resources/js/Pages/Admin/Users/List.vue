@@ -1,7 +1,7 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
-import {CirclePlusFilled, Delete, Edit, Search} from "@element-plus/icons-vue";
+import {CirclePlusFilled, Delete, Edit, Search, Key} from "@element-plus/icons-vue";
 import Page from "@/Pages/Admin/Page.vue";
 import Pagination from "@/Components/Pagination.vue";
 import useList from "@/Composables/useList.js";
@@ -39,10 +39,14 @@ const {query, handleSortChange} = useList();
                     </el-tooltip>
                 </template>
             </el-table-column>
-            <el-table-column align="right" width="100">
+            <el-table-column align="right" width="140">
                 <template #default="scope">
                     <Link :href="route('admin.users.edit', {user: scope.row.id})">
                         <el-button type="primary" :icon="Edit" circle/>
+                    </Link>
+
+                    <Link :href="route('admin.users.impersonate', {user: scope.row.id})" method="post">
+                        <el-button type="primary" :icon="Key" circle/>
                     </Link>
                     &nbsp;
                     <el-popconfirm title="Are you sure to delete this?"

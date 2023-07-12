@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Project;
 
 use App\Enums\ActivityType;
-use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Comment;
 use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,7 +18,7 @@ use Momentum\Modal\Modal;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
-class TasksController extends Controller
+class TasksController extends ProjectController
 {
     public function index(Request $request, Project $project): Response
     {
@@ -35,18 +35,25 @@ class TasksController extends Controller
                 ->sortByString($request->get('sort'))
                 ->with(['priority', 'status', 'latestActivity.user'])
                 ->withCommentsCount()
+                ->forCurrentUser()
                 ->latest('latest_activity_at')
                 ->paginate($this->perPage()))
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function show(Project $project, Task $task): Response
     {
+        $this->authorize('view', $task);
+
         return Inertia::render('Project/Task', [
             'project' => $project,
             'task' => $task->load('author', 'project', 'assignees'),
             'activities' => fn() => $task->activities()
                 ->with(['user', 'comment', 'media'])
+                ->forCurrentUser()
                 ->latest()
                 ->get(),
             'users' => fn() => $project->members()->get(),

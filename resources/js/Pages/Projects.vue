@@ -38,7 +38,7 @@ const {query} = useList({only: ['projects']});
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link preserve-state preserve-scroll :only="['modal']" :href="route('projects.create')">
+                <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="route('projects.create')">
                     <el-button type="success" :icon="CirclePlusFilled" style="">Create</el-button>
                 </Link>
             </div>

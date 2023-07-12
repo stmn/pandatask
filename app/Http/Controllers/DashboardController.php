@@ -27,6 +27,7 @@ class DashboardController extends Controller
                     ->select('id', 'name')
                     ->latest('latest_activity_at')
                     ->limit(loggedUser()->settings['dashboard_projects'])
+                    ->forCurrentUser()
                     ->get();
 
                 session()->put('dashboard-projects', $projects->pluck('id')->toArray());
@@ -43,6 +44,7 @@ class DashboardController extends Controller
                         ->select('id', 'project_id', 'subject', 'status_id', 'priority_id', 'latest_activity_id', 'number')
                         ->with(['status', 'priority', 'latestActivity.user'])
                         ->withCommentsCount()
+                        ->forCurrentUser()
                         ->latest('latest_activity_at')
                         ->limit(loggedUser()->settings['dashboard_tasks'])
                         ->get();

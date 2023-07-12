@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
@@ -50,12 +51,23 @@ class UsersController extends AdminController
         $this->afterDestroy();
     }
 
+    public function impersonate(User $user): RedirectResponse
+    {
+        session()->put('impersonated', loggedUser()->id);
+
+        auth()->login($user);
+
+        $this->success('You are now impersonating ' . $user->full_name);
+
+        return to_route('dashboard');
+    }
+
     protected function form(array $data = [
         'user' => new User(),
     ]): Modal
     {
         return Inertia::modal('Admin/Users/Form', $data + [
-            'groups' => Group::all(),
+                'groups' => Group::all(),
             ])
             ->baseRoute('admin.users.index');
     }
@@ -66,8 +78,8 @@ class UsersController extends AdminController
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => (!$user->exists?'required':'nullable').'|min:6',
-            'confirm_password' => (!$user->exists?'required':'nullable').'|same:password',
+            'password' => (!$user->exists ? 'required' : 'nullable') . '|min:6',
+            'confirm_password' => (!$user->exists ? 'required' : 'nullable') . '|same:password',
             'groups' => 'nullable|array',
         ]);
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\QueryBuilders\GroupQueryBuilder;
+use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,7 @@ use Laravolt\Avatar\Avatar;
 /**
  * @mixin IdeHelperUser
  * @property array $settings
+ * @property string $full_name
  */
 class User extends Authenticatable
 {
@@ -80,11 +82,21 @@ class User extends Authenticatable
         return $this->belongsTo(Time::class, 'active_time_id');
     }
 
+    public function projects(): BelongsToMany|ProjectQueryBuilder
+    {
+        return $this->belongsToMany(Project::class, 'project_members');
+    }
+
     // Actions
 
     public function isAdmin(): bool
     {
         return $this->groups()->where('id', 1)->exists();
+    }
+
+    public function isClient(): bool
+    {
+        return $this->groups()->where('id', 2)->exists();
     }
 
     // Attributes

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Time;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class TimerController extends Controller
@@ -16,15 +17,18 @@ class TimerController extends Controller
      * Start a new time
      * @param Request $request
      * @return void
+     * @throws AuthorizationException
      */
     public function start(Request $request): void
     {
+        /** @var Task $task */
+        $task = Task::query()->findOrFail($request->get('task'));
+
+        $this->authorize('view', $task->project);
+
         /** @var Time|null $time */
         $time = loggedUser()->times()->pending()->first();
         $time?->stop();
-
-        /** @var Task $task */
-        $task = Task::query()->findOrFail($request->get('task'));
 
         /** @var Time $time */
         $time = loggedUser()->times()->create([

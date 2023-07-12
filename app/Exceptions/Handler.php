@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -23,8 +24,21 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (Throwable $e, Request $request) {
+
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($request->ajax()) {
+            $request->session()->flash('message', [
+                'type' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+            return back();
+        }
+
+        return parent::render($request, $e);
     }
 }

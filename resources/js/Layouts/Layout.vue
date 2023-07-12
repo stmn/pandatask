@@ -1,5 +1,5 @@
 <script setup>
-import {router, usePage} from '@inertiajs/vue3'
+import {Link, router, usePage} from '@inertiajs/vue3'
 import {computed, ref, watch} from "vue";
 import {Modal} from 'momentum-modal'
 
@@ -53,6 +53,17 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
             :element-loading-svg="svg"
             style="background: var(--el-bg-color); border-radius: 15px; margin: 0 20px; position: relative; overflow: hidden;">
             <div>
+                <el-alert v-if="usePage().props.auth.impersonated"
+                          type="warning"
+                          show-icon
+                          :closable="false"
+                          style="margin-bottom: 15px;">
+                    <span>
+                        Impersonating as <strong>{{ usePage().props.auth.user.full_name }}</strong>.
+                        <Link :href="route('leave-impersonation')">Leave impersonation</Link>
+                    </span>
+                </el-alert>
+
                 <slot/>
             </div>
         </el-main>
