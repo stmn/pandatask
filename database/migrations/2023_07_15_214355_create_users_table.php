@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('last_name', 50)->nullable();
             $table->string('job_title', 50)->nullable();
             $table->string('phone', 15)->nullable();
+            $table->json('settings')->nullable();
         });
     }
 

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->timestamp('created_at')->useCurrent()->index('created_at_2');
+            $table->timestamp('created_at')->useCurrent()->index('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->unsignedBigInteger('user_id')->index('user_id');
             $table->unsignedBigInteger('project_id')->index('project_id');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('details')->nullable();
             $table->boolean('private')->default(false);
 
-            $table->index(['created_at'], 'created_at');
+            $table->index(['created_at'], 'created_at_2');
         });
     }
 

@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('project_members', function (Blueprint $table) {
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('member_id');
+            $table->unsignedTinyInteger('role')->nullable()->comment('
+');
 
             $table->unique(['project_id', 'member_id'], 'project_id');
         });
