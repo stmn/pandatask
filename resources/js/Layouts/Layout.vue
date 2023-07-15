@@ -15,7 +15,6 @@ const toggleDark = useToggle(isDark)
 const props = defineProps({
     activeIndex: {
         type: String,
-        required: true,
         default: ''
     },
 });
@@ -60,7 +59,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
                           style="margin-bottom: 15px;">
                     <span>
                         Impersonating as <strong>{{ usePage().props.auth.user.full_name }}</strong>.
-                        <Link :href="route('leave-impersonation')">Leave impersonation</Link>
+                        <Link :href="$route('leave-impersonation')">Leave impersonation</Link>
                     </span>
                 </el-alert>
 

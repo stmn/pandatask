@@ -27,7 +27,7 @@ const {query} = useList({only: ['projects']});
 <template>
     <Head title="Projects"/>
 
-    <el-page-header @back="() => router.visit(route('dashboard'))">
+    <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-icon style="margin-right: 10px; margin-top: -2px;">
@@ -38,7 +38,7 @@ const {query} = useList({only: ['projects']});
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="route('projects.create')">
+                <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
                     <el-button type="success" :icon="CirclePlusFilled" style="">Create</el-button>
                 </Link>
             </div>
@@ -69,7 +69,7 @@ const {query} = useList({only: ['projects']});
                                 style="margin-right: 10px; margin-top: -2px;"
                                 :src="item.avatar"
                             />
-                            <Link :href="route('project', {project: item.id})">
+                            <Link :href="$route('project', {project: item.id})">
                                 {{ item.name }}
                             </Link>
 
@@ -83,12 +83,12 @@ const {query} = useList({only: ['projects']});
                             </template>
                         </div>
                         <div>
-                            <Link :href="route('project.tasks', {project: item.id})">
+                            <Link :href="$route('project.tasks', {project: item.id})">
                                 <el-button class="button" type="primary" :icon="List">Tasks</el-button>
                             </Link>
                             &nbsp;
                             <Link preserve-state preserve-scroll :only="['modal']"
-                                  :href="route('project.tasks.create', {project: item.id})">
+                                  :href="$route('project.tasks.create', {project: item.id})">
                                 <el-button class="button" type="success" :icon="CirclePlusFilled">Add task</el-button>
                             </Link>
                         </div>

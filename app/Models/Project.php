@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectRole;
 use App\Models\Traits\useLatestActivity;
 use App\QueryBuilders\ActivityQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
@@ -52,11 +53,6 @@ class Project extends Model
         return new ProjectQueryBuilder($query);
     }
 
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function tasks(): HasMany|TaskQueryBuilder
     {
         return $this->hasMany(Task::class);
@@ -67,6 +63,11 @@ class Project extends Model
         return $this->hasMany(Time::class);
     }
 
+    public function pages(): HasMany|TimeQueryBuilder
+    {
+        return $this->hasMany(Page::class);
+    }
+
     public function activities(): HasMany|ActivityQueryBuilder
     {
         return $this->hasMany(Activity::class);
@@ -75,6 +76,16 @@ class Project extends Model
     public function members(): BelongsToMany|UserQueryBuilder
     {
         return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
+    }
+
+    public function teamMembers(): BelongsToMany|UserQueryBuilder
+    {
+        return $this->members()->wherePivot('role', ProjectRole::TEAM_MEMBER);
+    }
+
+    public function clients(): BelongsToMany|UserQueryBuilder
+    {
+        return $this->members()->where('role', ProjectRole::CLIENT);
     }
 
     protected function avatar(): Attribute

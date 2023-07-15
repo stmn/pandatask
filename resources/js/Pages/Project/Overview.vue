@@ -17,15 +17,12 @@ const props = defineProps({
     },
     project: {
         type: Object,
-        required: true
     },
     activities: {
         type: Array,
-        required: true
     },
     times: {
         type: Array,
-        required: true
     },
 });
 
@@ -62,15 +59,18 @@ const activeTab = ref(props.activeTab);
             border
         >
             <el-descriptions-item label="Client">
-                <User v-if="project.client" :user="project.client"/>
-                <span v-else>Not assigned</span>
+                <div style="display: flex; padding: 5px;">
+                    <User v-for="client in project.clients" :user="client"
+                          only-avatar
+                          style="display: inline; margin: 10px;"/>
+                </div>
             </el-descriptions-item>
             <el-descriptions-item label="Created at">
                 {{ useDateFormat(project.created_at, 'DD-mm-YYYY').value }}
             </el-descriptions-item>
-            <el-descriptions-item label="Members">
+            <el-descriptions-item label="Team members">
                 <div style="display: flex; padding: 5px;">
-                    <User v-for="member in project.members" :user="member"
+                    <User v-for="member in project.team_members" :user="member"
                           only-avatar
                           style="display: inline; margin: 10px;"/>
                 </div>

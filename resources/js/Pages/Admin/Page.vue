@@ -37,38 +37,38 @@ const props = defineProps({
     <el-row :gutter="20">
         <el-col :span="4">
             <el-menu
-                :default-active="route().current()"
+                :default-active="$route().current()"
                 active-text-color="var(--el-color-success)"
                 background-color="var(--el-color-primary-light-9)"
                 text-color="var(--el-text-color-primary)"
                 style="border-radius: 5px; padding: 0 10px;"
             >
-                <Link :href="route('admin.users.index')">
-                    <el-menu-item :index="route().current('admin.users.*') ? route().current() : ''">
+                <Link :href="$route('admin.users.index')">
+                    <el-menu-item :index="$route().current('admin.users.*') ? $route().current() : ''">
                         <el-icon>
                             <UserFilled/>
                         </el-icon>
                         <span>Users</span>
                     </el-menu-item>
                 </Link>
-                <Link :href="route('admin.groups.index')">
-                    <el-menu-item :index="route().current('admin.groups.*') ? route().current() : ''">
+                <Link :href="$route('admin.groups.index')">
+                    <el-menu-item :index="$route().current('admin.groups.*') ? $route().current() : ''">
                         <el-icon>
                             <Avatar/>
                         </el-icon>
                         <span>Groups</span>
                     </el-menu-item>
                 </Link>
-                <Link :href="route('admin.statuses.index')">
-                    <el-menu-item :index="route().current('admin.statuses.*') ? route().current() : ''">
+                <Link :href="$route('admin.statuses.index')">
+                    <el-menu-item :index="$route().current('admin.statuses.*') ? $route().current() : ''">
                         <el-icon>
                             <Avatar/>
                         </el-icon>
                         <span>Statuses</span>
                     </el-menu-item>
                 </Link>
-                <Link :href="route('admin.priorities.index')">
-                    <el-menu-item :index="route().current('admin.priorities.*') ? route().current() : ''">
+                <Link :href="$route('admin.priorities.index')">
+                    <el-menu-item :index="$route().current('admin.priorities.*') ? $route().current() : ''">
                         <el-icon>
                             <Avatar/>
                         </el-icon>

@@ -16,7 +16,8 @@ const props = defineProps({
         default: 'Hello'
     },
     projects: {
-        required: true
+        required: false,
+        default: () => []
     },
     tasks: {
         required: false,
@@ -121,7 +122,7 @@ const showSettings = ref(false);
         <div v-for="project in projects" :key="project.id">
             <el-divider content-position="left">
                 <div class="flex items-center">
-                    <Link :href="route('project', {project: project.id})"
+                    <Link :href="$route('project', {project: project.id})"
                           style="display: flex; align-items: center;">
                         <el-avatar
                             :size="24"
@@ -143,12 +144,12 @@ const showSettings = ref(false);
                     </template>
                     <TasksTable :tasks="project.tasks"/>
                     <div style="text-align: right;">
-                        <Link :href="route('project.tasks', {project: project.id})">
+                        <Link :href="$route('project.tasks', {project: project.id})">
                             <el-button type="primary">View all tasks</el-button>
                         </Link>
                         &nbsp;
                         <Link preserve-state preserve-scroll
-                              :href="route('project.tasks.create', {project: project.id})"
+                              :href="$route('project.tasks.create', {project: project.id})"
                               :only="['modal']">
                             <el-button type="success" :icon="CirclePlusFilled">Add task</el-button>
                         </Link>
@@ -158,7 +159,7 @@ const showSettings = ref(false);
             <div v-else>
                 <el-alert :closable="false" type="info">
                     No tasks found.
-                    <Link preserve-state :href="route('project.tasks.create', {project: project.id})"
+                    <Link preserve-state :href="$route('project.tasks.create', {project: project.id})"
                           style="margin-left: 5px;">
                         <el-button type="success" size="small" :icon="CirclePlusFilled">Add</el-button>
                     </Link>

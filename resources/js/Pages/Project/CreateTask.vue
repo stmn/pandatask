@@ -34,7 +34,7 @@ const form = useForm({
     tags: null,
 })
 
-const handleTasks = inject('handleTasks');
+const handleTasks = inject('handleTasks', () => {});
 
 const {close, redirect, show} = useModal()
 

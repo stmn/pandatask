@@ -61,11 +61,11 @@ const fullName = computed(() => {
             </div>
             <div v-if="user.active_time" style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">
                 Working on
-                <Link :href="route('project', {project: user.active_time.task.project_id})" style="margin-right: 5px;">
+                <Link :href="$route('project', {project: user.active_time.task.project_id})" style="margin-right: 5px;">
                     {{ user.active_time.task.project.name }}
                 </Link>
                 <el-tooltip :content="user.active_time.task.subject">
-                <Link :href="route('project.task', {project: user.active_time.task.project_id, task: user.active_time.task.number})">#{{ user.active_time.task.number }}
+                <Link :href="$route('project.task', {project: user.active_time.task.project_id, task: user.active_time.task.number})">#{{ user.active_time.task.number }}
                 </Link>
                 </el-tooltip>
             </div>

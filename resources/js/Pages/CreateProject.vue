@@ -13,7 +13,7 @@ const props = defineProps({
     clients: {
         type: Array,
     },
-    users: {
+    team_members: {
         type: Array,
     }
 });
@@ -21,9 +21,11 @@ const props = defineProps({
 const form = useForm(Object.assign({
     name: '',
     description: null,
-    client_id: null,
-    members: []
+    clients: [],
+    team_members: []
 }, props.project))
+
+// console.log(form.teamMembers, props.project?.team_members)
 
 const {close, redirect} = useModal()
 
@@ -56,26 +58,44 @@ const activeTab = ref('general');
             <el-form-item label="Description">
                 <el-input v-model="form.description" type="textarea" autosize/>
             </el-form-item>
-            <el-form-item label="Client">
-                <el-select v-model="form.client_id" placeholder="Select">
-                    <el-option
-                        v-for="item in clients"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                </el-select>
-            </el-form-item>
+<!--            <el-form-item label="Client">-->
+<!--                <el-select v-model="form.client_id" placeholder="Select">-->
+<!--                    <el-option-->
+<!--                        v-for="item in clients"-->
+<!--                        :key="item.value"-->
+<!--                        :label="item.label"-->
+<!--                        :value="item.value"-->
+<!--                    ></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
 
-            <el-form-item label="Members">
-                <el-select v-model="form.members"
+            <el-form-item label="Client users">
+                <el-select v-model="form.clients"
                            value-key="id"
                            filterable multiple
                            placeholder="Select"
                            style="width: 100%;"
                            fit-input-width>
                     <el-option
-                        v-for="item in users"
+                        v-for="item in clients"
+                        :key="item.id"
+                        :label="item.full_name"
+                        :value="item"
+                    >
+                        <User :user="item" disable-popover/>
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="Team members">
+                <el-select v-model="form.team_members"
+                           value-key="id"
+                           filterable multiple
+                           placeholder="Select"
+                           style="width: 100%;"
+                           fit-input-width>
+                    <el-option
+                        v-for="item in team_members"
                         :key="item.id"
                         :label="item.full_name"
                         :value="item"

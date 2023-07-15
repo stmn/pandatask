@@ -38,7 +38,7 @@ const updatePassword = () => {
     <section>
         <h3>Update Password</h3>
 
-        <el-alert :show-icon="InfoFilled" type="warning" :closable="false">
+        <el-alert show-icon type="warning" :closable="false">
             Ensure your account is using a long, random password to stay secure.
         </el-alert>
 

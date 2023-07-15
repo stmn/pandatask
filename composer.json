@@ -20,7 +20,9 @@
         "laravolt/avatar": "^5.0",
         "mehdi-fathi/eloquent-filter": "^3.4",
         "spatie/laravel-medialibrary": "^10.0.0",
-        "tightenco/ziggy": "^1.6"
+        "tightenco/ziggy": "^1.6",
+        "ext-dom": "*",
+        "ext-libxml": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",

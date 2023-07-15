@@ -72,9 +72,9 @@ const submit = () => {
 
                 <Link
                     v-if="canResetPassword"
-                    :href="route('password.request')"
+                    :href="$route('password.request')"
                 >
-                    <center>Forgot your password?</center>
+                    <div style="text-align: center;">Forgot your password?</div>
                 </Link>
             </el-form>
         </el-card>

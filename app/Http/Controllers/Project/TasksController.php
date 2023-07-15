@@ -48,15 +48,20 @@ class TasksController extends ProjectController
     {
         $this->authorize('view', $task);
 
+        $task->load('author', 'project', 'assignees');
+
         return Inertia::render('Project/Task', [
             'project' => $project,
-            'task' => $task->load('author', 'project', 'assignees'),
+            'task' => $task,
             'activities' => fn() => $task->activities()
                 ->with(['user', 'comment', 'media'])
                 ->forCurrentUser()
                 ->latest()
                 ->get(),
-            'users' => fn() => $project->members()->get(),
+            'users' => fn() => $project
+                ->members()
+                ->union($task->assignees())
+                ->get(),
             'times' => fn() => $task->times()
                 ->with(['author'])
                 ->latest()

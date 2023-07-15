@@ -104,7 +104,7 @@ const onlyComments = useStorage('onlyComments', true);
 <template>
     <Head :title="task.subject+ ' #'+task.number+' - '+project.name"/>
 
-    <el-page-header @back="() => router.visit(route('project.tasks', {project: props.project.id}))">
+    <el-page-header @back="() => router.visit($route('project.tasks', {project: props.project.id}))">
         <!--        <template #breadcrumb>-->
         <!--            <el-breadcrumb separator="/">-->
         <!--                <el-breadcrumb-item :to="{ path: './page-header.html' }">-->
@@ -177,10 +177,10 @@ const onlyComments = useStorage('onlyComments', true);
 
 <!--                    {{ JSON.stringify(task) }}-->
 
-                    <el-tabs v-model="activeTab" class="demo-tabs" @tab-click="handleClick">
+                    <el-tabs v-model="activeTab">
                         <el-tab-pane name="comment">
                             <template #label>
-                                <el-badge :is-dot="activityForm.comment.length">
+                                <el-badge :is-dot="!!activityForm.comment.length">
                                     <el-icon>
                                         <EditPen/>
                                     </el-icon> &nbsp;
@@ -213,7 +213,7 @@ const onlyComments = useStorage('onlyComments', true);
                         </el-tab-pane>
                         <el-tab-pane name="attachments">
                             <template #label>
-                                <el-badge :is-dot="activityForm.files.length">
+                                <el-badge :is-dot="!!activityForm.files.length">
                                     <el-icon>
                                         <Upload/>
                                     </el-icon> &nbsp;
@@ -311,7 +311,7 @@ const onlyComments = useStorage('onlyComments', true);
         <!--                    <el-divider content-position="left">Details</el-divider>-->
         <!--                    <el-descriptions column="1" border>-->
         <!--                        <el-descriptions-item label="Project">-->
-        <!--                            <Link :href="route('project.tasks', {project: task.project_id})">{{-->
+        <!--                            <Link :href="$route('project.tasks', {project: task.project_id})">{{-->
         <!--                                    task.project.name-->
         <!--                                }}-->
         <!--                            </Link>-->

@@ -3,7 +3,7 @@ import {Link, router} from '@inertiajs/vue3'
 import Layout from "@/Layouts/Layout.vue";
 import {ref, watch} from "vue";
 // import Edit from "@/Pages/Profile/Edit.vue";
-import {Clock, List, View} from "@element-plus/icons-vue";
+import {Clock, Document, List, View} from "@element-plus/icons-vue";
 
 defineOptions({layout: Layout})
 
@@ -31,19 +31,13 @@ const activeTab = ref(props.activeTab);
 // })
 
 const handleClick = (index) => {
-    // console.log('handleClick', index.paneName);
-    // console.log(route('project.' + activeTab.value, {project: props.project.id}))
-    // setTimeout(() => {
-    //     console.log('visit', activeTab.value)
         router.visit(route('project.' + index.paneName, {project: props.project.id}), {
-            only: ['tasks', 'activities', 'times'],
+            only: ['tasks', 'activities', 'times', 'pages', 'page'],
             preserveState: true,
             onSuccess: () => {
                 activeTab.value = index.paneName;
             }
         })
-    // }, 5000)
-
 };
 
 const projectValue = ref('')
@@ -63,7 +57,7 @@ const onProjectChange = (value) => {
 </script>
 
 <template>
-    <el-page-header @back="() => router.visit(route('projects'))">
+    <el-page-header @back="() => router.visit($route('projects'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-avatar
@@ -101,7 +95,7 @@ const onProjectChange = (value) => {
         </template>
         <template #extra>
             <div class="flex items-center">
-                <Link preserve-state preserve-scroll :only="['modal']" :href="route('projects.edit', {project: project.id})">
+                <Link preserve-state preserve-scroll :only="['modal']" :href="$route('projects.edit', {project: project.id})">
                     <el-button type="primary" class="ml-2">
                         <el-icon>
                             <Edit/>
@@ -136,6 +130,14 @@ const onProjectChange = (value) => {
                 </el-icon> &nbsp; Timesheets
             </template>
         </el-tab-pane>
+
+<!--        <el-tab-pane name="pages">-->
+<!--            <template #label>-->
+<!--                <el-icon>-->
+<!--                    <Document/>-->
+<!--                </el-icon> &nbsp; Wiki-->
+<!--            </template>-->
+<!--        </el-tab-pane>-->
 
         <el-tab-pane name="overview" style="margin-left: auto; left: auto;">
             <template #label>

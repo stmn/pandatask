@@ -5,13 +5,14 @@ import {HomeFilled, List, Menu} from "@element-plus/icons-vue";
 
 import {useDark, useToggle} from "@vueuse/core";
 
+// import $route from mixin methods
+
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const props = defineProps({
     activeIndex: {
         type: String,
-        required: true,
         default: ''
     },
 });
@@ -29,7 +30,7 @@ router.on('success', (event) => {
     <el-header>
         <div style="display: flex; max-height: var(--el-header-height);">
             <div class="brand">
-                <Link :href="route('dashboard')" :only="[]">
+                <Link :href="$route('dashboard')" :only="[]">
                     <img src="/logo.png" alt=""/>
                     <span style="color: #fff;"><b>PANDA</b>TASK</span>
                 </Link>
@@ -42,8 +43,8 @@ router.on('success', (event) => {
                 :collapse-transition="false"
             >
                 <el-menu-item index="dashboard" style="border:0;"
-                              :class="{'is-active': route().current()==='dashboard'}">
-                    <Link :href="route('dashboard')" :only="[]">
+                              :class="{'is-active': $route().current()==='dashboard'}">
+                    <Link :href="$route('dashboard')" :only="[]">
                         <el-icon>
                             <HomeFilled/>
                         </el-icon>
@@ -51,8 +52,8 @@ router.on('success', (event) => {
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="projects" style="border:0;" :class="{'is-active': route().current()==='projects'}">
-                    <Link :href="route('projects')" :only="['projects']">
+                <el-menu-item index="projects" style="border:0;" :class="{'is-active': $route().current()==='projects'}">
+                    <Link :href="$route('projects')" :only="['projects']">
                         <el-icon>
                             <Menu/>
                         </el-icon>
@@ -60,8 +61,8 @@ router.on('success', (event) => {
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="tasks" style="border:0;" :class="{'is-active': route().current()==='tasks'}">
-                    <Link :href="route('tasks')" :only="['tasks']">
+                <el-menu-item index="tasks" style="border:0;" :class="{'is-active': $route().current()==='tasks'}">
+                    <Link :href="$route('tasks')" :only="['tasks']">
                         <el-icon>
                             <List/>
                         </el-icon>
@@ -72,20 +73,27 @@ router.on('success', (event) => {
                 <el-sub-menu index="2" :show-timeout="0" style="margin-left: 20px;">
                     <template #title>More</template>
                     <el-menu-item index="profile">
-                        <Link :href="route('profile.edit')">Edit profile</Link>
+                        <Link :href="$route('profile.edit')">Edit profile</Link>
                     </el-menu-item>
                     <el-menu-item index="admin" v-if="group('admin')">
-                        <Link :href="route('admin.users.index')">Admin</Link>
+                        <Link :href="$route('admin.users.index')">Admin</Link>
                     </el-menu-item>
                     <el-menu-item index="logout">
-                        <Link method="post" :href="route('logout')">Logout</Link>
+                        <form method="post" :action="$route('logout')" style="width: 100%;">
+                            <input type="hidden" name="_token" :value="usePage().props.csrf_token">
+                            <el-button style="width: 100%;" type="danger" text bg native-type="submit">Logout</el-button>
+                        </form>
                     </el-menu-item>
-                    <el-menu-item index="theme">
-                        <el-button @click.stop="toggleDark()" style="width: 100%;">
+                    <el-menu-item index="theme" style="margin-top: 5px; text-align: center;">
+                        <el-button @click.stop="toggleDark()" type="primary" text bg style="width: 100%;">
                             <i inline-block align-middle i="dark:carbon-moon carbon-sun"/>
 
                             <span class="ml-2">{{ isDark ? 'Dark theme' : 'Light theme' }}</span>
                         </el-button>
+<!--                        <el-switch v-model="isDark" @click.stop-->
+<!--                                   active-text="Dark"-->
+<!--                                   inactive-text="Light"-->
+<!--                        />-->
                     </el-menu-item>
                 </el-sub-menu>
             </el-menu>

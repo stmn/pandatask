@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProjectRole;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -44,17 +45,22 @@ class ProjectsController extends Controller
             ? $this->authorize('update', $project)
             : $this->authorize('create', Project::class);
 
-        $project?->load('members');
+        $project?->load('teamMembers');
+        $project?->load('clients');
 
+        $fields = 'id,first_name,last_name';
         return Inertia::modal('CreateProject', [
             'project' => $project,
-            'clients' => User::query()->get()->map(function ($user) {
-                return [
-                    'value' => $user->id,
-                    'label' => $user->full_name,
-                ];
-            }),
-            'users' => User::query()->selectRaw('id,first_name,last_name')->get(),
+            'clients' => User::query()
+                ->selectRaw($fields)
+                ->whereHasGroupType('client')
+                ->union($project->clients()->selectRaw($fields))
+                ->get(),
+            'team_members' => User::query()
+                ->selectRaw($fields)
+                ->whereHasGroupType('teamm')
+                ->union($project->teamMembers()->selectRaw($fields))
+                ->get(),
         ])
             ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);
     }
@@ -82,8 +88,14 @@ class ProjectsController extends Controller
 
         assert($project instanceof Project);
 
-        $project->members()->sync(
-            collect($request->members)->pluck('id')
+        $project->clients()->syncWithPivotValues(
+            collect($request->clients)->pluck('id'),
+            ['role' => ProjectRole::CLIENT]
+        );
+
+        $project->teamMembers()->syncWithPivotValues(
+            collect($request->team_members)->pluck('id'),
+            ['role' => ProjectRole::TEAM_MEMBER]
         );
 
         if ($project->wasRecentlyCreated) {

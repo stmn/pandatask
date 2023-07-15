@@ -9,9 +9,7 @@ import {Comment} from "@element-plus/icons-vue";
 import Activity from "@/Components/Activity.vue";
 
 const props = defineProps({
-    tasks: {
-        required: true
-    },
+    tasks: {},
     showProject: {
         type: Boolean,
         required: false,
@@ -31,7 +29,7 @@ const props = defineProps({
 
 const tasksRows = computed(() => props.tasks?.data || props.tasks)
 
-const handleTasks = inject('handleTasks');
+const handleTasks = inject('handleTasks', () => {});
 
 const updateTask = ({task, data}) => {
     router.post(
@@ -65,7 +63,7 @@ const updateTask = ({task, data}) => {
 
                     <span style="display: contents;">
                         <el-text truncated>
-                        <Link :href="route('project.task', {project: row.project_id, task: row.number})">{{
+                        <Link :href="$route('project.task', {project: row.project_id, task: row.number})">{{
                                 row.subject
                             }}</Link>
                         </el-text>
@@ -87,7 +85,7 @@ const updateTask = ({task, data}) => {
                         style="margin-right: 5px;"
                         :src="row.project.avatar"
                     />
-                    <Link :href="route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
+                    <Link :href="$route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
                 </div>
             </template>
         </el-table-column>

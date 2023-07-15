@@ -16,12 +16,8 @@ const props = defineProps({
     },
     project: {
         type: Object,
-        required: true
     },
-    times: {
-        type: Array,
-        required: true
-    },
+    times: {},
 });
 
 const activeTab = ref(props.activeTab);
@@ -34,7 +30,7 @@ onMounted(() => {
 <template>
     <Head :title="project.name + ' - Timesheets'"/>
 
-    <Link preserve-state :href="route('project.timesheets.create', {project: project.id})">
+    <Link preserve-state :href="$route('project.timesheets.create', {project: project.id})">
         <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
     </Link>
 

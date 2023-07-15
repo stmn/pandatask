@@ -38,7 +38,7 @@ const submit = () => {
     <section>
         <h3>Profile Information</h3>
 
-        <el-alert :show-icon="InfoFilled" :closable="false" type="info">
+        <el-alert show-icon :closable="false" type="info">
             Update your account's profile information and email address.
         </el-alert>
         <br>
@@ -116,7 +116,7 @@ const submit = () => {
                 <!--                <p>-->
                 <!--                    Your email address is unverified.-->
                 <!--                    <Link-->
-                <!--                        :href="route('verification.send')"-->
+                <!--                        :href="$route('verification.send')"-->
                 <!--                        method="post"-->
                 <!--                        as="button"-->
                 <!--                    >-->

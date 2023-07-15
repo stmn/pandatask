@@ -55,7 +55,7 @@ window.addEventListener('focus', function () {
                 placement="left"
                 :width="260"
                 trigger="hover"
-                show-after="600"
+                :show-after="600"
             >
                 <template #default>
                     <div style="line-height: 20px;">
@@ -73,7 +73,7 @@ window.addEventListener('focus', function () {
                             </div>
                             <Link preserve-state
                                   preserve-scroll :only="['modal', 'tasks']"
-                                  :href="route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
+                                  :href="$route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
                                 <el-button type="primary" size="small">Edit</el-button>
                             </Link>
                         </div>

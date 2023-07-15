@@ -26,7 +26,6 @@ const props = defineProps({
     },
     tasks: {
         type: Object,
-        required: true
     },
 });
 
@@ -114,7 +113,7 @@ onMounted(() => {
 
     <br><br>
 
-    <Link preserve-state preserve-scroll :only="['modal']" :href="route('project.tasks.create', {project: project.id})">
+    <Link preserve-state preserve-scroll :only="['modal']" :href="$route('project.tasks.create', {project: project.id})">
         <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
     </Link>
 

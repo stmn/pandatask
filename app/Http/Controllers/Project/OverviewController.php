@@ -11,7 +11,7 @@ class OverviewController extends ProjectController
 {
     public function index(Project $project): Response
     {
-        $project->load('client', 'members');
+        $project->load('clients', 'teamMembers');
 
         return Inertia::render('Project/Overview', [
             'activeTab' => 'overview',

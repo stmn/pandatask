@@ -7,10 +7,6 @@ const props = defineProps({
         type: String,
         default: '80%',
     },
-    times: {
-        type: Array,
-        required: true
-    },
 })
 const {show, close, redirect} = useModal()
 const handleClose = (done: () => void) => {
@@ -47,7 +43,7 @@ const handleClose = (done: () => void) => {
         @closed="handleClose"
         draggable
     >
-        <template #title>
+        <template #header>
             <slot name="title"/>
         </template>
         <slot/>

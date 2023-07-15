@@ -14,7 +14,7 @@ import "./../css/app.scss";
 
 import {createInertiaApp} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
-import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
+// import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -33,9 +33,11 @@ const app = createInertiaApp({
                 resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
             })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            // .use(ZiggyVue, Ziggy)
             .use(LazyComponent)
             .use(ElementPlus);
+
+        // app.config.globalProperties.$route = route
 
         for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
             app.component(key, component)
@@ -46,6 +48,7 @@ const app = createInertiaApp({
                 group: function (name) {
                     return this.$page.props.auth.groups?.[name];
                 },
+                $route: route,
             },
         })
 

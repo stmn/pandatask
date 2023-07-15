@@ -11,6 +11,7 @@ use App\Http\Controllers\Project\ActivitiesController;
 use App\Http\Controllers\Project\OverviewController;
 use App\Http\Controllers\Project\TasksController as ProjectTasksController;
 use App\Http\Controllers\Project\TimesheetsController;
+use App\Http\Controllers\Project\WikiController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\TimerController;
@@ -83,6 +84,11 @@ Route::middleware('auth')->group(callback: function () {
 
         Route::get('tasks/create', [ProjectTasksController::class, 'create'])->name('.tasks.create');
         Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('.tasks.store');
+
+        Route::get('pages/', [WikiController::class, 'index'])->name('.pages');
+        Route::get('pages/{page:slug_title?}', [WikiController::class, 'index'])->name('.pages.show');
+        Route::post('pages/{page:slug_title?}', [WikiController::class, 'save'])->name('.pages.save');
+        Route::delete('pages/{page:slug_title?}', [WikiController::class, 'delete'])->name('.pages.delete');
 
         Route::get('timesheets', [TimesheetsController::class, 'index'])->name('.timesheets');
         Route::get('timesheets/create', [TimesheetsController::class, 'form'])->name('.timesheets.create');

@@ -14,7 +14,7 @@ const {query, handleSortChange} = useList();
 <template>
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="route('admin.users.create')" style="margin-right: 15px;">
+            <Link :href="$route('admin.users.create')" style="margin-right: 15px;">
                 <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
             </Link>
 
@@ -41,16 +41,16 @@ const {query, handleSortChange} = useList();
             </el-table-column>
             <el-table-column align="right" width="140">
                 <template #default="scope">
-                    <Link :href="route('admin.users.edit', {user: scope.row.id})">
+                    <Link :href="$route('admin.users.edit', {user: scope.row.id})">
                         <el-button type="primary" :icon="Edit" circle/>
                     </Link>
 
-                    <Link :href="route('admin.users.impersonate', {user: scope.row.id})" method="post">
+                    <Link :href="$route('admin.users.impersonate', {user: scope.row.id})" method="post">
                         <el-button type="primary" :icon="Key" circle/>
                     </Link>
                     &nbsp;
                     <el-popconfirm title="Are you sure to delete this?"
-                                   @confirm="router.delete(route('admin.users.destroy', {user: scope.row.id}))">
+                                   @confirm="router.delete($route('admin.users.destroy', {user: scope.row.id}))">
                         <template #reference>
                             <el-button type="danger" :icon="Delete" circle/>
                         </template>

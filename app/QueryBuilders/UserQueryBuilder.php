@@ -10,4 +10,11 @@ class UserQueryBuilder extends Builder
         'last_name',
         'public_email',
     ];
+
+    public function whereHasGroupType(string $type): self
+    {
+        return $this->whereHas('groups', static function (Builder $query) use ($type) {
+            $query->where('type', $type);
+        });
+    }
 }

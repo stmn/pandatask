@@ -9,9 +9,7 @@ import {onMounted} from "vue";
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
-    tasks: {
-        required: true,
-    },
+    tasks: {},
     search: {
         type: String,
         required: false,
@@ -31,7 +29,7 @@ onMounted(() => {
 <template>
     <Head title="Tasks"/>
 
-    <el-page-header @back="() => router.visit(route('dashboard'))">
+    <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
                 <el-icon style="margin-right: 10px; margin-top: -2px;">
