@@ -2,7 +2,9 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
-import {Lock, User} from "@element-plus/icons-vue";
+import {computed, ref, watch} from "vue";
+import {useCssVar} from "@vueuse/core";
+import {TinyColor} from "@ctrl/tinycolor";
 
 defineProps({
     canResetPassword: {
@@ -24,6 +26,27 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+
+const color = useCssVar('--el-color-primary', document.body, {observe:true})
+console.log(111,color)
+
+setInterval(() => {
+    // color.value = '#'+Math.floor(Math.random()*16777215).toString(16);
+    // console.log(color.value)
+}, 3000);
+
+setInterval(() => {
+    // console.log(123, useCssVar('--el-color-primary', document.documentElement))
+    // color.value = useCssVar('--el-color-primary', document.documentElement, {observe: true}).value;
+}, 100);
+
+watch(()=>color, () => {
+    console.log(123)
+});
+watch(color, () => {
+    console.log(123)
+});
 </script>
 
 <template>
@@ -42,8 +65,11 @@ const submit = () => {
                     <el-input
                         v-model="form.email"
                         placeholder="E-mail"
-                        autocomplete="email"
-                        :prefix-icon="User"></el-input>
+                        autocomplete="email">
+                        <template #prefix>
+                            <i class="fas fa-envelope fa-fw"></i>
+                        </template>
+                    </el-input>
                     <InputError class="mt-2" :message="form.errors.email"/>
                 </el-form-item>
                 <el-form-item prop="password" style="margin-bottom: 5px;">
@@ -53,7 +79,11 @@ const submit = () => {
                         autocomplete="password"
                         :prefix-icon="Lock"
                         type="password"
-                    ></el-input>
+                    >
+                        <template #prefix>
+                            <i class="fas fa-lock fa-fw"></i>
+                        </template>
+                    </el-input>
                     <InputError class="mt-2" :message="form.errors.password"/>
                 </el-form-item>
 
@@ -62,8 +92,8 @@ const submit = () => {
                 <el-form-item>
                     <el-button
                         :loading="form.processing"
-                        type="primary"
                         native-type="submit"
+                        :color="$primaryColor()"
                         block
                         :disabled="form.processing"
                     >Login

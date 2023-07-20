@@ -2,7 +2,6 @@
 import {Head, Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import TasksTable from "@/Components/TasksTable.vue";
-import {CirclePlusFilled, Setting} from "@element-plus/icons-vue";
 import {onMounted, provide, ref} from "vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
 import Settings from "@/Components/Dashboard/Settings.vue";
@@ -75,15 +74,27 @@ const showSettings = ref(false);
 <template>
     <Head title="Dashboard"/>
 
-    <div class="el-page-header__header chuj">
-        <div class="el-page-header__left">
-            <div class="el-page-header__content">
-                <div style="display: flex; justify-content: space-around; width: 100%;">
-                    <span><b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!</span>
-                </div>
-            </div>
+<!--    <div class="flex justify-between w-full">-->
+<!--        <button-->
+<!--            bg="blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600"-->
+<!--            text="sm white"-->
+<!--            font="mono light"-->
+<!--            p="y-2 x-4"-->
+<!--            border="2 rounded blue-200"-->
+<!--        >-->
+<!--            Button-->
+<!--        </button>-->
+
+<!--        <button class="bg-red-400 border-0">test</button>-->
+<!--    </div>-->
+
+    <div flex justify-between>
+        <div>
+            <b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!
+            <i class="fa-regular fa-face-smile-wink ml-1"></i>
         </div>
-        <div class="el-page-header__right">
+
+        <div>
             <!-- Customization Button -->
             <el-popover :visible="showSettings" trigger="click" placement="left" width="300">
                 <template #default>
@@ -91,11 +102,9 @@ const showSettings = ref(false);
                 </template>
                 <template #reference>
                     <el-button link @click="showSettings = !showSettings">
-<!--                        <el-tooltip show-after="300" :disabled="showSettings" placement="left" content="Customize">-->
-                            <el-icon size="24" style="cursor: pointer;" class="hover-rotate">
-                                <Setting/>
-                            </el-icon>
-<!--                        </el-tooltip>-->
+                        <!--                        <el-tooltip show-after="300" :disabled="showSettings" placement="left" content="Customize">-->
+                        <i class="fa-solid fa-gear hover-rotate" style="cursor: pointer; font-size: 24px;"></i>
+                        <!--                        </el-tooltip>-->
                     </el-button>
                 </template>
             </el-popover>
@@ -145,13 +154,17 @@ const showSettings = ref(false);
                     <TasksTable :tasks="project.tasks"/>
                     <div style="text-align: right;">
                         <Link :href="$route('project.tasks', {project: project.id})">
-                            <el-button type="primary">View all tasks</el-button>
+                            <el-button :color="$primaryColor()">
+                                <i class="fa-solid fa-list-check mr-2"></i>Tasks
+                            </el-button>
                         </Link>
                         &nbsp;
                         <Link preserve-state preserve-scroll
                               :href="$route('project.tasks.create', {project: project.id})"
                               :only="['modal']">
-                            <el-button type="success" :icon="CirclePlusFilled">Add task</el-button>
+                            <el-button type="success">
+                                <i class="fa-solid fa-circle-plus mr-2"></i>Add task
+                            </el-button>
                         </Link>
                     </div>
                 </lazy-component>
@@ -161,7 +174,9 @@ const showSettings = ref(false);
                     No tasks found.
                     <Link preserve-state :href="$route('project.tasks.create', {project: project.id})"
                           style="margin-left: 5px;">
-                        <el-button type="success" size="small" :icon="CirclePlusFilled">Add</el-button>
+                        <el-button type="success" size="small">
+                            <i class="fa-solid fa-circle-plus mr-2"></i>Add
+                        </el-button>
                     </Link>
                 </el-alert>
             </div>

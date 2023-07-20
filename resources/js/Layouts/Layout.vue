@@ -8,6 +8,7 @@ import GlobalTimer from "@/Components/GlobalTimer.vue";
 import {ElMessage} from "element-plus";
 import Header from "@/Components/Layout/Header.vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
+import ColorPanel from "@/Components/Demo/ColorPanel.vue";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -24,6 +25,7 @@ const page = usePage()
 const message = computed(() => usePage().props.flash.message);
 
 watch(message, (message) => {
+    console.log(message);
     if (message) {
         ElMessage({
             message: message.message,
@@ -45,12 +47,14 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
 </script>
 
 <template>
+    <ColorPanel />
+
     <el-container style="min-height: 100%;">
         <Header/>
         <el-main
             v-loading="loading"
             :element-loading-svg="svg"
-            style="background: var(--el-bg-color); border-radius: 15px; margin: 0 20px; position: relative; overflow: hidden;">
+            style="background: var(--el-bg-color); color: var(--el-text-color-primary);  border-radius: 15px; margin: 0 20px; position: relative; overflow: hidden;">
             <div>
                 <el-alert v-if="usePage().props.auth.impersonated"
                           type="warning"
@@ -68,7 +72,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
         </el-main>
         <el-footer>
             <br>
-            <small>All rights reserved &copy; <a href="#">Pandatask</a> v1.0</small>
+            <small>All rights reserved &copy; <a href="https://pandatask.app" rel="nofollow" target="_blank"><b>Panda</b>task</a> v1.0</small>
         </el-footer>
     </el-container>
 
@@ -77,31 +81,19 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
 </template>
 
 <style lang="scss">
-.el-main {
-    //min-height: 69vmax;
-}
-
 .el-header > ul > .el-menu-item {
     & > a {
-        color: #fff;
+        color: var(--el-text-color);
     }
 }
 
 .el-footer {
-    color: #fff;
+    color: var(--el-text-color);
     text-align: center;
 
     a {
-        font-weight: 800;
-        color: #fff;
+        font-weight: 400;
+        color: var(--el-text-color) !important;
     }
 }
-
-//.el-menu-item {
-//    padding: 0;
-//}
-//
-//.el-menu-item a {
-//    padding: 0 var(--el-menu-base-level-padding);
-//}
 </style>

@@ -1,7 +1,6 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
-import {CirclePlusFilled, Delete, Edit, Search} from "@element-plus/icons-vue";
 import Page from "@/Pages/Admin/Page.vue";
 import Pagination from "@/Components/Pagination.vue";
 import useList from "@/Composables/useList.js";
@@ -15,7 +14,9 @@ const {query, handleSortChange} = useList();
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
             <Link :href="$route('admin.priorities.create')" style="margin-right: 15px;">
-                <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
+                <el-button type="success">
+                    <i class="fa-solid fa-circle-plus mr-2"></i>Add
+                </el-button>
             </Link>
 
             <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
@@ -38,12 +39,16 @@ const {query, handleSortChange} = useList();
             <el-table-column align="right" width="100">
                 <template #default="scope">
                     <Link :href="$route('admin.priorities.edit', {priority: scope.row.id})">
-                        <el-button type="primary" :icon="Edit" circle/>
+                        <el-button :color="$primaryColor()" circle>
+                            <i class="fas fa-edit" />
+                        </el-button>
                     </Link>
                     <el-popconfirm title="Are you sure to delete this?"
                                    @confirm="router.delete($route('admin.priorities.destroy', {priority: scope.row.id}))">
                         <template #reference>
-                            <el-button type="danger" :icon="Delete" circle style="margin-left: 5px;"/>
+                            <el-button type="danger" circle style="margin-left: 5px;">
+                                <i class="fa-solid fa-trash"></i>
+                            </el-button>
                         </template>
                     </el-popconfirm>
                 </template>

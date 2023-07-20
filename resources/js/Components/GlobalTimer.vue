@@ -46,84 +46,96 @@ window.addEventListener('focus', function () {
 </script>
 
 <template>
-    <Timer :task="activeTime?.task">
-        <!--        <template #play>-->
-        <!--            <el-button>PLAY</el-button>-->
-        <!--        </template>-->
-        <template #stop>
-            <el-popover
-                placement="left"
-                :width="260"
-                trigger="hover"
-                :show-after="600"
-            >
-                <template #default>
-                    <div style="line-height: 20px;">
-                        <el-text truncated>
-                        <Link
-                            :href="activeTime?.task.url">{{
-                                activeTime?.task?.subject
-                            }}
-                        </Link>
-                        </el-text>
-                        <br>
-                        <div style="display: flex; justify-content: space-between;">
-                            <div>
-                                <b>Time:</b> {{ time }}
-                            </div>
-                            <Link preserve-state
-                                  preserve-scroll :only="['modal', 'tasks']"
-                                  :href="$route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
-                                <el-button type="primary" size="small">Edit</el-button>
-                            </Link>
-                        </div>
-                    </div>
-                </template>
-                <template #reference>
-                    <div class="timer-stop">
-                        <div>
-                            <b>STOP</b>
-                            <div>{{ time }}</div>
-                        </div>
-                    </div>
-                </template>
-            </el-popover>
-        </template>
-    </Timer>
+    <div class="global-timer">
+        <Transition name="slide-fade">
+            <template v-if="activeTime?.task">
+                <Timer :task="activeTime?.task">
+                    <template #stop>
+                        <el-popover
+                            placement="left"
+                            :width="260"
+                            trigger="hover"
+                            :show-after="600"
+                        >
+                            <template #default>
+                                <div style="line-height: 20px;">
+                                    <el-text truncated>
+                                        <Link
+                                            :href="activeTime?.task.url">{{
+                                                activeTime?.task?.subject
+                                            }}
+                                        </Link>
+                                    </el-text>
+                                    <br>
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="min-width: 90px;">
+                                            <i class="fa-solid fa-clock mr-1"></i> {{ time }}
+                                        </div>
+                                        <Link preserve-state
+                                              preserve-scroll :only="['modal', 'tasks']"
+                                              :href="$route('project.timesheets.edit', {project: activeTime.task.project_id, time: activeTime.id})">
+                                            <el-button :color="$primaryColor()" size="small">
+                                                <i class="fa-solid fa-edit mr-1"></i>Edit
+                                            </el-button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </template>
+                            <template #reference>
+                                <div class="timer-stop">
+                                    <div>
+                                        <b>STOP</b>
+                                        <div>{{ time }}</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </el-popover>
+                    </template>
+                </Timer>
+            </template>
+        </Transition>
+    </div>
 </template>
 
 <style lang="scss">
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
+}
+
+.global-timer {
+    position: fixed;
+    z-index: 10;
+    top: 15px;
+    right: 15px;
+}
+
 .timer-stop {
-    transition: all 0.2s ease-in-out;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 3px solid var(--el-bg-color);
     cursor: pointer;
     color: #fff;
-
     height: 80px;
     width: 80px;
     background: var(--el-color-danger-light-3);
     border-radius: 50%;
     text-align: center;
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
     font-size: 14px;
-    //box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     &:hover {
         background: var(--el-color-danger-light-5);
-        //border-color: rgba(255, 255, 255, 1);
     }
 
-    &:active {
-        //transition: all 0s ease-in-out;
-        //background: rgba(255, 0, 0, 0.8);
-        //border-color: var(--el-color-primary-dark-2);
-        //box-shadow: none;
-    }
 }
 </style>

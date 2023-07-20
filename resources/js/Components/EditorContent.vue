@@ -1,5 +1,5 @@
 <template>
-    <div class="ProseMirror"
+    <div class="ProseMirror ProseMirror-content"
          ref="contentRef"
          v-html="content"></div>
 </template>

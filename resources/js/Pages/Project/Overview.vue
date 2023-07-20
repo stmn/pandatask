@@ -6,6 +6,7 @@ import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import Activities from "@/Components/Activities.vue";
 import {useDateFormat} from "@vueuse/core";
 import User from "@/Components/User.vue";
+import Modal from "@/Layouts/Modal.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
@@ -32,6 +33,8 @@ const activeTab = ref(props.activeTab);
 <template>
     <Head :title="project.name + ' - Overview'"/>
 
+    <Modal>
+        <template #title>Project informations</template>
     <!--    <br>-->
     <el-config-provider size="small">
         <!--        <el-row>-->
@@ -79,20 +82,6 @@ const activeTab = ref(props.activeTab);
                 {{ project.description || 'No description' }}
             </el-descriptions-item>
         </el-descriptions>
-
-        <br>
-
-        <el-row :gutter="12">
-            <el-col :span="24">
-                <el-divider content-position="left">Latest activity</el-divider>
-                <Activities :activities="activities" show-task/>
-            </el-col>
-            <!--            <el-col :span="12">-->
-            <!--                <el-divider content-position="left">Latest timesheets</el-divider>-->
-            <!--                <Timesheets :times="times"-->
-            <!--                            only-avatar-->
-            <!--                            :cols="['timer', 'task_id', 'start_at', 'end_at', 'author_id']"/>-->
-            <!--            </el-col>-->
-        </el-row>
     </el-config-provider>
+    </Modal>
 </template>

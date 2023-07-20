@@ -75,9 +75,11 @@ onMounted(() => {
         <el-button @click="close">Cancel</el-button>
 
         <el-button type="success" @click="createAndOpen">
+                <i class="fa-solid fa-circle-plus mr-2"></i>
           Create and open
         </el-button>
           <el-button type="success" @click="create(0)">
+              <i class="fa-solid fa-circle-plus mr-2"></i>
           Create
         </el-button>
       </span>

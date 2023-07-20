@@ -54,12 +54,12 @@ class ProjectsController extends Controller
             'clients' => User::query()
                 ->selectRaw($fields)
                 ->whereHasGroupType('client')
-                ->union($project->clients()->selectRaw($fields))
+                ->when($project, fn($query) => $query->union($project->clients()->selectRaw($fields)))
                 ->get(),
             'team_members' => User::query()
                 ->selectRaw($fields)
-                ->whereHasGroupType('teamm')
-                ->union($project->teamMembers()->selectRaw($fields))
+                ->whereHasGroupType('team')
+                ->when($project, fn($query) => $query->union($project->teamMembers()->selectRaw($fields)))
                 ->get(),
         ])
             ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);

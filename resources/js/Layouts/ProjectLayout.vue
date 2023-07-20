@@ -3,7 +3,6 @@ import {Link, router} from '@inertiajs/vue3'
 import Layout from "@/Layouts/Layout.vue";
 import {ref, watch} from "vue";
 // import Edit from "@/Pages/Profile/Edit.vue";
-import {Clock, Document, List, View} from "@element-plus/icons-vue";
 
 defineOptions({layout: Layout})
 
@@ -67,7 +66,7 @@ const onProjectChange = (value) => {
                 />
 
                 <el-dropdown trigger="click" ref="dropdownRef" @visible-change="onOpen" style="color: inherit; font-size: inherit; line-height: inherit; cursor: pointer;">
-                    <span>{{ project.name }} <el-icon style="margin-top: 3px; margin-left: 5px; position: absolute; opacity: 0.4;"><arrow-down/></el-icon></span>
+                    <span>{{ project.name }} <i class="fa-solid fa-angle-down" style="opacity: 0.4;"></i></span>
 
                     <template #dropdown>
                         <el-select ref="projectsSelectRef" :persistent="false" v-model="projectValue" @change="onProjectChange" value-key="id" filterable
@@ -91,15 +90,17 @@ const onProjectChange = (value) => {
                         </el-select>
                     </template>
                 </el-dropdown>
+
+                <Link preserve-state preserve-scroll :only="['modal']" :href="$route('project.overview', {project: project.id})">
+                    <i class="fa-solid fa-circle-info ml-2 cursor-pointer"></i>
+                </Link>
             </div>
         </template>
         <template #extra>
             <div class="flex items-center">
                 <Link preserve-state preserve-scroll :only="['modal']" :href="$route('projects.edit', {project: project.id})">
-                    <el-button type="primary" class="ml-2">
-                        <el-icon>
-                            <Edit/>
-                        </el-icon> &nbsp; Edit
+                    <el-button :color="$primaryColor()" class="ml-2">
+                        <i class="fa-solid fa-pen-to-square mr-2"></i> Edit
                     </el-button>
                 </Link>
             </div>
@@ -109,43 +110,33 @@ const onProjectChange = (value) => {
     <el-tabs v-model="activeTab" @tab-click="handleClick">
         <el-tab-pane name="tasks">
             <template #label>
-                <el-icon>
-                    <List/>
-                </el-icon> &nbsp; Tasks
+                <i class="fa-solid fa-list-check mr-2"></i> Tasks
             </template>
         </el-tab-pane>
 
         <el-tab-pane name="activity">
             <template #label>
-                <el-icon>
-                    <View/>
-                </el-icon> &nbsp; Activity
+                <i class="fa-solid fa-eye mr-2"></i>Activity
             </template>
         </el-tab-pane>
 
         <el-tab-pane name="timesheets">
             <template #label>
-                <el-icon>
-                    <Clock/>
-                </el-icon> &nbsp; Timesheets
+                <i class="fa-solid fa-clock mr-2"></i>Timesheets
             </template>
         </el-tab-pane>
 
 <!--        <el-tab-pane name="pages">-->
 <!--            <template #label>-->
-<!--                <el-icon>-->
-<!--                    <Document/>-->
-<!--                </el-icon> &nbsp; Wiki-->
+<!--                Wiki-->
 <!--            </template>-->
 <!--        </el-tab-pane>-->
 
-        <el-tab-pane name="overview" style="margin-left: auto; left: auto;">
-            <template #label>
-                <el-icon>
-                    <Grid/>
-                </el-icon> &nbsp; Overview
-            </template>
-        </el-tab-pane>
+<!--        <el-tab-pane name="overview" style="margin-left: auto; left: auto;">-->
+<!--            <template #label>-->
+<!--                <i class="fa-solid fa-table-columns mr-2"></i>Overview-->
+<!--            </template>-->
+<!--        </el-tab-pane>-->
     </el-tabs>
     <slot />
 </template>

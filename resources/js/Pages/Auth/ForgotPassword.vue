@@ -43,12 +43,18 @@ const submit = () => {
                         autofocus
                         autocomplete="email"
                         placeholder="Email address"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fas fa-envelope fa-fw"></i>
+                        </template>
+                    </el-input>
                     <InputError :message="form.errors.email"/>
                 </el-form-item>
 
 
-                <el-button native-type="submit" :loading="form.processing" :disabled="form.processing">
+                <el-button native-type="submit"
+                           :color="$primaryColor()"
+                           :loading="form.processing" :disabled="form.processing">
                     Email Password Reset Link
                 </el-button>
             </el-form>

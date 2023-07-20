@@ -5,7 +5,6 @@ import Time from "@/Components/Time.vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
 import Pagination from "@/Components/Pagination.vue";
-import {Comment} from "@element-plus/icons-vue";
 import Activity from "@/Components/Activity.vue";
 
 const props = defineProps({
@@ -29,7 +28,8 @@ const props = defineProps({
 
 const tasksRows = computed(() => props.tasks?.data || props.tasks)
 
-const handleTasks = inject('handleTasks', () => {});
+const handleTasks = inject('handleTasks', () => {
+});
 
 const updateTask = ({task, data}) => {
     router.post(
@@ -44,36 +44,41 @@ const updateTask = ({task, data}) => {
         },
     )
 }
+
+const tableRowClassName = ({row, rowIndex}) => {
+    if (usePage().props.auth.user.active_time?.task_id == row.id) {
+        return 'timer-active'
+    }
+    return ''
+}
 </script>
 
 <template>
-    <el-table :data="tasksRows" stripe style="width: 100%">
+    <el-table :data="tasksRows" stripe style="width: 100%" :row-class-name="tableRowClassName">
         <template #empty>
             <div v-if="tasks">No Data</div>
             <div v-else>
-                <el-icon class="is-loading" size="32" style="margin-top: 22px;">
-                    <Loading/>
-                </el-icon>
+                <i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
             </div>
         </template>
-        <el-table-column prop="subject" min-width="300">
+        <el-table-column prop="subject" min-width="300" class-name="subject-col">
             <template #default="{row}">
-                <div style="display: flex; align-items: center;">
-                    <Timer :task="row" style="margin-right: 5px;"/>
+                <div class="task-link" style="display: flex; align-items: center;">
+                    <Timer :task="row" style="margin-right: 10px;"/>
 
-                    <span style="display: contents;">
+                    <div style="display: contents;">
                         <el-text truncated>
-                        <Link :href="$route('project.task', {project: row.project_id, task: row.number})">{{
-                                row.subject
-                            }}</Link>
+                            <Link :href="$route('project.task', {project: row.project_id, task: row.number})">{{
+                                    row.subject
+                                }}
+                            </Link>
                         </el-text>
                         <span class="task-number">#{{ row.number }}</span>
                         <template v-if="row.comments_count">
-                        <el-icon size="14" style="margin: 0 2px 0 5px;">
-                            <Comment/>
-                        </el-icon> <span>{{ row.comments_count }}</span>
+                            <i class="fa-solid fa-comment-dots" style="margin: 1px 2px 0 6px;"></i>
+                            <span style="font-size: 12px; font-weight: 600;">{{ row.comments_count }}</span>
                         </template>
-                    </span>
+                    </div>
                 </div>
             </template>
         </el-table-column>
@@ -138,8 +143,9 @@ const updateTask = ({task, data}) => {
                 <template v-if="row.latest_activity">
                     <div v-if="row.latest_activity" style="display: flex; align-items: center;">
                         <User :user="row.latest_activity.user"/> &nbsp;
-                        <Activity :activity="row.latest_activity" :task="row" only-icon style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
-                        <Time :time="row.latest_activity.created_at"/>
+                        <Activity :activity="row.latest_activity" :task="row" only-icon
+                                  style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
+                        <Time :show-clock="false" :time="row.latest_activity.created_at"/>
                     </div>
                 </template>
                 <template v-else>
@@ -152,3 +158,57 @@ const updateTask = ({task, data}) => {
 
     <Pagination :data="tasks" :only="['tasks']"/>
 </template>
+
+<style lang="scss">
+.el-table__row {
+    background: #000;
+    .subject-col {
+        .timer {
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            transform: translateX(-30px);
+        }
+
+        .task-link {
+            transition: all 0.3s ease-out;
+            transform: translateX(-30px);
+        }
+
+        &:hover {
+            .timer {
+                opacity: 1;
+                transform: translateX(0px);
+            }
+
+            .task-link {
+                transform: translateX(0px);
+            }
+        }
+    }
+
+    &.timer-active {
+        .timer {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+
+        .task-link {
+            transform: translateX(0px);
+        }
+    }
+}
+
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
+}
+</style>

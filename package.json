@@ -12,11 +12,21 @@
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.5",
         "sass": "^1.63.0",
+        "unocss": "^0.53.5",
+        "unplugin-auto-import": "^0.16.6",
+        "unplugin-element-plus": "^0.7.2",
+        "unplugin-vue-components": "^0.25.1",
         "vite": "^4.0.0",
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@ctrl/tinycolor": "^3.6.0",
         "@element-plus/icons-vue": "^2.1.0",
+        "@fortawesome/fontawesome-svg-core": "^6.4.0",
+        "@fortawesome/free-brands-svg-icons": "^6.4.0",
+        "@fortawesome/free-regular-svg-icons": "^6.4.0",
+        "@fortawesome/free-solid-svg-icons": "^6.4.0",
+        "@fortawesome/vue-fontawesome": "^3.0.3",
         "@headlessui/vue": "^1.7.14",
         "@inertiajs/vue3": "^1.0.7",
         "@tiptap/extension-code-block-lowlight": "^2.0.3",
@@ -33,6 +43,7 @@
         "lowlight": "^2.9.0",
         "momentum-modal": "^0.2.1",
         "v-lazy-component": "^3.0.8",
+        "vue3-lottie": "^3.0.0",
         "worker-timers": "^7.0.72"
     }
 }

@@ -4,7 +4,6 @@ import {onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
 import Timesheets from "@/Components/Timesheets.vue";
-import {CirclePlusFilled} from "@element-plus/icons-vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
@@ -31,7 +30,9 @@ onMounted(() => {
     <Head :title="project.name + ' - Timesheets'"/>
 
     <Link preserve-state :href="$route('project.timesheets.create', {project: project.id})">
-        <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
+        <el-button type="success">
+            <i class="fa-solid fa-circle-plus mr-2"></i>Add
+        </el-button>
     </Link>
 
     <Timesheets :times="times"/>

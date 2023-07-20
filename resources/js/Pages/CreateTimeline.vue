@@ -3,7 +3,6 @@ import {useForm} from "@inertiajs/vue3"
 import Modal from "../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import InputError from "@/Components/InputError.vue";
-import {Clock} from "@element-plus/icons-vue";
 
 const props = defineProps({
     project: {
@@ -42,10 +41,10 @@ const create = () => form.post(url, {
 </script>
 
 <template>
-    <Modal>
+    <Modal :width="500">
         <template #title>{{ time ? 'Edit time' : 'Create a new time' }}</template>
 
-        <el-form label-width="120px">
+        <el-form label-width="90px" label-position="left">
             <el-form-item label="Task" :class="{'is-error': form.errors.task}">
                 <el-select v-model="form.task" value-key="id" filterable placeholder="Select">
                     <el-option
@@ -57,19 +56,21 @@ const create = () => form.post(url, {
                 </el-select>
                 <InputError :message="form.errors.task"/>
             </el-form-item>
-            <el-form-item label="Start">
+            <el-form-item label="Start at">
                 <el-date-picker
                     v-model="form.start_at"
                     type="datetime"
                 />
                 <InputError :message="form.errors.start_at"/>
             </el-form-item>
-            <el-form-item label="End">
+            <el-form-item label="End at">
                 <el-date-picker
                     v-model="form.end_at"
                     type="datetime"
                 />
-                <el-button @click="form.end_at = new Date()" :icon="Clock" style="margin-left: 15px;">Now</el-button>
+                <el-button @click="form.end_at = new Date()">
+                    <i class="fa-solid fa-clock mr-2"></i>Now
+                </el-button>
                 <InputError :message="form.errors.end_at"/>
             </el-form-item>
             <el-form-item label="Comment">
@@ -81,7 +82,8 @@ const create = () => form.post(url, {
       <span class="dialog-footer">
         <el-button @click="close">Cancel</el-button>
 
-          <el-button type="primary" @click="create">
+          <el-button :color="$primaryColor()" @click="create">
+              <i class="fas fa-circle-plus mr-2"></i>
           {{ time ? 'Save' : 'Create' }}
         </el-button>
       </span>

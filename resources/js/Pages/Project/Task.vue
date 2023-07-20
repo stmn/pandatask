@@ -3,7 +3,6 @@ import {Head, router, useForm} from '@inertiajs/vue3';
 import {computed, onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import {ElMessage} from "element-plus";
-import {Check, EditPen, Operation, Upload, UploadFilled} from "@element-plus/icons-vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
@@ -121,7 +120,7 @@ const onlyComments = useStorage('onlyComments', true);
                 <Timer :task="task"/>
 
                 <el-avatar
-                    :size="28"
+                    :size="26"
                     style="margin: 0 10px;"
                     :src="task.project.avatar"
                 />
@@ -181,9 +180,7 @@ const onlyComments = useStorage('onlyComments', true);
                         <el-tab-pane name="comment">
                             <template #label>
                                 <el-badge :is-dot="!!activityForm.comment.length">
-                                    <el-icon>
-                                        <EditPen/>
-                                    </el-icon> &nbsp;
+                                    <i class="fa-solid fa-comment-dots mr-2"></i>
                                     Comment
                                 </el-badge>
                             </template>
@@ -214,9 +211,7 @@ const onlyComments = useStorage('onlyComments', true);
                         <el-tab-pane name="attachments">
                             <template #label>
                                 <el-badge :is-dot="!!activityForm.files.length">
-                                    <el-icon>
-                                        <Upload/>
-                                    </el-icon> &nbsp;
+                                    <i class="fa-solid fa-upload mr-2"></i>
                                     Attachments
                                 </el-badge>
                             </template>
@@ -228,9 +223,7 @@ const onlyComments = useStorage('onlyComments', true);
                                 v-model:file-list="activityForm.files"
                                 :auto-upload="false"
                             >
-                                <el-icon class="el-icon--upload">
-                                    <upload-filled/>
-                                </el-icon>
+                                <i class="el-icon--upload fa-solid fa-cloud-arrow-up"></i>
                                 <div class="el-upload__text">
                                     Drop file here or <em>click to upload</em>
                                 </div>
@@ -244,9 +237,7 @@ const onlyComments = useStorage('onlyComments', true);
                         <el-tab-pane name="settings">
                             <template #label>
                                 <el-badge :is-dot="taskForm.isDirty">
-                                    <el-icon>
-                                        <Operation/>
-                                    </el-icon> &nbsp;
+                                    <i class="fa-solid fa-sliders mr-2"></i>
                                     Details
                                 </el-badge>
                             </template>
@@ -269,29 +260,27 @@ const onlyComments = useStorage('onlyComments', true);
                     <el-form-item>
                         <el-button type="success" @click="submit"
                                    :loading="activityForm.processing"
-                                   :disabled="activityForm.processing || !canSubmit"
-                        :icon="Check">Submit</el-button>
+                                   :disabled="activityForm.processing || !canSubmit">
+                            <i class="fa-solid fa-check mr-2"></i>Submit
+                        </el-button>
                     </el-form-item>
                 </el-form>
 
                 <el-tabs v-model="activeTab2" class="demo-tabs">
                     <el-tab-pane name="activity">
                         <template #label>
-                            <el-icon>
-                                <Comment/>
-                            </el-icon> &nbsp;
+                            <i class="fa-solid fa-eye mr-2"></i>
                             Activity
                         </template>
 
-                        <el-switch v-model="onlyComments" active-text="Only comments" size="small" style="margin-bottom: 15px;"/>
+                        <el-switch v-model="onlyComments"
+                                   active-text="Only comments" size="small" style="margin-bottom: 15px;"/>
 
                         <Activities :only-comments="onlyComments" :activities="activities"/>
                     </el-tab-pane>
                     <el-tab-pane name="timesheet">
                         <template #label>
-                            <el-icon>
-                                <Clock/>
-                            </el-icon> &nbsp;
+                            <i class="fa-solid fa-clock mr-2"></i>
                             Timesheets
                         </template>
 

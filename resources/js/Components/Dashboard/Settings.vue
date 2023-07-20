@@ -1,7 +1,6 @@
 <script setup>
 import {router} from "@inertiajs/vue3";
 import {inject} from "vue";
-import {Check} from "@element-plus/icons-vue";
 
 const props = defineProps(['settings']);
 
@@ -57,7 +56,9 @@ const options = [3, 5, 7, 10]
             each.
         </div>
 
-        <el-button type="success" size="small" @click="submit" :icon="Check"/>
+        <el-button type="success" size="small" @click="submit">
+            <i class="fa-solid fa-check"></i>
+        </el-button>
     </div>
 </template>
 

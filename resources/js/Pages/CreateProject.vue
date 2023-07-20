@@ -111,6 +111,7 @@ const activeTab = ref('general');
         <el-button @click="close">Cancel</el-button>
 
           <el-button type="success" @click="create">
+              <i class="fa fa-circle-plus mr-2"></i>
           {{ project ? 'Save' : 'Create' }}
         </el-button>
       </span>

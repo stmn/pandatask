@@ -1,6 +1,5 @@
 <script setup>
 import {Head, Link, router} from "@inertiajs/vue3";
-import {Avatar, Setting, UserFilled} from "@element-plus/icons-vue";
 
 const props = defineProps({
     title: {
@@ -45,41 +44,30 @@ const props = defineProps({
             >
                 <Link :href="$route('admin.users.index')">
                     <el-menu-item :index="$route().current('admin.users.*') ? $route().current() : ''">
-                        <el-icon>
-                            <UserFilled/>
-                        </el-icon>
+                        <i class="fa-solid fa-users mr-2 fa-fw"></i>
                         <span>Users</span>
                     </el-menu-item>
                 </Link>
                 <Link :href="$route('admin.groups.index')">
                     <el-menu-item :index="$route().current('admin.groups.*') ? $route().current() : ''">
-                        <el-icon>
-                            <Avatar/>
-                        </el-icon>
+                        <i class="fa-solid fa-user-group mr-2 fa-fw"></i>
                         <span>Groups</span>
                     </el-menu-item>
                 </Link>
                 <Link :href="$route('admin.statuses.index')">
                     <el-menu-item :index="$route().current('admin.statuses.*') ? $route().current() : ''">
-                        <el-icon>
-                            <Avatar/>
-                        </el-icon>
+                        <i class="fa-solid fa-bars mr-2 fa-fw"></i>
                         <span>Statuses</span>
                     </el-menu-item>
                 </Link>
                 <Link :href="$route('admin.priorities.index')">
                     <el-menu-item :index="$route().current('admin.priorities.*') ? $route().current() : ''">
-                        <el-icon>
-                            <Avatar/>
-                        </el-icon>
+                        <i class="fa-solid fa-bars mr-2 fa-fw"></i>
                         <span>Priorities</span>
                     </el-menu-item>
                 </Link>
 <!--                <Link :href="route('admin.users.index')">-->
 <!--                    <el-menu-item index="settings">-->
-<!--                        <el-icon>-->
-<!--                            <Setting/>-->
-<!--                        </el-icon>-->
 <!--                        <span>Settings</span>-->
 <!--                    </el-menu-item>-->
 <!--                </Link>-->

@@ -3,7 +3,6 @@ import {useForm} from '@inertiajs/vue3';
 import {ref} from 'vue';
 import InputError from "@/Components/InputError.vue";
 import {ElMessage} from "element-plus";
-import {InfoFilled} from "@element-plus/icons-vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -76,7 +75,7 @@ const updatePassword = () => {
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="updatePassword" :disabled="form.processing">Save</el-button>
+                    <el-button :color="$primaryColor()" @click="updatePassword" :disabled="form.processing">Save</el-button>
                 </el-form-item>
             </el-form>
         </el-card>

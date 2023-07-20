@@ -71,7 +71,7 @@ const submit = () => {
                     <InputError :message="form.errors.password_confirmation"/>
                 </el-form-item>
 
-                <el-button native-type="submit" type="primary" :loading="form.processing" :disabled="form.processing">
+                <el-button native-type="submit" :color="$primaryColor()" :loading="form.processing" :disabled="form.processing">
                     Reset Password
                 </el-button>
             </el-form>

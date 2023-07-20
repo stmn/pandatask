@@ -1,7 +1,6 @@
 <script setup>
 import {Head, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
-import {List, Search} from "@element-plus/icons-vue";
 import TasksTable from "@/Components/TasksTable.vue";
 import useList from "@/Composables/useList.js";
 import {onMounted} from "vue";
@@ -32,9 +31,7 @@ onMounted(() => {
     <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <el-icon style="margin-right: 10px; margin-top: -2px;">
-                    <List/>
-                </el-icon>
+                <i class="fa-solid fa-list-check mr-2"></i>
                 <span>Tasks</span>
             </div>
         </template>
@@ -43,12 +40,15 @@ onMounted(() => {
     <br>
 
     <el-input
-        :prefix-icon="Search"
         :clearable="true"
         v-model="query.search"
-        placeholder="Search..."
+        placeholder="Type to search..."
         size="large"
-        class="w-full"></el-input>
+        class="w-full">
+        <template #prefix>
+            <i class="fa-solid fa-search"></i>
+        </template>
+    </el-input>
 
     <br><br>
 

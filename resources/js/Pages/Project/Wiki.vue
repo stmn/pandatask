@@ -3,7 +3,6 @@ import {Head, router, useForm} from '@inertiajs/vue3';
 import {nextTick, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import {ArrowRight, Back, Check, CirclePlusFilled, DeleteFilled, EditPen} from "@element-plus/icons-vue";
 import EditorContent from "@/Components/EditorContent.vue";
 import Editor from "@/Components/Editor.vue";
 import InputError from "@/Components/InputError.vue";
@@ -86,14 +85,13 @@ const goToPage = (url, _hash) => {
     <el-row :gutter="30">
         <!-- Col -->
 
-        <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="{span: 24}" class="text-right" style="margin-bottom: 15px;">
+        <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="{span: 24}" style="margin-bottom: 15px;">
             <!-- Buttons -->
 
             <div style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
-                <el-button plain type="primary"
-                           :icon="CirclePlusFilled"
+                <el-button :color="$primaryColor()"
                            @click="addPage">
-                    Add page
+                    <i class="fa-solid fa-circle-plus mr-2"></i>Add page
                 </el-button>
             </div>
 
@@ -101,7 +99,7 @@ const goToPage = (url, _hash) => {
 
             <el-card shadow="never" class="menu">
                 <template #header>
-                    <el-text type="primary" size="large" tag="b">Pages</el-text>
+                    <el-text :color="$primaryColor()" size="large" tag="b">Pages</el-text>
                     <el-tag round style="position: absolute; margin-left: 10px; margin-top: 1px;" size="small">
                         {{ pages.length }}
                     </el-tag>
@@ -125,11 +123,11 @@ const goToPage = (url, _hash) => {
                                 :style="`padding-left: ${header.level === 1 ? 0 : header.level*10}px;`">
                                 <el-link
                                     :underline="false"
-                                    :icon="ArrowRight"
                                     :type="hash === header.id ? 'success' : 'primary'"
                                     @click="goToPage($route('project.pages.show', {project: project, page: _page}) + `#${header.id}`, header.id)"
                                     class="page-header">
                                     <el-text truncated :type="hash === header.id ? 'success' : 'primary'">
+                                        <i class="fa-solid fa-arrow-right mr-2"></i>
                                         {{ header.title }}
                                     </el-text>
                                 </el-link>
@@ -147,33 +145,29 @@ const goToPage = (url, _hash) => {
 
             <div style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
                 <el-button v-if="editing || adding"
-                           plain type="primary"
-                           :icon="Back"
+                           :color="$primaryColor()"
                            @click="cancel">
-                    Cancel
+                    <i class="fa-solid fa-arrow-left mr-2"></i>Cancel
                 </el-button>
                 <el-button v-if="!editing && !adding"
-                           plain type="primary"
-                           :icon="EditPen"
+                           :color="$primaryColor()"
                            @click="editing = true; form.title = page.title; form.content = page.content;">
-                    Edit
+                    <i class="fa-solid fa-edit mr-2"></i>Edit
                 </el-button>
                 <el-button v-if="editing || adding"
-                           plain type="success"
-                           :icon="Check"
+                           type="success"
                            @click="savePage"
                 >
-                    Save
+                    <i class="fa-solid fa-check mr-2"></i>Save
                 </el-button>
                 <el-popconfirm v-if="form.title !== 'Home'" title="Are you sure to delete this?" @confirm="deletePage"
                                width="222">
                     <template #reference>
                         <el-button v-if="!adding"
                                    plain type="danger"
-                                   :icon="DeleteFilled"
                                    style="margin-left: auto;"
                         >
-                            Delete
+                            <i class="fa-solid fa-trash mr-2"></i>Delete
                         </el-button>
                     </template>
                 </el-popconfirm>
@@ -183,6 +177,7 @@ const goToPage = (url, _hash) => {
 
             <el-card shadow="never">
                 <template v-if="editing || adding">
+                    <el-form>
                     <el-form-item>
                         <el-tooltip :disabled="form.title!=='Home'" content="Home page title cannot be changed."
                                     placement="top">
@@ -194,6 +189,7 @@ const goToPage = (url, _hash) => {
                     <InputError :message="form.errors.content"/>
                     <Editor v-model="form.content" :min-height="400" :max-height="400"
                             placeholder="Enter page content..."/>
+                    </el-form>
                 </template>
 
                 <EditorContent v-else-if="page" :content="page.converted_content"/>

@@ -1,7 +1,6 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
 import {useForm, usePage} from '@inertiajs/vue3';
-import {InfoFilled} from "@element-plus/icons-vue";
 import {ElMessage} from "element-plus";
 
 defineProps({
@@ -132,7 +131,7 @@ const submit = () => {
                 <!--            </div>-->
 
                 <el-form-item>
-                    <el-button @click="submit" type="primary" :disabled="form.processing">Save</el-button>
+                    <el-button @click="submit" :color="$primaryColor()" :disabled="form.processing">Save</el-button>
                 </el-form-item>
             </el-form>
         </el-card>

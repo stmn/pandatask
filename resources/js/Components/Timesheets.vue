@@ -5,7 +5,6 @@ import Time from "@/Components/Time.vue";
 import Timer from "@/Components/Timer.vue";
 import User from "@/Components/User.vue";
 import Pagination from "@/Components/Pagination.vue";
-import {Comment, Edit} from "@element-plus/icons-vue";
 
 const props = defineProps({
     task: {
@@ -55,9 +54,7 @@ const timeBetweenTwoDates = (date1, date2) => {
         <template #empty>
             <div v-if="times">No Data</div>
             <div v-else>
-                <el-icon class="is-loading" size="32" style="margin-top: 22px;">
-                    <Loading/>
-                </el-icon>
+                <i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
             </div>
         </template>
         <!--        <el-table-column v-if="cols.includes('timer') && !task" prop="timer" width="43">-->
@@ -82,12 +79,12 @@ const timeBetweenTwoDates = (date1, date2) => {
         </el-table-column>
         <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">
             <template #default="{row}">
-                <Time :time="row.start_at" force-type="date"/>
+                <Time :show-clock="false" :time="row.start_at" force-type="date"/>
             </template>
         </el-table-column>
         <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="150">
             <template #default="{row}">
-                <Time v-if="row.end_at" :time="row.end_at" force-type="date"/>
+                <Time :show-clock="false" v-if="row.end_at" :time="row.end_at" force-type="date"/>
                 <span v-else>
                     <b>Pending</b>
                 </span>
@@ -111,7 +108,9 @@ const timeBetweenTwoDates = (date1, date2) => {
                     trigger="click"
                 >
                     <template #reference>
-                        <el-button :icon="Comment" circle></el-button>
+                        <el-button circle>
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </el-button>
                     </template>
                     <template #default>
                         <small>{{ row.comment }}</small>
@@ -123,7 +122,7 @@ const timeBetweenTwoDates = (date1, date2) => {
             <template #default="{row}">
                 <Link preserve-state preserve-scroll :only="['modal', 'times']"
                       :href="$route('project.timesheets.edit', {project: row.project_id, time: row.id})">
-                    <el-button type="primary" circle :icon="Edit"></el-button>
+                    <el-button :color="$primaryColor()" circle><i class="fa-solid fa-pen-to-square"></i></el-button>
                 </Link>
             </template>
         </el-table-column>

@@ -2,7 +2,6 @@
 import {Head, Link, router} from '@inertiajs/vue3';
 import Layout from "@/Layouts/Layout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import {CirclePlusFilled, List, Menu, Search} from '@element-plus/icons-vue'
 import User from "@/Components/User.vue";
 import Time from "@/Components/Time.vue";
 import Activity from "@/Components/Activity.vue";
@@ -30,16 +29,16 @@ const {query} = useList({only: ['projects']});
     <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <el-icon style="margin-right: 10px; margin-top: -2px;">
-                    <Menu/>
-                </el-icon>
+                <i class="fa-solid fa-rectangle-list mr-2"></i>
                 <span>Projects</span>
             </div>
         </template>
         <template #extra>
             <div class="flex items-center">
                 <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
-                    <el-button type="success" :icon="CirclePlusFilled" style="">Create</el-button>
+                    <el-button type="success">
+                        <i class="fa-solid fa-circle-plus mr-2"></i> Create
+                    </el-button>
                 </Link>
             </div>
         </template>
@@ -48,19 +47,22 @@ const {query} = useList({only: ['projects']});
     <br>
 
     <el-input
-        :prefix-icon="Search"
         :clearable="true"
         v-model="query.search"
         placeholder="Type to search"
         size="large"
         autofocus
-        class="w-full"></el-input>
+        class="w-full">
+        <template #prefix>
+            <i class="fa-solid fa-search"></i>
+        </template>
+    </el-input>
 
     <br><br>
 
     <div v-if="projects?.data.length > 0">
         <div v-for="item in projects.data" :key="item.id">
-            <el-card class="box-card project-card">
+            <el-card class="box-card project-card" shadow="never">
                 <template #header>
                     <div class="card-header">
                         <div style="display: flex; align-items:center;">
@@ -84,12 +86,17 @@ const {query} = useList({only: ['projects']});
                         </div>
                         <div>
                             <Link :href="$route('project.tasks', {project: item.id})">
-                                <el-button class="button" type="primary" :icon="List">Tasks</el-button>
+                                <el-button class="button" :color="$primaryColor()">
+                                    <i class="fa-solid fa-list-check mr-2"></i> Tasks
+                                </el-button>
                             </Link>
                             &nbsp;
                             <Link preserve-state preserve-scroll :only="['modal']"
                                   :href="$route('project.tasks.create', {project: item.id})">
-                                <el-button class="button" type="success" :icon="CirclePlusFilled">Add task</el-button>
+                                <el-button class="button" type="success">
+                                    <i class="fa-solid fa-circle-plus mr-2"></i>
+                                    Add task
+                                </el-button>
                             </Link>
                         </div>
                     </div>

@@ -12,6 +12,11 @@ const props = defineProps({
         type: String,
         required: false,
         default: ''
+    },
+    showClock: {
+        type: Boolean,
+        required: false,
+        default: true
     }
 })
 
@@ -35,7 +40,7 @@ const toggleTimeType = () => {
 <template>
     <span :class="`time ${forceType ? 'forced' : 'not-forced'}`"
           :title="timeType !== 'ago' ? useTimeAgo(time).value : useDateFormat(time, dateFormat).value"
-          @click="toggleTimeType">{{
+          @click="toggleTimeType"><i v-if="showClock" class="far fa-clock mr-1"></i>{{
             timeType === 'ago' ? useTimeAgo(time).value : useDateFormat(time, dateFormat).value
         }}
     </span>

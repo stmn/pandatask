@@ -1,11 +1,27 @@
-// only scss variables
-
 $--colors: (
     "primary": (
         "base": #1e65c4,
     ),
 );
 
+//$bg-color: () !default;
+//$bg-color: map.merge(
+//        (
+//            '': #ffffff,
+//            'page': #f2f3f5,
+//            'overlay': #ffffff,
+//        ),
+//        $bg-color
+//);
+
 @forward "element-plus/theme-chalk/src/dark/var.scss" with (
-  $colors: $--colors
+  $colors: $--colors,
+  //$bg-color: (
+  //  '': orange,
+  //  'page': #f2f3f5,
+  //  'overlay': blue,
+  //)
+  $card: (
+    //'border
+  ),
 );

@@ -3,7 +3,6 @@ import {Head, Link, router} from '@inertiajs/vue3';
 import {onMounted, ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import {CirclePlusFilled, Search} from "@element-plus/icons-vue";
 import TasksTable from "@/Components/TasksTable.vue";
 import useList from "@/Composables/useList.js";
 
@@ -70,9 +69,6 @@ onMounted(() => {
     <!--    <el-dropdown style="margin-bottom: 10px;">-->
     <!--    <span class="el-dropdown-link">-->
     <!--      Saved filters-->
-    <!--      <el-icon class="el-icon&#45;&#45;right">-->
-    <!--        <arrow-down/>-->
-    <!--      </el-icon>-->
     <!--    </span>-->
     <!--        <template #dropdown>-->
     <!--            <el-dropdown-menu>-->
@@ -84,12 +80,15 @@ onMounted(() => {
     <!--    </el-dropdown>-->
 
     <el-input
-        :prefix-icon="Search"
         :clearable="true"
         v-model="query.search"
-        placeholder="Search..."
+        placeholder="Type to search..."
         size="large"
-        class="w-full"></el-input>
+        class="w-full">
+        <template #prefix>
+            <i class="fa-solid fa-search"></i>
+        </template>
+    </el-input>
 
     <!--    <el-switch-->
     <!--        size="small"-->
@@ -114,7 +113,9 @@ onMounted(() => {
     <br><br>
 
     <Link preserve-state preserve-scroll :only="['modal']" :href="$route('project.tasks.create', {project: project.id})">
-        <el-button type="success" :icon="CirclePlusFilled">Add</el-button>
+        <el-button type="success">
+            <i class="fa-solid fa-circle-plus mr-2"></i>Add
+        </el-button>
     </Link>
 
     <TasksTable :tasks="tasks"/>

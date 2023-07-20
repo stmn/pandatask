@@ -9,11 +9,11 @@ use Inertia\Response;
 
 class OverviewController extends ProjectController
 {
-    public function index(Project $project): Response
+    public function index(Project $project)
     {
         $project->load('clients', 'teamMembers');
 
-        return Inertia::render('Project/Overview', [
+        return Inertia::modal('Project/Overview', [
             'activeTab' => 'overview',
             'project' => $project,
             'projects' => fn() => Project::query()
@@ -29,6 +29,6 @@ class OverviewController extends ProjectController
                 ->latest()
                 ->limit(10)
                 ->get()
-        ]);
+        ])->baseRoute('project.tasks', ['project' => $project]);
     }
 }
