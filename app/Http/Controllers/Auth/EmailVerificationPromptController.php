@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Auth;
 
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class EmailVerificationPromptController extends Controller
+class tEmailVerificationPromptController extends Controller
 {
     /**
      * Display the email verification prompt.

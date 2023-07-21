@@ -162,6 +162,7 @@ const tableRowClassName = ({row, rowIndex}) => {
 <style lang="scss">
 .el-table__row {
     background: #000;
+
     .subject-col {
         .timer {
             opacity: 0;

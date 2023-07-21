@@ -7,38 +7,27 @@ import ColorPanel from "../components/demo/ColorPanel.vue";
 import Logo from "@/Components/Logo.vue";
 
 const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).value));
-// color1.isDark(); // false
-
-setInterval(() => {
-    // console.log(123, useCssVar('--el-color-primary', document.documentElement))
-    // color.value = new TinyColor(useCssVar('--el-color-primary', document.documentElement).value);
-}, 100);
-
 </script>
 
 <template>
-    <ColorPanel />
+    <ColorPanel/>
 
     <div class="guest">
         <div>
             <h1 class="logo">
                 <Link href="/" style="color: var(--el-text-color);">
-<!--                    <img style="height:100px;display: inline-block;color:#fff;fill: currentColor;" src="/logo.svg"/>-->
-                    <Logo style="height:100px;display: inline-block;" />
-                    <br><span
-                    :style="`font-weight: 400;`"><b>PANDA</b>TASK</span>
+                    <Logo style="height:100px;display: inline-block;"/>
+                    <br><span :style="`font-weight: 400;`"><b>PANDA</b>TASK</span>
                 </Link>
             </h1>
 
-<!--            {{ $themeColor.isDark() ? 'dark' : 'light' }}-->
-
-            <img
-                style="transform: rotate(-45deg);z-index: -1;height: 512px;right:-40px;bottom:-40px;display:inline-block;opacity: 0.03;position: absolute;"
+            <img alt=""
+                style="transform: rotate(-45deg);z-index: -1;height: 30vw;right:-40px;bottom:-40px;display:inline-block;opacity: 0.03;position: fixed;"
                 src="/logo.png"/>
 
             <el-config-provider size="large">
                 <div>
-                    <slot />
+                    <slot/>
                 </div>
             </el-config-provider>
         </div>
@@ -46,10 +35,6 @@ setInterval(() => {
 </template>
 
 <style lang="scss">
-body {
-    overflow: hidden;
-}
-
 .guest {
     display: flex;
     align-items: center;
@@ -62,8 +47,6 @@ body {
     }
 
     h1 {
-        //margin-top: -20%;
-        //margin-bottom: 20%;
         text-align: center;
 
         a {

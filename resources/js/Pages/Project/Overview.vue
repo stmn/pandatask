@@ -3,7 +3,6 @@ import {Head} from '@inertiajs/vue3';
 import {ref} from "vue";
 import Layout from "@/Layouts/Layout.vue";
 import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import Activities from "@/Components/Activities.vue";
 import {useDateFormat} from "@vueuse/core";
 import User from "@/Components/User.vue";
 import Modal from "@/Layouts/Modal.vue";
@@ -35,53 +34,53 @@ const activeTab = ref(props.activeTab);
 
     <Modal>
         <template #title>Project informations</template>
-    <!--    <br>-->
-    <el-config-provider size="small">
-        <!--        <el-row>-->
-        <!--            <el-col :span="6">-->
-        <!--                <el-statistic title="Open tasks" :value="100"/>-->
-        <!--            </el-col>-->
-        <!--            <el-col :span="6">-->
-        <!--                <el-statistic title="Tasks in progress" :value="25"/>-->
-        <!--            </el-col>-->
-        <!--            <el-col :span="6">-->
-        <!--                <el-statistic title="Closed tasks" :value="50"/>-->
-        <!--            </el-col>-->
-        <!--            <el-col :span="6">-->
-        <!--                <el-statistic title="All tasks" :value="150"/>-->
-        <!--            </el-col>-->
-        <!--        </el-row>-->
+        <!--    <br>-->
+        <el-config-provider size="small">
+            <!--        <el-row>-->
+            <!--            <el-col :span="6">-->
+            <!--                <el-statistic title="Open tasks" :value="100"/>-->
+            <!--            </el-col>-->
+            <!--            <el-col :span="6">-->
+            <!--                <el-statistic title="Tasks in progress" :value="25"/>-->
+            <!--            </el-col>-->
+            <!--            <el-col :span="6">-->
+            <!--                <el-statistic title="Closed tasks" :value="50"/>-->
+            <!--            </el-col>-->
+            <!--            <el-col :span="6">-->
+            <!--                <el-statistic title="All tasks" :value="150"/>-->
+            <!--            </el-col>-->
+            <!--        </el-row>-->
 
-        <!--        <br>-->
+            <!--        <br>-->
 
-        <el-divider content-position="left">General</el-divider>
+            <el-divider content-position="left">General</el-divider>
 
-        <el-descriptions
-            direction="vertical"
-            :column="3"
-            border
-        >
-            <el-descriptions-item label="Client">
-                <div style="display: flex; padding: 5px;">
-                    <User v-for="client in project.clients" :user="client"
-                          only-avatar
-                          style="display: inline; margin: 10px;"/>
-                </div>
-            </el-descriptions-item>
-            <el-descriptions-item label="Created at">
-                {{ useDateFormat(project.created_at, 'DD-mm-YYYY').value }}
-            </el-descriptions-item>
-            <el-descriptions-item label="Team members">
-                <div style="display: flex; padding: 5px;">
-                    <User v-for="member in project.team_members" :user="member"
-                          only-avatar
-                          style="display: inline; margin: 10px;"/>
-                </div>
-            </el-descriptions-item>
-            <el-descriptions-item label="Description">
-                {{ project.description || 'No description' }}
-            </el-descriptions-item>
-        </el-descriptions>
-    </el-config-provider>
+            <el-descriptions
+                direction="vertical"
+                :column="3"
+                border
+            >
+                <el-descriptions-item label="Client">
+                    <div style="display: flex; padding: 5px;">
+                        <User v-for="client in project.clients" :user="client"
+                              only-avatar
+                              style="display: inline; margin: 10px;"/>
+                    </div>
+                </el-descriptions-item>
+                <el-descriptions-item label="Created at">
+                    {{ useDateFormat(project.created_at, 'DD-mm-YYYY').value }}
+                </el-descriptions-item>
+                <el-descriptions-item label="Team members">
+                    <div style="display: flex; padding: 5px;">
+                        <User v-for="member in project.team_members" :user="member"
+                              only-avatar
+                              style="display: inline; margin: 10px;"/>
+                    </div>
+                </el-descriptions-item>
+                <el-descriptions-item label="Description">
+                    {{ project.description || 'No description' }}
+                </el-descriptions-item>
+            </el-descriptions>
+        </el-config-provider>
     </Modal>
 </template>

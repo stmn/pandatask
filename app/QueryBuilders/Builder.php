@@ -4,7 +4,7 @@ namespace App\QueryBuilders;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
-class Builder extends EloquentBuilder
+abstract class Builder extends EloquentBuilder
 {
     protected array $searchFields = [];
 

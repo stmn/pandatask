@@ -66,7 +66,7 @@ const addPage = () => {
     })
 }
 
-const goToPage = (url, _hash) => {
+const goToPage = (url, _hash = null) => {
     cancel();
     router.visit(url, {preserveState: true});
     hash.value = _hash;

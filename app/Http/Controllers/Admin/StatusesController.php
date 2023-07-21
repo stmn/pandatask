@@ -1,9 +1,12 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Status;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
@@ -12,9 +15,10 @@ class StatusesController extends AdminController
 {
     public function index(Request $request): Response
     {
+        /** @var Collection $items */
         $items = Status::query()
-            ->search($request->search)
-            ->sortByString($request->sort)
+            ->search($request->get('search'))
+            ->sortByString($request->get('sort'))
             ->paginate($this->perPage());
 
         return Inertia::render('Admin/Statuses/List', [
@@ -30,6 +34,9 @@ class StatusesController extends AdminController
         ]);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function update(Status $status): void
     {
         $this->save($status);
@@ -37,6 +44,9 @@ class StatusesController extends AdminController
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(Status $status): void
     {
         $this->authorize('delete', $status);
@@ -51,6 +61,9 @@ class StatusesController extends AdminController
             ->baseRoute('admin.statuses.index');
     }
 
+    /**
+     * @throws ValidationException
+     */
     protected function save(Status $status = new Status()): void
     {
         $this->validate(request(), [

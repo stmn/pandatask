@@ -33,8 +33,8 @@ const projects = ref(props.projects);
 const tasks = ref(props.tasks);
 
 function handleTasks(response) {
-    for (let i = 0; i < projects.value.length; i++) {
-        projects.value[i].tasks = response.props.tasks['project_' + projects.value[i].id];
+    for (let i = 0; i < projects.value?.length || 0; i++) {
+        projects.value[i].tasks = response.props.tasks?.['project_' + projects.value[i].id];
     }
 }
 
@@ -74,20 +74,6 @@ const showSettings = ref(false);
 <template>
     <Head title="Dashboard"/>
 
-<!--    <div class="flex justify-between w-full">-->
-<!--        <button-->
-<!--            bg="blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600"-->
-<!--            text="sm white"-->
-<!--            font="mono light"-->
-<!--            p="y-2 x-4"-->
-<!--            border="2 rounded blue-200"-->
-<!--        >-->
-<!--            Button-->
-<!--        </button>-->
-
-<!--        <button class="bg-red-400 border-0">test</button>-->
-<!--    </div>-->
-
     <div flex justify-between>
         <div>
             <b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!
@@ -102,9 +88,7 @@ const showSettings = ref(false);
                 </template>
                 <template #reference>
                     <el-button link @click="showSettings = !showSettings">
-                        <!--                        <el-tooltip show-after="300" :disabled="showSettings" placement="left" content="Customize">-->
                         <i class="fa-solid fa-gear hover-rotate" style="cursor: pointer; font-size: 24px;"></i>
-                        <!--                        </el-tooltip>-->
                     </el-button>
                 </template>
             </el-popover>

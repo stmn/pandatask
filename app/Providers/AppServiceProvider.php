@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Providers;
 
@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
+     * @noinspection PhpUndefinedMethodInspection
      */
     public function boot(): void
     {

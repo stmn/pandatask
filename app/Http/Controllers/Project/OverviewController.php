@@ -1,15 +1,14 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
-use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Inertia\Inertia;
-use Inertia\Response;
+use Momentum\Modal\Modal;
 
 class OverviewController extends ProjectController
 {
-    public function index(Project $project)
+    public function index(Project $project): Modal
     {
         $project->load('clients', 'teamMembers');
 

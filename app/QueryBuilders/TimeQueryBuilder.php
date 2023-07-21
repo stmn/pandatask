@@ -4,7 +4,7 @@ namespace App\QueryBuilders;
 
 use App\Models\User;
 
-class TimeQueryBuilder extends Builder
+final class TimeQueryBuilder extends Builder
 {
     public function pending(): self
     {

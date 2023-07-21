@@ -54,7 +54,7 @@ const fullName = computed(() => {
             />
             <div><b>{{ user?.first_name }} {{ user?.last_name }}</b></div>
             <div><small>{{ user.job_title }}</small></div>
-            <div style="margin-top: 0px;">
+            <div style="margin-top: 0;">
                 <a :href="`mailto:${user.public_email || user.email}`">
                     {{ user.public_email || user.email }}
                 </a>

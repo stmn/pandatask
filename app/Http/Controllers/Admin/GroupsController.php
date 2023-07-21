@@ -1,9 +1,12 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Group;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
@@ -12,9 +15,10 @@ class GroupsController extends AdminController
 {
     public function index(Request $request): Response
     {
+        /** @var Collection $items */
         $items = Group::query()
-            ->search($request->search)
-            ->sortByString($request->sort)
+            ->search($request->get('search'))
+            ->sortByString($request->get('sort'))
             ->paginate($this->perPage());
 
         $items->append('can');
@@ -32,6 +36,9 @@ class GroupsController extends AdminController
         ]);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function update(Group $group): void
     {
         $this->save($group);
@@ -39,8 +46,11 @@ class GroupsController extends AdminController
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(Group $group): void
-    {;
+    {
         $this->authorize('delete', $group);
         $group->delete();
         $this->afterDestroy();
@@ -54,6 +64,9 @@ class GroupsController extends AdminController
             ->baseRoute('admin.groups.index');
     }
 
+    /**
+     * @throws ValidationException
+     */
     protected function save(Group $group = new Group()): void
     {
         $this->validate(request(), [

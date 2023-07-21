@@ -11,6 +11,7 @@
 {{--        <meta name="viewport" content="width=device-width, initial-scale=1">--}}
 
         <title inertia>{{ config('app.name', 'Pandatask') }}</title>
+        <!--suppress HtmlUnknownTarget -->
         <link rel="icon" type="image/png" href="/logo.png">
 
         <!-- Fonts -->
@@ -20,7 +21,7 @@
         <!-- Scripts -->
         <style>
             body {
-                --el-color-primary: {{ \App\Models\Setting::whereName('theme.primary_color')->value('value') }};
+                --el-color-primary: {{ \App\Models\Setting::query()->where('name', 'theme.primary_color')->value('value') }};
                 /*--text-color: var(--el-color-white);*/
             }
             /** {*/

@@ -5,7 +5,7 @@ namespace App\QueryBuilders;
 use App\Enums\ActivityType;
 use App\Models\User;
 
-class TaskQueryBuilder extends Builder
+final class TaskQueryBuilder extends Builder
 {
     protected array $searchFields = [
         'number',

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
@@ -109,7 +109,7 @@ class TasksController extends ProjectController
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function update(Request $request, Project $project, Task $task): void
+    public function update(Request $request, Task $task): void
     {
         $request->validate([
             'activity.comment' => [],
@@ -161,9 +161,9 @@ class TasksController extends ProjectController
             $activity['type'] = ActivityType::TASK_COMMENTED;
         }
 
-        if ($request->has('task.assignees') && $request->task['assignees'] !== NULL) {
+        if ($request->has('task.assignees') && $request->get('task')['assignees'] !== NULL) {
             $result = $task->assignees()->sync(
-                collect($request->task['assignees'])->pluck('id')
+                collect($request->get('task')['assignees'])->pluck('id')
             );
             if ($result['attached']) {
                 $activity['details']['attached']['assignees'] = $result['attached'];

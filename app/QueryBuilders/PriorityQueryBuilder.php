@@ -2,7 +2,7 @@
 
 namespace App\QueryBuilders;
 
-class PriorityQueryBuilder extends Builder
+final class PriorityQueryBuilder extends Builder
 {
 
 }

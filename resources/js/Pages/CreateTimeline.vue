@@ -41,7 +41,7 @@ const create = () => form.post(url, {
 </script>
 
 <template>
-    <Modal :width="500">
+    <Modal width="500">
         <template #title>{{ time ? 'Edit time' : 'Create a new time' }}</template>
 
         <el-form label-width="90px" label-position="left">

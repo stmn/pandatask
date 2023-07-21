@@ -75,7 +75,8 @@ const updatePassword = () => {
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button :color="$primaryColor()" @click="updatePassword" :disabled="form.processing">Save</el-button>
+                    <el-button :color="$primaryColor()" @click="updatePassword" :disabled="form.processing">Save
+                    </el-button>
                 </el-form-item>
             </el-form>
         </el-card>

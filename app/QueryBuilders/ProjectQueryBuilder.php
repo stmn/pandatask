@@ -4,7 +4,7 @@ namespace App\QueryBuilders;
 
 use App\Models\User;
 
-class ProjectQueryBuilder extends Builder
+final class ProjectQueryBuilder extends Builder
 {
     protected array $searchFields = [
         'name',

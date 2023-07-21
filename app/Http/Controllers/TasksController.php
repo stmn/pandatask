@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers;
 
@@ -12,6 +12,7 @@ class TasksController extends Controller
 {
     /**
      * @throws AuthorizationException
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function index(Request $request): Response
     {

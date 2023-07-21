@@ -4,8 +4,6 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -31,10 +29,11 @@ class Handler extends ExceptionHandler
 //        });
     }
 
+    /** @noinspection PhpMissingReturnTypeInspection */
     public function render($request, Throwable $e)
     {
         if ($request->ajax()) {
-            if($e instanceof AuthorizationException){
+            if ($e instanceof AuthorizationException) {
                 $request->session()->flash('message', [
                     'type' => 'error',
                     'message' => $e->getMessage(),

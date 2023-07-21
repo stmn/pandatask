@@ -41,7 +41,7 @@ const {query, handleSortChange} = useList();
                 <template #default="scope">
                     <Link :href="$route('admin.groups.edit', {group: scope.row.id})">
                         <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-edit" />
+                            <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
                     <el-popconfirm v-if="scope.row?.can?.delete" title="Are you sure to delete this?"

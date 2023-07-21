@@ -21,18 +21,18 @@ const page = usePage()
 
 const auth = computed(() => page.props.auth)
 
-const url = ref(route('project.task', {project: props.activity.project_id, task: props.activity?.task?.number || props.task?.id}))
+const url = ref(route('project.task', {
+    project: props.activity.project_id,
+    task: props.activity?.task?.number || props.task?.id
+}))
 </script>
 
 <template>
     <template v-if="onlyIcon">
         <span style="display: inline-flex;">
             <el-tooltip :content="activity.description">
-<!--                <EditPen v-if="activity.type === 'task_commented'"/>-->
                 <i v-if="activity.type === 'task_commented'" class="fa-solid fa-comment-dots"></i>
-<!--                <CirclePlus v-if="activity.type === 'task_created'"/>-->
                 <i v-if="activity.type === 'task_created'" class="fa-solid fa-square-plus"></i>
-<!--                <Operation v-else />-->
                 <i v-else class="fa-solid fa-sliders"></i>
         </el-tooltip>
         </span>

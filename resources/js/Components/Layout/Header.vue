@@ -1,11 +1,8 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3'
 import {ref} from "vue";
-
 import {useDark, useToggle} from "@vueuse/core";
 import Logo from "@/Components/Logo.vue";
-
-// import $route from mixin methods
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -31,8 +28,7 @@ router.on('success', (event) => {
         <div style="display: flex; max-height: var(--el-header-height);">
             <div class="brand">
                 <Link :href="$route('dashboard')" :only="[]">
-<!--                    <img src="/logo.png" alt=""/>-->
-                    <Logo class="logo" />
+                    <Logo class="logo"/>
                     <span><b>PANDA</b>TASK</span>
                 </Link>
             </div>
@@ -45,21 +41,25 @@ router.on('success', (event) => {
             >
                 <el-menu-item index="dashboard" style="border:0;line-height:1;"
                               :class="{'is-active': $route().current()==='dashboard'}">
-                    <Link :href="$route('dashboard')" :only="[]" style="display: flex;">
+                    <Link :href="$route('dashboard')" :only="[]" style="height:100%;display: flex;align-items: center;">
                         <i class="fa-solid fa-house mr-2"></i>
                         <span>Dashboard</span>
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="projects" style="border:0;line-height:1" :class="{'is-active': $route().current()==='projects'}">
-                    <Link :href="$route('projects')" :only="['projects']" style="display: flex;">
+                <el-menu-item index="projects" style="border:0;line-height:1"
+                              :class="{'is-active': $route().current()==='projects'}">
+                    <Link :href="$route('projects')" :only="['projects']"
+                          style="height:100%;display: flex;align-items: center;">
                         <i class="fa-solid fa-rectangle-list mr-2"></i>
                         Projects
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="tasks" style="border:0;line-height:1" :class="{'is-active': $route().current()==='tasks'}">
-                    <Link :href="$route('tasks')" :only="['tasks']" style="display: flex;">
+                <el-menu-item index="tasks" style="border:0;line-height:1"
+                              :class="{'is-active': $route().current()==='tasks'}">
+                    <Link :href="$route('tasks')" :only="['tasks']"
+                          style="height:100%;display: flex;align-items: center;">
                         <i class="fa-solid fa-list-check mr-2"></i>
                         Tasks
                     </Link>
@@ -72,7 +72,7 @@ router.on('success', (event) => {
                             <i class="fa-fw fa-solid fa-user-pen mr-2"></i>Edit profile
                         </Link>
                     </el-menu-item>
-                    <el-menu-item index="admin" v-if="group('admin')"  style="line-height: 1;">
+                    <el-menu-item index="admin" v-if="group('admin')" style="line-height: 1;">
                         <Link :href="$route('admin.users.index')">
                             <i class="fa-fw fa-solid mr-2"></i>Admin panel
                         </Link>
@@ -80,7 +80,8 @@ router.on('success', (event) => {
                     <el-menu-item index="logout">
                         <form method="post" :action="$route('logout')" style="width: 100%;">
                             <input type="hidden" name="_token" :value="usePage().props.csrf_token">
-                            <el-button style="width: 100%;" type="danger" text bg native-type="submit">Logout</el-button>
+                            <el-button style="width: 100%;" type="danger" text bg native-type="submit">Logout
+                            </el-button>
                         </form>
                     </el-menu-item>
                     <el-menu-item index="theme" style="margin-top: 5px; text-align: left;">
@@ -90,10 +91,6 @@ router.on('success', (event) => {
                             <span v-if="isDark">Light theme</span>
                             <span v-else>Dark theme</span>
                         </el-button>
-<!--                        <el-switch v-model="isDark" @click.stop-->
-<!--                                   active-text="Dark"-->
-<!--                                   inactive-text="Light"-->
-<!--                        />-->
                     </el-menu-item>
                 </el-sub-menu>
             </el-menu>
@@ -165,11 +162,11 @@ router.on('success', (event) => {
     .el-sub-menu {
         .el-sub-menu__title {
             border: 0;
+
             &:hover {
                 background: transparent !important;
             }
         }
     }
 }
-
 </style>

@@ -25,7 +25,6 @@ const props = defineProps({
         default: ['timer', 'task_id', 'start_at', 'end_at', 'time', 'comment', 'author_id', 'actions']
     }
 })
-// const times = ref(props.times.data || props.times);
 
 const page = usePage()
 
@@ -57,11 +56,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 <i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
             </div>
         </template>
-        <!--        <el-table-column v-if="cols.includes('timer') && !task" prop="timer" width="43">-->
-        <!--            <template #default="{row}">-->
-        <!--                <Timer :task="row.task" />-->
-        <!--            </template>-->
-        <!--        </el-table-column>-->
+
         <el-table-column v-if="cols.includes('task_id') && !task" prop="task_id" min-width="200">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
@@ -132,6 +127,3 @@ const timeBetweenTwoDates = (date1, date2) => {
 
     <Pagination v-if="times?.data" :data="times"/>
 </template>
-
-<style lang="scss" scoped>
-</style>

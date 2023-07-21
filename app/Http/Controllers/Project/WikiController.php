@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
@@ -64,7 +64,7 @@ class WikiController extends ProjectController
         return redirect()->route('project.pages.show', ['project' => $project, 'page' => $page]);
     }
 
-    public function delete(Request $request, Project $project, Page $page): RedirectResponse
+    public function delete(Project $project, Page $page): RedirectResponse
     {
         $page->delete();
 

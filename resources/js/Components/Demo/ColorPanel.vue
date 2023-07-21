@@ -22,11 +22,8 @@
 </template>
 
 <script setup>
-import {useCssVar, useStorage} from "@vueuse/core";
-import {ref} from "vue";
+import {useCssVar, useDark, useStorage, useToggle} from "@vueuse/core";
 import {TinyColor} from "@ctrl/tinycolor";
-import {useDark, useToggle} from "@vueuse/core";
-import Logo from "@/Components/Logo.vue";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -34,21 +31,16 @@ const toggleDark = useToggle(isDark)
 const color = useStorage('theme.primary_color', getComputedStyle(document.body).getPropertyValue('--el-color-primary'))
 const originalColor = color.value;
 
-console.log(color.value)
-//
-// const isDark = () => {
-//     return new TinyColor(useCssVar('--el-color-primary', document.body).value).isDark()
-// }
-
 const changeColor = (color) => {
     if (!color) {
         color.value = originalColor
     }
+
     document.body.style.setProperty('--el-color-primary', color)
 
     const isDark = new TinyColor(useCssVar('--el-color-primary', document.body).value).isDark();
-    console.log({isDark})
-    if(isDark) {
+
+    if (isDark) {
         document.body.style.setProperty('--text-color', 'var(--el-color-white)')
     } else {
         document.body.style.setProperty('--text-color', 'var(--el-color-black)')

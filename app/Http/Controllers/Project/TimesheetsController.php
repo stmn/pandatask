@@ -1,8 +1,7 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
-use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Time;
 use Illuminate\Http\Request;
@@ -51,10 +50,10 @@ class TimesheetsController extends ProjectController
             'id' => $time?->id,
         ], [
             'project_id' => $project->id,
-            'task_id' => $request->task['id'],
-            'comment' => $request->comment,
-            'start_at' => $request->start_at,
-            'end_at' => $request->end_at,
+            'task_id' => $request->get('task')['id'],
+            'comment' => $request->get('comment'),
+            'start_at' => $request->get('start_at'),
+            'end_at' => $request->get('end_at'),
             'author_id' => $request->user()->id,
         ]);
 

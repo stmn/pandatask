@@ -2,9 +2,6 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
-import {computed, ref, watch} from "vue";
-import {useCssVar} from "@vueuse/core";
-import {TinyColor} from "@ctrl/tinycolor";
 
 defineProps({
     canResetPassword: {
@@ -26,27 +23,6 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
-
-
-const color = useCssVar('--el-color-primary', document.body, {observe:true})
-console.log(111,color)
-
-setInterval(() => {
-    // color.value = '#'+Math.floor(Math.random()*16777215).toString(16);
-    // console.log(color.value)
-}, 3000);
-
-setInterval(() => {
-    // console.log(123, useCssVar('--el-color-primary', document.documentElement))
-    // color.value = useCssVar('--el-color-primary', document.documentElement, {observe: true}).value;
-}, 100);
-
-watch(()=>color, () => {
-    console.log(123)
-});
-watch(color, () => {
-    console.log(123)
-});
 </script>
 
 <template>

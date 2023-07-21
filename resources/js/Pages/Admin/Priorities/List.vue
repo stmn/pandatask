@@ -28,7 +28,7 @@ const {query, handleSortChange} = useList();
                   stripe
                   style="width: 100%">
             <el-table-column label="ID" prop="id" sortable="custom" width="70"/>
-            <el-table-column label="Name" prop="name" />
+            <el-table-column label="Name" prop="name"/>
             <el-table-column label="Color" prop="color" width="100">
                 <template #default="scope">
                     <el-tag :type="scope.row.color" style="border: 0;" effect="dark" :color="scope.row.color">
@@ -40,7 +40,7 @@ const {query, handleSortChange} = useList();
                 <template #default="scope">
                     <Link :href="$route('admin.priorities.edit', {priority: scope.row.id})">
                         <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-edit" />
+                            <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
                     <el-popconfirm title="Are you sure to delete this?"

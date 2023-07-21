@@ -5,7 +5,7 @@ namespace App\QueryBuilders;
 use App\Enums\ActivityType;
 use App\Models\User;
 
-class ActivityQueryBuilder extends Builder
+final class ActivityQueryBuilder extends Builder
 {
     public function whereType(ActivityType $type): self
     {

@@ -1,12 +1,14 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
@@ -15,9 +17,10 @@ class UsersController extends AdminController
 {
     public function index(Request $request): Response
     {
+        /** @var Collection $items */
         $items = User::query()
-            ->search($request->search)
-            ->sortByString($request->sort)
+            ->search($request->get('search'))
+            ->sortByString($request->get('sort'))
             ->with('groups')
             ->paginate($this->perPage());
 
@@ -38,6 +41,9 @@ class UsersController extends AdminController
         ]);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function update(User $user): void
     {
         $this->save($user);
@@ -72,6 +78,9 @@ class UsersController extends AdminController
             ->baseRoute('admin.users.index');
     }
 
+    /**
+     * @throws ValidationException
+     */
     protected function save(User $user = new User()): void
     {
         $this->validate(request(), [

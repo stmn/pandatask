@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers;
 
@@ -81,20 +81,20 @@ class ProjectsController extends Controller
         $project = Project::query()->updateOrCreate([
             'id' => $project?->id,
         ], [
-            'name' => $request->name,
-            'description' => $request->description,
-            'client_id' => $request->client_id,
+            'name' => $request->get('name'),
+            'description' => $request->get('description'),
+            'client_id' => $request->get('client_id'),
         ]);
 
         assert($project instanceof Project);
 
         $project->clients()->syncWithPivotValues(
-            collect($request->clients)->pluck('id'),
+            collect($request->get('clients'))->pluck('id'),
             ['role' => ProjectRole::CLIENT]
         );
 
         $project->teamMembers()->syncWithPivotValues(
-            collect($request->team_members)->pluck('id'),
+            collect($request->get('team_members'))->pluck('id'),
             ['role' => ProjectRole::TEAM_MEMBER]
         );
 

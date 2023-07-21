@@ -1,8 +1,7 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
-use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Inertia\Inertia;
 use Inertia\Response;

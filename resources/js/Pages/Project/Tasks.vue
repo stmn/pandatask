@@ -112,7 +112,8 @@ onMounted(() => {
 
     <br><br>
 
-    <Link preserve-state preserve-scroll :only="['modal']" :href="$route('project.tasks.create', {project: project.id})">
+    <Link preserve-state preserve-scroll :only="['modal']"
+          :href="$route('project.tasks.create', {project: project.id})">
         <el-button type="success">
             <i class="fa-solid fa-circle-plus mr-2"></i>Add
         </el-button>

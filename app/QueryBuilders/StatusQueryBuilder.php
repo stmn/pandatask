@@ -2,7 +2,7 @@
 
 namespace App\QueryBuilders;
 
-class StatusQueryBuilder extends Builder
+final class StatusQueryBuilder extends Builder
 {
 
 }

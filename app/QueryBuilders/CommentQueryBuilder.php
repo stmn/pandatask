@@ -2,7 +2,7 @@
 
 namespace App\QueryBuilders;
 
-class CommentQueryBuilder extends Builder
+final class CommentQueryBuilder extends Builder
 {
 
 }

@@ -18,7 +18,7 @@ import {ref} from "vue";
 
 const props = defineProps(['data', 'only'])
 
-const pageSize = ref(parseInt(route().params.per_page || 25))
+const pageSize = ref(parseInt(route().params.per_page || '25'))
 
 const change = (page) => {
     router.visit(location.href, {

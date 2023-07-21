@@ -2,7 +2,7 @@
 
 namespace App\QueryBuilders;
 
-class UserQueryBuilder extends Builder
+final class UserQueryBuilder extends Builder
 {
     protected array $searchFields = [
         'id',

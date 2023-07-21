@@ -18,7 +18,7 @@ import StarterKit from '@tiptap/starter-kit'
 import {Editor, EditorContent, VueNodeViewRenderer} from '@tiptap/vue-3'
 
 
-import { lowlight } from 'lowlight'
+import {lowlight} from 'lowlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import CodeBlockComponent from './CodeBlockComponent.vue'
 // import css from 'highlight.js/lib/languages/css'
@@ -115,7 +115,7 @@ export default {
                         //     }
                         // },
                     })
-                    .configure({ lowlight }),
+                    .configure({lowlight}),
                 // HardBreak,
             ],
             content: this.modelValue,

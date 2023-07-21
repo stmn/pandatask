@@ -21,23 +21,19 @@ const props = defineProps({
         required: true
     },
 })
-
-// console.log(111, props.modelValue)
-
 </script>
 
 <template>
     <el-row :gutter="15">
-<!--        {{ JSON.stringify(modelValue) }}-->
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Subject">
-                <el-input v-model="modelValue.subject" class="focus-me" />
+                <el-input v-model="modelValue.subject" class="focus-me"/>
                 <InputError :message="modelValue.errors['task.subject']"/>
             </el-form-item>
         </el-col>
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Tags">
-<!--                {{ JSON.stringify(modelValue.tags) }}-->
+                <!--                {{ JSON.stringify(modelValue.tags) }}-->
                 <el-select v-model="modelValue.tags"
                            multiple
                            filterable
@@ -114,7 +110,7 @@ const props = defineProps({
         </el-col>
         <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
             <el-form-item label="Private" style="text-align: left;">
-                <el-switch v-model="modelValue.private" />
+                <el-switch v-model="modelValue.private"/>
             </el-form-item>
         </el-col>
     </el-row>

@@ -2,7 +2,7 @@
 
 namespace App\QueryBuilders;
 
-class PageQueryBuilder extends Builder
+final class PageQueryBuilder extends Builder
 {
 //    protected array $searchFields = [
 //        'id',

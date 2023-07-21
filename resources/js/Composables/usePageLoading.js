@@ -1,6 +1,4 @@
-import {router} from "@inertiajs/vue3";
-import {reactive, ref} from "vue";
-import {watchDebounced} from "@vueuse/core";
+import {ref} from "vue";
 
 const loading = ref(false);
 

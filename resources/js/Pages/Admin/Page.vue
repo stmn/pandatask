@@ -29,7 +29,8 @@ const props = defineProps({
 
     <el-alert type="info" style="font-size: 18px; margin-bottom: 15px;" :closable="false">
         <b>New Software Version Available.</b><br>
-        A new version of this software is now available. We highly recommend updating to the latest version to benefit from new features, enhancements, and bug fixes.<br>
+        A new version of this software is now available. We highly recommend updating to the latest version to benefit
+        from new features, enhancements, and bug fixes.<br>
         Read the <a href="#">release notes</a> for more information.
     </el-alert>
 
@@ -66,11 +67,11 @@ const props = defineProps({
                         <span>Priorities</span>
                     </el-menu-item>
                 </Link>
-<!--                <Link :href="route('admin.users.index')">-->
-<!--                    <el-menu-item index="settings">-->
-<!--                        <span>Settings</span>-->
-<!--                    </el-menu-item>-->
-<!--                </Link>-->
+                <!--                <Link :href="route('admin.users.index')">-->
+                <!--                    <el-menu-item index="settings">-->
+                <!--                        <span>Settings</span>-->
+                <!--                    </el-menu-item>-->
+                <!--                </Link>-->
             </el-menu>
         </el-col>
         <el-col :span="20">

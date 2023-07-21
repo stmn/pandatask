@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Http\Controllers\Project;
 
@@ -14,7 +14,7 @@ abstract class ProjectController extends Controller
         $this->middleware(function (Request $request, Closure $next) {
             try {
                 $this->authorize('view', $request->route()->parameter('project'));
-            } catch (Exception $e) {
+            } catch (Exception) {
                 abort(403, 'You don\'t have access to this project.');
             }
 

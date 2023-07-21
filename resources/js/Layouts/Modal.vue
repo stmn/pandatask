@@ -8,38 +8,26 @@ const props = defineProps({
         default: '80%',
     },
 })
+
 const {show, close, redirect} = useModal()
-const handleClose = (done: () => void) => {
-    // redirect({only: ['times']});
 
-    // close();
-    // redirect();
-    // console.log(usePage().url, usePage()?.props?.modal.redirectURL, location.href, usePage())
-
+const handleClose = () => {
     const redirectURL = usePage()?.props?.modal?.redirectURL;
-    if(redirectURL && location.href !== redirectURL) {
-        router.visit(redirectURL, {
-            preserveScroll: true,
-            preserveState: true,
-            only: ['times', 'tasks'],
-        })
+    if (redirectURL && location.href !== redirectURL) {
+        router.visit(
+            redirectURL, {
+                preserveScroll: true,
+                preserveState: true,
+                only: ['times', 'tasks'],
+            })
     }
-
-    // close();
-    // ElMessageBox.confirm('Are you sure to close this dialog?')
-    //     .then(() => {
-    //         done()
-    //     })
-    //     .catch(() => {
-    //         // catch error
-    //     })
 }
 </script>
 
 <template>
     <el-dialog
         v-model="show"
-       :width="width"
+        :width="width"
         @closed="handleClose"
         draggable
     >

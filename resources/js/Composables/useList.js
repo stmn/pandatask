@@ -2,7 +2,7 @@ import {router} from "@inertiajs/vue3";
 import {reactive} from "vue";
 import {watchDebounced} from "@vueuse/core";
 
-export default function useList({only} = {only:[]}) {
+export default function useList({only} = {only: []}) {
     const {search, sort} = route().params;
 
     const data = reactive({search, sort})

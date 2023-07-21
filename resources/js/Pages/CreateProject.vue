@@ -58,16 +58,16 @@ const activeTab = ref('general');
             <el-form-item label="Description">
                 <el-input v-model="form.description" type="textarea" autosize/>
             </el-form-item>
-<!--            <el-form-item label="Client">-->
-<!--                <el-select v-model="form.client_id" placeholder="Select">-->
-<!--                    <el-option-->
-<!--                        v-for="item in clients"-->
-<!--                        :key="item.value"-->
-<!--                        :label="item.label"-->
-<!--                        :value="item.value"-->
-<!--                    ></el-option>-->
-<!--                </el-select>-->
-<!--            </el-form-item>-->
+            <!--            <el-form-item label="Client">-->
+            <!--                <el-select v-model="form.client_id" placeholder="Select">-->
+            <!--                    <el-option-->
+            <!--                        v-for="item in clients"-->
+            <!--                        :key="item.value"-->
+            <!--                        :label="item.label"-->
+            <!--                        :value="item.value"-->
+            <!--                    ></el-option>-->
+            <!--                </el-select>-->
+            <!--            </el-form-item>-->
 
             <el-form-item label="Client users">
                 <el-select v-model="form.clients"

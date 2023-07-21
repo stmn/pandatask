@@ -44,13 +44,13 @@ const {query, handleSortChange} = useList();
                 <template #default="scope">
                     <Link :href="$route('admin.users.edit', {user: scope.row.id})">
                         <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-edit" />
+                            <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
 
                     <Link :href="$route('admin.users.impersonate', {user: scope.row.id})" method="post">
                         <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-key" />
+                            <i class="fas fa-key"/>
                         </el-button>
                     </Link>
                     &nbsp;

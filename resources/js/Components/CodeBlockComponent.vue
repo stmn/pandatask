@@ -1,22 +1,22 @@
 <template>
     <node-view-wrapper class="code-block">
-<!--        <select contenteditable="false" v-model="selectedLanguage">-->
-<!--            <option :value="null">-->
-<!--                auto-->
-<!--            </option>-->
-<!--            <option disabled>-->
-<!--                —-->
-<!--            </option>-->
-<!--            <option v-for="(language, index) in languages" :value="language" :key="index">-->
-<!--                {{ language }}-->
-<!--            </option>-->
-<!--        </select>-->
-        <pre><code><node-view-content /></code></pre>
+        <!--        <select contenteditable="false" v-model="selectedLanguage">-->
+        <!--            <option :value="null">-->
+        <!--                auto-->
+        <!--            </option>-->
+        <!--            <option disabled>-->
+        <!--                —-->
+        <!--            </option>-->
+        <!--            <option v-for="(language, index) in languages" :value="language" :key="index">-->
+        <!--                {{ language }}-->
+        <!--            </option>-->
+        <!--        </select>-->
+        <pre><code><node-view-content/></code></pre>
     </node-view-wrapper>
 </template>
 
 <script>
-import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
+import {NodeViewContent, nodeViewProps, NodeViewWrapper} from '@tiptap/vue-3'
 
 export default {
     components: {
@@ -38,7 +38,7 @@ export default {
                 return this.node.attrs.language
             },
             set(language) {
-                this.updateAttributes({ language })
+                this.updateAttributes({language})
             },
         },
     },

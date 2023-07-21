@@ -1,8 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnusedParameterInspection PhpInconsistentReturnPointsInspection */
 
 namespace App\Policies;
-
-use App\Models\User;
 
 class UserPolicy
 {
