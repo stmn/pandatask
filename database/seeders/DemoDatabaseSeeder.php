@@ -47,12 +47,15 @@ class DemoDatabaseSeeder extends Seeder
 
         $faker = Factory::create();
 
-        User::factory()->create([
+        /** @var User $user */
+        $user = User::factory()->create([
             'first_name' => 'Adam',
             'last_name' => 'Smith',
             'email' => 'admin@demo.com',
             'password' => bcrypt('demo'),
-        ])->groups()->attach(1);
+        ]);
+
+        $user->groups()->attach(1);
 
         // create random 20 team members
 
