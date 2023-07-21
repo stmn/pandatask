@@ -2,9 +2,16 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@/*": ["resources/js/*"],
-            "@/Composables/*": ["resources/js/Composables/*"]
+            "@/*": [
+                "resources/js/*"
+            ],
+            "@/Composables/*": [
+                "resources/js/Composables/*"
+            ]
         }
     },
-    "exclude": ["node_modules", "public"]
+    "exclude": [
+        "node_modules",
+        "public"
+    ]
 }

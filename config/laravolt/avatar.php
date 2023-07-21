@@ -3,6 +3,9 @@
 /*
  * Set specific configuration variables here
  */
+
+use Laravolt\Avatar\Generator\DefaultGenerator;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,7 +14,7 @@ return [
     | Avatar use Intervention Image library to process image.
     | Meanwhile, Intervention Image supports "GD Library" and "Imagick" to process images
     | internally. You may choose one of them according to your PHP
-    | configuration. By default PHP's "GD Library" implementation is used.
+    | configuration. By default, PHP's "GD Library" implementation is used.
     |
     | Supported: "gd", "imagick"
     |
@@ -19,7 +22,7 @@ return [
     'driver' => env('IMAGE_DRIVER', 'gd'),
 
     // Initial generator class
-    'generator' => \Laravolt\Avatar\Generator\DefaultGenerator::class,
+    'generator' => DefaultGenerator::class,
 
     // Whether all characters supplied must be replaced with their closest ASCII counterparts
     'ascii' => false,
@@ -46,7 +49,7 @@ return [
     'rtl' => false,
 
     // Fonts used to render text.
-    // If contains more than one fonts, randomly selected based on name supplied
+    // If contains more than one font, randomly selected based on name supplied
     'fonts' => [__DIR__ . '/../fonts/OpenSans-Bold.ttf', __DIR__ . '/../fonts/rockwell.ttf'],
 
     // List of foreground colors to be used, randomly selected based on name supplied

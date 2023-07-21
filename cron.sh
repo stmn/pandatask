@@ -3,6 +3,7 @@
 _term() {
   echo "Caught SIGTERM signal!"
   go=""
+  # shellcheck disable=SC2046
   wait $(jobs -p)
 }
 
