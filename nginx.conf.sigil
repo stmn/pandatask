@@ -32,7 +32,7 @@ server {
     proxy_buffer_size 12k;
     proxy_buffering {{ $.PROXY_BUFFERING }};
     proxy_buffers 12 8k;
-    proxy_busy_buffers_size 23k;
+    proxy_busy_buffers_size 24k;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection $http_connection;
     proxy_set_header Host $http_host;
