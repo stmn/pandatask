@@ -3,7 +3,7 @@ import {Link} from '@inertiajs/vue3'
 import {TinyColor} from "@ctrl/tinycolor";
 import {useCssVar} from "@vueuse/core";
 import {ref} from "vue";
-import ColorPanel from "~/js/Components/demo/ColorPanel.vue";
+import ColorPanel from "~/js/Components/Demo/ColorPanel.vue";
 import Logo from "~/js/Components/Layout/AppLogo.vue";
 
 const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).value));
