@@ -12,6 +12,7 @@
         "ext-dom": "*",
         "ext-gd": "*",
         "ext-libxml": "*",
+        "barryvdh/laravel-debugbar": "^3.8",
         "based/momentum-modal": "^0.2.0",
         "fakerphp/faker": "^1.23",
         "genealabs/laravel-model-caching": "^0.13.4",
