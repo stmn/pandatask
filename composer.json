@@ -9,7 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-dom": "*",
+        "ext-libxml": "*",
         "based/momentum-modal": "^0.2.0",
+        "fakerphp/faker": "^1.23",
         "genealabs/laravel-model-caching": "^0.13.4",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
@@ -20,13 +23,10 @@
         "laravolt/avatar": "^5.0",
         "mehdi-fathi/eloquent-filter": "^3.4",
         "spatie/laravel-medialibrary": "^10.0.0",
-        "tightenco/ziggy": "^1.6",
-        "ext-dom": "*",
-        "ext-libxml": "*"
+        "tightenco/ziggy": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
-        "fakerphp/faker": "^1.9.1",
         "kitloong/laravel-migrations-generator": "^6.10",
         "laravel/breeze": "^1.21",
         "laravel/pint": "^1.0",
