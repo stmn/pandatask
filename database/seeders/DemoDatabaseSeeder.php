@@ -90,6 +90,7 @@ class DemoDatabaseSeeder extends Seeder
                 $task['subject'] .= ' ' . Arr::random(['🚀', '', '', '', '', '', '', '', '', '', '']);
                 $task['status_id'] = Status::query()->inRandomOrder()->first()->id;
                 $task['priority_id'] = Priority::query()->inRandomOrder()->first()->id;
+                $task['private'] = false;
 
                 $task['description'] .= '<p></p><pre><code>// This is a code example
 while($task->isNotCompleted()){
