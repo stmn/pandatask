@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ActivityType;
+use App\QueryBuilders\ActivityQueryBuilder;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -32,10 +34,13 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth' => function () use ($request) {
-                $user = $request->user();
+                $user = loggedUser();
 
                 if ($user) {
                     $user->load('activeTime.task');
+                    $user?->activeTime?->task?->loadCount([
+                        'activities as comments_count' => fn(ActivityQueryBuilder $query) => $query->whereType(ActivityType::TASK_COMMENTED)
+                    ]);
 
                     return [
                         'user' => $user,

@@ -1,7 +1,7 @@
-<script lang="ts" setup>
+<script setup>
 import Modal from "../../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import InputError from "@/Components/InputError.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 import useAdminForm from "@/Composables/useAdminForm.js";
 
 const props = defineProps({

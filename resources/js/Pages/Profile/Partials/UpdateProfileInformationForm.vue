@@ -1,5 +1,5 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
+import InputError from '~/js/Components/Forms/InputError.vue';
 import {useForm, usePage} from '@inertiajs/vue3';
 import {ElMessage} from "element-plus";
 

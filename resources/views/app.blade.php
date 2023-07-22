@@ -15,15 +15,11 @@
     <!--suppress HtmlUnknownTarget -->
     <link rel="icon" type="image/png" href="/logo.png">
 
-    <!-- Fonts -->
-    {{--        <link rel="preconnect" href="https://fonts.bunny.net">--}}
-    {{--        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />--}}
-
     <!-- Scripts -->
     <style>
         body {
-            --el-color-primary: {{ Setting::query()->where('name', 'theme.primary_color')->value('value') }};
-            /*--text-color: var(--el-color-white);*/
+            --brand-color: {{ Setting::query()->where('name', 'theme.brand_color')->value('value') ?? '#347CE4' }};
+            --brand-text-color: {{ '#cc0000' }};
         }
 
         /** {*/
@@ -35,7 +31,7 @@
     @inertiaHead
     <script src="https://kit.fontawesome.com/9d759f8fd4.js" crossorigin="anonymous"></script>
 </head>
-<body style="--text-color: var(--el-color-white); color: var(--text-color);">
+<body style=" --el-bg-color-page: var(--brand-color);">
 @inertia
 </body>
 </html>

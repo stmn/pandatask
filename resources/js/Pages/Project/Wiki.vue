@@ -1,11 +1,11 @@
 <script setup>
 import {Head, router, useForm} from '@inertiajs/vue3';
 import {nextTick, ref} from "vue";
-import Layout from "@/Layouts/Layout.vue";
-import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import EditorContent from "@/Components/EditorContent.vue";
-import Editor from "@/Components/Editor.vue";
-import InputError from "@/Components/InputError.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
+import EditorContent from "~/js/Components/Forms/EditorContent.vue";
+import Editor from "~/js/Components/Forms/EditorInput.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 import {useTimeAgo} from "@vueuse/core";
 
 defineOptions({layout: [Layout, ProjectLayout]})

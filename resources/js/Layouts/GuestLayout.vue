@@ -3,8 +3,8 @@ import {Link} from '@inertiajs/vue3'
 import {TinyColor} from "@ctrl/tinycolor";
 import {useCssVar} from "@vueuse/core";
 import {ref} from "vue";
-import ColorPanel from "../components/demo/ColorPanel.vue";
-import Logo from "@/Components/Logo.vue";
+import ColorPanel from "~/js/Components/demo/ColorPanel.vue";
+import Logo from "~/js/Components/Layout/AppLogo.vue";
 
 const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).value));
 </script>
@@ -14,7 +14,7 @@ const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).v
 
     <div class="guest">
         <div>
-            <h1 class="logo">
+            <h1 class="logo" style="color: var(--brand-text-color);">
                 <Link href="/" style="color: var(--el-text-color);">
                     <Logo style="height:100px;display: inline-block;"/>
                     <br><span :style="`font-weight: 400;`"><b>PANDA</b>TASK</span>

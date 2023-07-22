@@ -28,7 +28,7 @@ import {TinyColor} from "@ctrl/tinycolor";
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const color = useStorage('theme.primary_color', getComputedStyle(document.body).getPropertyValue('--el-color-primary'))
+const color = useStorage('theme.brand_color', getComputedStyle(document.body).getPropertyValue('--brand-color'))
 const originalColor = color.value;
 
 const changeColor = (color) => {
@@ -36,14 +36,14 @@ const changeColor = (color) => {
         color.value = originalColor
     }
 
-    document.body.style.setProperty('--el-color-primary', color)
+    document.body.style.setProperty('--brand-color', color)
 
-    const isDark = new TinyColor(useCssVar('--el-color-primary', document.body).value).isDark();
+    const isDark = new TinyColor(useCssVar('--brand-color', document.body).value).isDark();
 
     if (isDark) {
-        document.body.style.setProperty('--text-color', 'var(--el-color-white)')
+        document.body.style.setProperty('--brand-text-color', 'var(--el-color-white)')
     } else {
-        document.body.style.setProperty('--text-color', 'var(--el-color-black)')
+        document.body.style.setProperty('--brand-text-color', 'var(--el-color-black)')
     }
 }
 

@@ -1,10 +1,11 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
-import Time from "@/Components/Time.vue";
-import Timer from "@/Components/Timer.vue";
-import User from "@/Components/User.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Time from "~/js/Components/Common/TimeValue.vue";
+import Timer from "~/js/Components/Task/TimerButton.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Pagination from "~/js/Components/Common/AppPagination.vue";
+import TaskLink from "@/Components/Task/TaskLink.vue";
 
 const props = defineProps({
     task: {
@@ -61,9 +62,7 @@ const timeBetweenTwoDates = (date1, date2) => {
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
-                    <el-text truncated>
-                        <Link :href="row.task.url">{{ row.task.subject }}</Link>
-                    </el-text>
+                    <TaskLink :task="row.task" style="display: contents;" />
                 </div>
             </template>
         </el-table-column>
@@ -94,7 +93,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </template>
             </template>
         </el-table-column>
-        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="60">
+        <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="90">
             <template #default="{row}">
                 <el-popover
                     v-if="row.comment"

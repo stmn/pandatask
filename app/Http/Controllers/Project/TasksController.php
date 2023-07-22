@@ -73,7 +73,7 @@ class TasksController extends ProjectController
 
     public function create(Project $project): Modal
     {
-        return Inertia::modal('Project/CreateTask', [
+        return Inertia::modal('Modals/TaskForm', [
             'project' => $project,
             'statuses' => fn() => Status::all(),
             'priorities' => fn() => Priority::all(),

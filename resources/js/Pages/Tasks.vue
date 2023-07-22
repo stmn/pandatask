@@ -1,7 +1,7 @@
 <script setup>
 import {Head, router} from '@inertiajs/vue3';
-import Layout from "@/Layouts/Layout.vue";
-import TasksTable from "@/Components/TasksTable.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import useList from "@/Composables/useList.js";
 import {onMounted} from "vue";
 
@@ -30,8 +30,8 @@ onMounted(() => {
 
     <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
-            <div style="display: flex; align-items: center;">
-                <i class="fa-solid fa-list-check mr-2"></i>
+            <div flex items-center>
+                <i class="fas fa-list-check mr-2"></i>
                 <span>Tasks</span>
             </div>
         </template>

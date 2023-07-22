@@ -12,7 +12,7 @@ class OverviewController extends ProjectController
     {
         $project->load('clients', 'teamMembers');
 
-        return Inertia::modal('Project/Overview', [
+        return Inertia::modal('Modals/ProjectOverview', [
             'activeTab' => 'overview',
             'project' => $project,
             'projects' => fn() => Project::query()

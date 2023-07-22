@@ -6,20 +6,9 @@ import {ref} from "vue";
 defineOptions({layout: Layout})
 
 const props = defineProps({
-    activeTab: {
-        type: String,
-        required: true,
-        default: 'overview'
-    },
-    project: {
-        type: Object,
-        required: true
-    },
-    projects: {
-        type: Array,
-        required: false,
-        default: () => []
-    }
+    activeTab: String,
+    project: Object,
+    projects: Array
 });
 
 /**
@@ -50,7 +39,6 @@ const tabs = [
     {'icon': 'fa-eye', 'name': 'activity'},
     {'icon': 'fa-clock', 'name': 'timesheets'},
     {'icon': 'fa-book', 'name': 'pages'},
-    {'icon': 'fa-cog', 'name': 'settings'},
 ];
 const activeTab = ref(props.activeTab);
 
@@ -105,7 +93,7 @@ const handleClick = (index) => {
             <Link preserve-state preserve-scroll :only="['modal']"
                   :href="$route('projects.edit', {project: project.id})">
                 <el-button :color="$primaryColor()">
-                    <i class="fa-solid fa-pen-to-square mr-2"></i> Edit
+                    <i class="fas fa-pen-to-square mr-2"></i> Edit
                 </el-button>
             </Link>
         </template>

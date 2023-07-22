@@ -1,12 +1,15 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
+        "baseUrl": "./resources",
         "paths": {
             "@/*": [
-                "resources/js/*"
+                "js/**/*"
+            ],
+            "@/Components/*": [
+                "js/Components/*"
             ],
             "@/Composables/*": [
-                "resources/js/Composables/*"
+                "js/Composables/*"
             ]
         }
     },

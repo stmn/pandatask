@@ -1,11 +1,13 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3'
 import {computed, inject} from "vue";
-import Time from "@/Components/Time.vue";
-import Timer from "@/Components/Timer.vue";
-import User from "@/Components/User.vue";
-import Pagination from "@/Components/Pagination.vue";
-import Activity from "@/Components/Activity.vue";
+import Time from "~/js/Components/Common/TimeValue.vue";
+import Timer from "~/js/Components/Task/TimerButton.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Pagination from "~/js/Components/Common/AppPagination.vue";
+import Activity from "~/js/Components/Activity/ActivityType.vue";
+import TaskLink from "~/js/Components/Task/TaskLink.vue";
+import TimerButton from "~/js/Components/Task/TimerButton.vue";
 
 const props = defineProps({
     tasks: {},
@@ -65,20 +67,9 @@ const tableRowClassName = ({row, rowIndex}) => {
             <template #default="{row}">
                 <div class="task-link" style="display: flex; align-items: center;">
                     <Timer :task="row" style="margin-right: 10px;"/>
-
-                    <div style="display: contents;">
-                        <el-text truncated>
-                            <Link :href="$route('project.task', {project: row.project_id, task: row.number})">{{
-                                    row.subject
-                                }}
-                            </Link>
-                        </el-text>
-                        <span class="task-number">#{{ row.number }}</span>
-                        <template v-if="row.comments_count">
-                            <i class="fa-solid fa-comment-dots" style="margin: 1px 2px 0 6px;"></i>
-                            <span style="font-size: 12px; font-weight: 600;">{{ row.comments_count }}</span>
-                        </template>
-                    </div>
+<!--                    <div style="display: contents">-->
+                    <TaskLink :task="row" style="display: contents;" />
+<!--                    </div>-->
                 </div>
             </template>
         </el-table-column>

@@ -31,7 +31,7 @@ class TimesheetsController extends ProjectController
     {
         $time?->load('task');
 
-        return Inertia::modal('CreateTimeline', [
+        return Inertia::modal('Modals/TimelineForm', [
             'project' => $project,
             'time' => $time,
             'tasks' => $project->tasks()->get(),

@@ -2,7 +2,7 @@
 import {Link, router, usePage} from '@inertiajs/vue3'
 import {ref} from "vue";
 import {useDark, useToggle} from "@vueuse/core";
-import Logo from "@/Components/Logo.vue";
+import Logo from "~/js/Components/Layout/AppLogo.vue";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)

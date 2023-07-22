@@ -1,17 +1,17 @@
 <script setup>
 import {Head, router, useForm} from '@inertiajs/vue3';
 import {computed, onMounted, ref} from "vue";
-import Layout from "@/Layouts/Layout.vue";
+import Layout from "~/js/Layouts/Layout.vue";
 import {ElMessage} from "element-plus";
-import Timer from "@/Components/Timer.vue";
-import User from "@/Components/User.vue";
-import Time from "@/Components/Time.vue";
-import Timesheets from "@/Components/Timesheets.vue";
-import Activities from "@/Components/Activities.vue";
-import TaskForm from "@/Components/Task/TaskForm.vue";
-import Editor from "@/Components/Editor.vue";
+import Timer from "~/js/Components/Task/TimerButton.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Time from "~/js/Components/Common/TimeValue.vue";
+import Timesheets from "~/js/Components/Timesheets/TimesheetsTable.vue";
+import Activities from "~/js/Components/Activity/ActivityList.vue";
+import TaskForm from "~/js/Components/Task/TaskForm.vue";
+import Editor from "~/js/Components/Forms/EditorInput.vue";
 import {useStorage} from "@vueuse/core";
-import EditorContent from "@/Components/EditorContent.vue";
+import EditorContent from "~/js/Components/Forms/EditorContent.vue";
 
 defineOptions({layout: [Layout]})
 

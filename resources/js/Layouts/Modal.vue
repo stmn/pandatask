@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 import {useModal} from "momentum-modal"
 import {router, usePage} from "@inertiajs/vue3"
 

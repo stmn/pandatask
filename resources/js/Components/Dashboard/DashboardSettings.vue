@@ -74,6 +74,7 @@ const options = [3, 5, 7, 10]
     font-size: inherit;
     outline: none !important;
     cursor: pointer;
+    vertical-align: initial;
 }
 
 :focus-visible {

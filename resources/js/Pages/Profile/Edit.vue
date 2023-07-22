@@ -3,7 +3,7 @@
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import {Head} from '@inertiajs/vue3';
-import Layout from "@/Layouts/Layout.vue";
+import Layout from "~/js/Layouts/Layout.vue";
 
 defineProps({
     mustVerifyEmail: {

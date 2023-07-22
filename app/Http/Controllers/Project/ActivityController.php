@@ -6,11 +6,11 @@ use App\Models\Project;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ActivitiesController extends ProjectController
+class ActivityController extends ProjectController
 {
     public function index(Project $project): Response
     {
-        return Inertia::render('Project/Activities', [
+        return Inertia::render('Project/Activity', [
             'activeTab' => 'activity',
             'project' => $project,
             'projects' => fn() => Project::query()

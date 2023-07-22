@@ -4,7 +4,7 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 if (!function_exists('loggedUser')) {
-    function loggedUser(): User|Authenticatable
+    function loggedUser(): User|Authenticatable|null
     {
         return auth()->user();
     }

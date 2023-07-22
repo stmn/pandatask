@@ -2,11 +2,11 @@
 import {Link, router, usePage} from '@inertiajs/vue3'
 import {computed, ref, watch} from "vue";
 import {Modal} from 'momentum-modal';
-import GlobalTimer from "@/Components/GlobalTimer.vue";
+import GlobalTimer from "~/js/Components/Layout/AppTimer.vue";
 import {ElMessage} from "element-plus";
-import Header from "@/Components/Layout/Header.vue";
+import Header from "~/js/Components/Layout/AppHeader.vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
-import ColorPanel from "@/Components/Demo/ColorPanel.vue";
+import ColorPanel from "~/js/Components/Demo/ColorPanel.vue";
 
 const props = defineProps({
     activeIndex: {
@@ -44,7 +44,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
     <ColorPanel/>
 
     <el-container style="min-height: 100%;">
-        <Header/>
+        <Header style="color: var(--brand-text-color);"/>
 
         <el-main
             v-loading="loading"
@@ -66,7 +66,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
             </div>
         </el-main>
 
-        <el-footer>
+        <el-footer style="color: var(--brand-text-color);">
             <br>
             <small>
                 All rights reserved &copy;

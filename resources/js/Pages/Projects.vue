@@ -1,10 +1,10 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
-import Layout from "@/Layouts/Layout.vue";
-import Pagination from "@/Components/Pagination.vue";
-import User from "@/Components/User.vue";
-import Time from "@/Components/Time.vue";
-import Activity from "@/Components/Activity.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import Pagination from "~/js/Components/Common/AppPagination.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Time from "~/js/Components/Common/TimeValue.vue";
+import Activity from "~/js/Components/Activity/ActivityType.vue";
 import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
@@ -62,21 +62,23 @@ const {query} = useList({only: ['projects']});
 
     <div v-if="projects?.data.length > 0">
         <div v-for="item in projects.data" :key="item.id">
-            <el-card class="box-card project-card" shadow="never">
+            <el-card class="project-card mb-4" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <div style="display: flex; align-items:center;">
+                        <div flex items-center>
                             <el-avatar
                                 :size="32"
                                 style="margin-right: 10px; margin-top: -2px;"
                                 :src="item.avatar"
                             />
+
                             <Link :href="$route('project', {project: item.id})">
                                 {{ item.name }}
                             </Link>
 
                             <template v-if="item.latest_activity">
                                 <el-divider direction="vertical"></el-divider>
+
                                 <div class="last-activity">
                                     <User :user="item.latest_activity.user"/>
                                     <Activity :activity="item.latest_activity"/>
@@ -84,17 +86,18 @@ const {query} = useList({only: ['projects']});
                                 </div>
                             </template>
                         </div>
+
                         <div>
                             <Link :href="$route('project.tasks', {project: item.id})">
-                                <el-button class="button" :color="$primaryColor()">
-                                    <i class="fa-solid fa-list-check mr-2"></i> Tasks
+                                <el-button :color="$primaryColor()">
+                                    <i class="fas fa-list-check mr-2"/> Tasks
                                 </el-button>
                             </Link>
                             &nbsp;
                             <Link preserve-state preserve-scroll :only="['modal']"
                                   :href="$route('project.tasks.create', {project: item.id})">
-                                <el-button class="button" type="success">
-                                    <i class="fa-solid fa-circle-plus mr-2"></i>
+                                <el-button type="success">
+                                    <i class="fas fa-circle-plus mr-2"/>
                                     Add task
                                 </el-button>
                             </Link>
@@ -105,8 +108,8 @@ const {query} = useList({only: ['projects']});
                     {{ item.description || '&nbsp;' }}
                 </div>
             </el-card>
-            <br>
         </div>
+
         <pagination :data="projects"/>
     </div>
     <div v-else>
@@ -116,21 +119,20 @@ const {query} = useList({only: ['projects']});
 
 <style lang="scss" scoped>
 .project-card {
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .last-activity {
         display: flex;
         align-items: center;
         font-size: 12px;
-        color: var(--el-text-color-secondary);
 
         * {
             margin: 0 5px;
         }
     }
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 </style>

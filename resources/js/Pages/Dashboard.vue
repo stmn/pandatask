@@ -1,25 +1,19 @@
 <script setup>
 import {Head, Link, router, usePage} from '@inertiajs/vue3';
-import Layout from "@/Layouts/Layout.vue";
-import TasksTable from "@/Components/TasksTable.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import {onMounted, provide, ref} from "vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
-import Settings from "@/Components/Dashboard/Settings.vue";
+import Settings from "~/js/Components/Dashboard/DashboardSettings.vue";
 
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
-    hello: {
-        type: String,
-        required: false,
-        default: 'Hello'
-    },
+    hello: String,
     projects: {
-        required: false,
         default: () => []
     },
     tasks: {
-        required: false,
         default: () => []
     },
     settings: {
@@ -77,7 +71,7 @@ const showSettings = ref(false);
     <div flex justify-between>
         <div>
             <b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!
-            <i class="fa-regular fa-face-smile-wink ml-1"></i>
+            <i class="fa-regular fa-face-smile-wink ml-1"/>
         </div>
 
         <div>
@@ -88,7 +82,7 @@ const showSettings = ref(false);
                 </template>
                 <template #reference>
                     <el-button link @click="showSettings = !showSettings">
-                        <i class="fa-solid fa-gear hover-rotate" style="cursor: pointer; font-size: 24px;"></i>
+                        <i class="fas fa-gear hover-rotate" style="cursor: pointer; font-size: 24px;"/>
                     </el-button>
                 </template>
             </el-popover>
@@ -114,32 +108,33 @@ const showSettings = ref(false);
     <el-config-provider size="default">
         <div v-for="project in projects" :key="project.id">
             <el-divider content-position="left">
-                <div class="flex items-center">
-                    <Link :href="$route('project', {project: project.id})"
-                          style="display: flex; align-items: center;">
-                        <el-avatar
-                            :size="24"
-                            style="margin-right: 10px;"
-                            :src="project.avatar"
-                        />
-                        <span>{{ project.name }}</span>
-                    </Link>
-                </div>
+                <Link :href="$route('project', {project: project.id})"
+                      flex items-center>
+                    <el-avatar
+                        :size="24"
+                        class="mr-3"
+                        :src="project.avatar"
+                    />
+                    <span>{{ project.name }}</span>
+                </Link>
             </el-divider>
 
             <div v-if="project.tasks === undefined">
                 <el-skeleton :rows="9" animated/>
             </div>
+
             <div v-else-if="project.tasks.length">
                 <lazy-component>
                     <template #placeholder>
                         <el-skeleton :rows="9" animated/>
                     </template>
+
                     <TasksTable :tasks="project.tasks"/>
-                    <div style="text-align: right;">
+
+                    <div text-right>
                         <Link :href="$route('project.tasks', {project: project.id})">
                             <el-button :color="$primaryColor()">
-                                <i class="fa-solid fa-list-check mr-2"></i>Tasks
+                                <i class="fas fa-list-check mr-2"/>Tasks
                             </el-button>
                         </Link>
                         &nbsp;
@@ -147,19 +142,22 @@ const showSettings = ref(false);
                               :href="$route('project.tasks.create', {project: project.id})"
                               :only="['modal']">
                             <el-button type="success">
-                                <i class="fa-solid fa-circle-plus mr-2"></i>Add task
+                                <i class="fas fa-circle-plus mr-2"/>Add task
                             </el-button>
                         </Link>
                     </div>
                 </lazy-component>
             </div>
+
             <div v-else>
                 <el-alert :closable="false" type="info">
                     No tasks found.
-                    <Link preserve-state :href="$route('project.tasks.create', {project: project.id})"
-                          style="margin-left: 5px;">
+
+                    <Link preserve-state
+                          :href="$route('project.tasks.create', {project: project.id})"
+                          class="ml-2">
                         <el-button type="success" size="small">
-                            <i class="fa-solid fa-circle-plus mr-2"></i>Add
+                            <i class="fas fa-circle-plus mr-2"/>Add
                         </el-button>
                     </Link>
                 </el-alert>

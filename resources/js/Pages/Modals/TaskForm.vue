@@ -1,9 +1,9 @@
-<script lang="ts" setup>
+<script setup>
 import {useForm} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {inject, onMounted} from "vue";
-import TaskForm from "@/Components/Task/TaskForm.vue";
+import TaskForm from "~/js/Components/Task/TaskForm.vue";
 
 const props = defineProps({
     project: {

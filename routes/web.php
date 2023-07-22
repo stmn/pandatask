@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Project\ActivitiesController;
+use App\Http\Controllers\Project\ActivityController;
 use App\Http\Controllers\Project\OverviewController;
 use App\Http\Controllers\Project\TasksController as ProjectTasksController;
 use App\Http\Controllers\Project\TimesheetsController;
@@ -97,7 +97,7 @@ Route::middleware('auth')->group(callback: function () {
         Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('.timesheets.update');
 
 
-        Route::get('activities', [ActivitiesController::class, 'index'])->name('.activity');
+        Route::get('activity', [ActivityController::class, 'index'])->name('.activity');
 
         Route::get('tasks/{task:number}', [ProjectTasksController::class, 'show'])->name('.task');
         Route::post('tasks/{task:number}', [ProjectTasksController::class, 'update'])->name('.task.update');

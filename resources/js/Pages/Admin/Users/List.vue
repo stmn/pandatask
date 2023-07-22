@@ -1,8 +1,8 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3';
-import Layout from "@/Layouts/Layout.vue";
+import Layout from "~/js/Layouts/Layout.vue";
 import Page from "@/Pages/Admin/Page.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "~/js/Components/Common/AppPagination.vue";
 import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})

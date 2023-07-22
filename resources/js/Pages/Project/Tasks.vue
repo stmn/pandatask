@@ -1,9 +1,9 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
 import {onMounted, ref} from "vue";
-import Layout from "@/Layouts/Layout.vue";
-import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import TasksTable from "@/Components/TasksTable.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
+import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout, ProjectLayout]})

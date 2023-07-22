@@ -49,7 +49,7 @@ class ProjectsController extends Controller
         $project?->load('clients');
 
         $fields = 'id,first_name,last_name';
-        return Inertia::modal('CreateProject', [
+        return Inertia::modal('Modals/ProjectForm', [
             'project' => $project,
             'clients' => User::query()
                 ->selectRaw($fields)

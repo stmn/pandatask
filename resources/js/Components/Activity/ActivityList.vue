@@ -1,10 +1,10 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
-import Time from "@/Components/Time.vue";
-import User from "@/Components/User.vue";
-import Pagination from "@/Components/Pagination.vue";
-import EditorContent from "@/Components/EditorContent.vue";
+import Time from "~/js/Components/Common/TimeValue.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Pagination from "~/js/Components/Common/AppPagination.vue";
+import EditorContent from "~/js/Components/Forms/EditorContent.vue";
 
 const props = defineProps({
     task: {

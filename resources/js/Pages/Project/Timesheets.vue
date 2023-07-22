@@ -1,9 +1,9 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
 import {onMounted, ref} from "vue";
-import Layout from "@/Layouts/Layout.vue";
-import ProjectLayout from "@/Layouts/ProjectLayout.vue";
-import Timesheets from "@/Components/Timesheets.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
+import TimesheetsTable from "@/Components/Timesheets/TimesheetsTable.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
@@ -31,9 +31,9 @@ onMounted(() => {
 
     <Link preserve-state :href="$route('project.timesheets.create', {project: project.id})">
         <el-button type="success">
-            <i class="fa-solid fa-circle-plus mr-2"></i>Add
+            <i class="fas fa-circle-plus mr-2"></i>Add
         </el-button>
     </Link>
 
-    <Timesheets :times="times"/>
+    <TimesheetsTable :times="times"/>
 </template>

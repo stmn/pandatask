@@ -1,6 +1,6 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
+import GuestLayout from '~/js/Layouts/GuestLayout.vue';
+import InputError from '~/js/Components/Forms/InputError.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({

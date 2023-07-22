@@ -36,8 +36,8 @@ const app = createInertiaApp({
             .use(plugin)
             .use(LazyComponent);
 
-        const primaryColor = useCssVar('--el-color-primary', document.body, {observe: true});
-
+        const primaryColor = useCssVar('--brand-color', document.body, {observe: true});
+        console.log(primaryColor.value)
         app.mixin({
             methods: {
                 group: function (name) {
@@ -49,9 +49,9 @@ const app = createInertiaApp({
         })
 
         if (new TinyColor(primaryColor.value).isDark()) {
-            document.body.style.setProperty('--text-color', 'var(--el-color-white)')
+            document.body.style.setProperty('--brand-text-color', 'var(--el-color-white)')
         } else {
-            document.body.style.setProperty('--text-color', 'var(--el-color-black)')
+            document.body.style.setProperty('--brand-text-color', 'var(--el-color-black)')
         }
 
         return app.mount(el);

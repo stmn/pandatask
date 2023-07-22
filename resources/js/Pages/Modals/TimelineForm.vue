@@ -1,19 +1,13 @@
-<script lang="ts" setup>
+<script setup>
 import {useForm} from "@inertiajs/vue3"
-import Modal from "../Layouts/Modal.vue"
+import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import InputError from "@/Components/InputError.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 
 const props = defineProps({
-    project: {
-        type: Object,
-    },
-    time: {
-        type: Object,
-    },
-    tasks: {
-        type: Array,
-    },
+    project: Object,
+    time: Object,
+    tasks: Array,
 });
 
 const form = useForm(Object.assign({

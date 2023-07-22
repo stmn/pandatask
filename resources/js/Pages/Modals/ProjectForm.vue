@@ -1,10 +1,10 @@
-<script lang="ts" setup>
+<script setup>
 import {useForm} from "@inertiajs/vue3"
-import Modal from "../Layouts/Modal.vue"
+import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {onMounted, ref} from "vue";
-import User from "@/Components/User.vue";
-import InputError from "@/Components/InputError.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 
 const props = defineProps({
     project: {

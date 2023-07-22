@@ -1,7 +1,7 @@
 <script setup>
 import {useForm} from '@inertiajs/vue3';
 import {ref} from 'vue';
-import InputError from "@/Components/InputError.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 import {ElMessage} from "element-plus";
 
 const passwordInput = ref(null);

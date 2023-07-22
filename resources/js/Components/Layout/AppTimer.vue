@@ -1,9 +1,10 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3'
 import {ref} from "vue";
-import Timer from "@/Components/Timer.vue";
+import Timer from "~/js/Components/Task/TimerButton.vue";
 import useTaskTimer from "@/Composables/useTaskTimer.js";
 import {clearInterval, setInterval} from 'worker-timers';
+import TaskLink from "@/Components/Task/TaskLink.vue";
 
 const page = usePage()
 
@@ -54,19 +55,12 @@ window.addEventListener('focus', function () {
                         <el-popover
                             placement="left"
                             :width="260"
-                            trigger="hover"
+                            trigger="contextmenu"
                             :show-after="600"
                         >
                             <template #default>
-                                <div style="line-height: 20px;">
-                                    <el-text truncated>
-                                        <Link
-                                            :href="activeTime?.task.url">{{
-                                                activeTime?.task?.subject
-                                            }}
-                                        </Link>
-                                    </el-text>
-                                    <br>
+                                <div style="">
+                                    <TaskLink :task="activeTime?.task" flex items-center mb-2 />
                                     <div style="display: flex; align-items: center;">
                                         <div style="min-width: 90px;">
                                             <i class="fa-solid fa-clock mr-1"></i> {{ time }}

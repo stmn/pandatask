@@ -1,11 +1,11 @@
 <script setup>
 import {Head} from '@inertiajs/vue3';
 import {ref} from "vue";
-import Layout from "@/Layouts/Layout.vue";
-import ProjectLayout from "@/Layouts/ProjectLayout.vue";
+import Layout from "~/js/Layouts/Layout.vue";
+import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
 import {useDateFormat} from "@vueuse/core";
-import User from "@/Components/User.vue";
-import Modal from "@/Layouts/Modal.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Modal from "~/js/Layouts/Modal.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 

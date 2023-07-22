@@ -1,7 +1,7 @@
 <script setup>
-import User from "@/Components/User.vue";
-import Editor from "@/Components/Editor.vue";
-import InputError from "@/Components/InputError.vue";
+import User from "~/js/Components/User/UserAvatar.vue";
+import Editor from "~/js/Components/Forms/EditorInput.vue";
+import InputError from "~/js/Components/Forms/InputError.vue";
 
 const props = defineProps({
     modelValue: {

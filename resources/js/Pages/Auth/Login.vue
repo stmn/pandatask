@@ -1,6 +1,6 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
+import GuestLayout from '~/js/Layouts/GuestLayout.vue';
+import InputError from '~/js/Components/Forms/InputError.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
 
 defineProps({
@@ -53,7 +53,6 @@ const submit = () => {
                         v-model="form.password"
                         placeholder="Password"
                         autocomplete="password"
-                        :prefix-icon="Lock"
                         type="password"
                     >
                         <template #prefix>
