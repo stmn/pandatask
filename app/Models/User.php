@@ -108,7 +108,7 @@ class User extends Authenticatable
                 if (!$this->full_name) {
                     return null;
                 }
-
+                return '#';
                 return Cache::rememberForever('avatar-' . $this->full_name, function () {
                     return (new Avatar([
                         ...config('laravolt.avatar'),

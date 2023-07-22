@@ -91,6 +91,7 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
+                return '#';
                 return Cache::rememberForever('project-avatar-' . $this->name, function () {
                     return (new Avatar(config('laravolt.avatar')))->create($this->name)->toBase64();
                 });
