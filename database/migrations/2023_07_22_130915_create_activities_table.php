@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->timestamp('created_at')->useCurrent()->index('created_at');
+            $table->timestamp('created_at')->useCurrent()->index();
             $table->timestamp('updated_at')->nullable();
-            $table->unsignedBigInteger('user_id')->index('user_id');
-            $table->unsignedBigInteger('project_id')->index('project_id');
-            $table->unsignedBigInteger('task_id')->index('task_id');
-            $table->unsignedBigInteger('comment_id')->nullable()->index('comment_id');
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('project_id')->index();
+            $table->unsignedBigInteger('task_id')->index();
+            $table->unsignedBigInteger('comment_id')->nullable()->index();
             $table->string('type', 16);
             $table->json('details')->nullable();
             $table->boolean('private')->default(false);

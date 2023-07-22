@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('client_id')->nullable()->index('client_id');
-            $table->unsignedBigInteger('latest_activity_id')->nullable()->index('latest_activity_id');
-            $table->timestamp('latest_activity_at')->nullable()->index('latest_activity_at');
-            $table->string('name', 30)->index('name');
+            $table->unsignedBigInteger('client_id')->nullable()->index();
+            $table->unsignedBigInteger('latest_activity_id')->nullable()->index();
+            $table->timestamp('latest_activity_at')->nullable()->index();
+            $table->string('name', 30)->index();
             $table->text('description')->nullable();
             $table->json('custom_fields')->nullable();
             $table->timestamp('created_at')->useCurrent();

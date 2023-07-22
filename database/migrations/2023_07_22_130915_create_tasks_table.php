@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('project_id')->index('project_id');
-            $table->unsignedBigInteger('author_id')->index('author_id');
-            $table->unsignedBigInteger('status_id')->nullable()->index('status_id');
-            $table->unsignedBigInteger('priority_id')->nullable()->index('priority_id');
-            $table->unsignedBigInteger('latest_activity_id')->nullable()->index('latest_activity_id');
-            $table->timestamp('latest_activity_at')->nullable()->index('latest_activity_at');
-            $table->unsignedBigInteger('number')->index('number');
+            $table->unsignedBigInteger('project_id')->index();
+            $table->unsignedBigInteger('author_id')->index();
+            $table->unsignedBigInteger('status_id')->nullable()->index();
+            $table->unsignedBigInteger('priority_id')->nullable()->index();
+            $table->unsignedBigInteger('latest_activity_id')->nullable()->index();
+            $table->timestamp('latest_activity_at')->nullable()->index();
+            $table->unsignedBigInteger('number')->index();
             $table->string('subject', 200);
             $table->text('description')->nullable();
             $table->boolean('private');

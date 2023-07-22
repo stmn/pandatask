@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('user_id');
 
-            $table->unique(['task_id', 'user_id'], 'task_id');
+            $table->unique(['task_id', 'user_id']);
         });
     }
 

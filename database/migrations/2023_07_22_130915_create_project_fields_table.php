@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_fields', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('project_id')->index('project_id');
+            $table->unsignedBigInteger('project_id')->index();
             $table->string('name', 100);
             $table->json('meta');
         });

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('project_id')->index('project_id');
+            $table->unsignedBigInteger('project_id')->index();
             $table->timestamps();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->string('title');
