@@ -109,7 +109,7 @@ class TasksController extends ProjectController
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function update(Request $request, Task $task): void
+    public function update(Request $request, Project $project, Task $task): void
     {
         $request->validate([
             'activity.comment' => [],
