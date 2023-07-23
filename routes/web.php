@@ -15,6 +15,7 @@ use App\Http\Controllers\Project\WikiController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\TimerController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Laravolt\Avatar\Avatar;
 
@@ -107,7 +108,9 @@ Route::middleware('auth')->group(callback: function () {
     Route::get('/leave-impersonation', [AuthenticatedSessionController::class, 'leaveImpersonation'])->name('leave-impersonation');
 });
 
-Route::get('storage/project-avatars/{project}.png', function (\App\Models\Project $project) {
+Route::get('storage/project-avatars/{project}.png', function (Project $project) {
+    @mkdir(storage_path('app/public/project-avatars/'), 0777, true);
+
     $image = (new Avatar(config('laravolt.avatar')))
         ->create($project->name)
         ->save(storage_path('app/public/project-avatars/' . $project->id . '.png'));
@@ -116,10 +119,7 @@ Route::get('storage/project-avatars/{project}.png', function (\App\Models\Projec
 });
 
 Route::get('storage/user-avatars/{user}.png', function (\App\Models\User $user) {
-//    return (new Avatar([
-//        ...config('laravolt.avatar'),
-//        ...['chars' => 2]
-//    ]))->create($this->full_name)->toBase64();
+    @mkdir(storage_path('app/public/user-avatars/'), 0777, true);
 
     $image = (new Avatar([
         ...config('laravolt.avatar'),
