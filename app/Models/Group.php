@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\useCacheBuilder;
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  */
 class Group extends Model
 {
+//    use useCacheBuilder;
+
     protected $fillable = [
         'name',
         'description',

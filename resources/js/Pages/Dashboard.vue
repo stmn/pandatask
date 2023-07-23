@@ -2,7 +2,7 @@
 import {Head, Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
 import TasksTable from "~/js/Components/Task/TasksTable.vue";
-import {onMounted, provide, ref} from "vue";
+import {onMounted, provide, ref, Transition} from "vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
 import Settings from "~/js/Components/Dashboard/DashboardSettings.vue";
 
@@ -21,7 +21,7 @@ const props = defineProps({
     }
 });
 
-usePageLoading().loading.value = true;
+// usePageLoading().loading.value = true;
 
 const projects = ref(props.projects);
 const tasks = ref(props.tasks);
@@ -53,7 +53,7 @@ onMounted(() => {
             router.reload({
                 only: ['tasks'], onSuccess: (response) => {
                     handleTasks(response);
-                    usePageLoading().loading.value = false;
+                    // usePageLoading().loading.value = false;
                 }
             });
 
@@ -119,17 +119,36 @@ const showSettings = ref(false);
                 </Link>
             </el-divider>
 
-            <div v-if="project.tasks === undefined">
-                <el-skeleton :rows="9" animated/>
+            <div v-if="project.tasks_count === 0">
+                <el-alert :closable="false" type="info">
+                    <div flex items-center>
+                        No tasks found.
+
+                        <Link preserve-state
+                              :href="$route('project.tasks.create', {project: project.id})"
+                              class="ml-2">
+                            <el-button type="success" size="small">
+                                <i class="fas fa-circle-plus mr-2"/>Add
+                            </el-button>
+                        </Link>
+                    </div>
+                </el-alert>
+            </div>
+
+            <div v-else-if="project.tasks === undefined">
+                <el-skeleton :rows="Math.min(project.tasks_count, settings.dashboard_tasks)+2" animated/>
+<!--                <TasksTable :tasks="Array.apply(null, Array(Math.min(project.tasks_count, settings.dashboard_tasks))).map(function(){ return {status: ''}; })"/>-->
             </div>
 
             <div v-else-if="project.tasks.length">
                 <lazy-component>
                     <template #placeholder>
-                        <el-skeleton :rows="9" animated/>
+                        <el-skeleton :rows="project.tasks_count" animated/>
                     </template>
 
+                    <Transition appear>
                     <TasksTable :tasks="project.tasks"/>
+                    </Transition>
 
                     <div text-right>
                         <Link :href="$route('project.tasks', {project: project.id})">
@@ -147,20 +166,6 @@ const showSettings = ref(false);
                         </Link>
                     </div>
                 </lazy-component>
-            </div>
-
-            <div v-else>
-                <el-alert :closable="false" type="info">
-                    No tasks found.
-
-                    <Link preserve-state
-                          :href="$route('project.tasks.create', {project: project.id})"
-                          class="ml-2">
-                        <el-button type="success" size="small">
-                            <i class="fas fa-circle-plus mr-2"/>Add
-                        </el-button>
-                    </Link>
-                </el-alert>
             </div>
         </div>
     </el-config-provider>

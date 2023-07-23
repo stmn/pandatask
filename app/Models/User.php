@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\useCacheBuilder;
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
@@ -25,7 +26,7 @@ use Laravolt\Avatar\Avatar;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;//, useCacheBuilder;
 
     protected $fillable = [
         'active_time_id',
@@ -105,16 +106,16 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                if (!$this->full_name) {
-                    return null;
-                }
-                return '';
-                return Cache::rememberForever('avatar-' . $this->full_name, function () {
-                    return (new Avatar([
-                        ...config('laravolt.avatar'),
-                        ...['chars' => 2]
-                    ]))->create($this->full_name)->toBase64();
-                });
+//                if (!$this->full_name) {
+//                    return null;
+//                }
+                return url('storage/user-avatars/' . $this->id . '.png');
+//                return Cache::rememberForever('avatar-' . $this->full_name, function () {
+//                    return (new Avatar([
+//                        ...config('laravolt.avatar'),
+//                        ...['chars' => 2]
+//                    ]))->create($this->full_name)->toBase64();
+//                });
             },
         );
     }

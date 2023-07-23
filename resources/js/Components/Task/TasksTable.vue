@@ -1,6 +1,6 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3'
-import {computed, inject} from "vue";
+import {computed, inject, Transition} from "vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Timer from "~/js/Components/Task/TimerButton.vue";
 import User from "~/js/Components/User/UserAvatar.vue";
@@ -69,10 +69,12 @@ const tableRowClassName = ({row, rowIndex}) => {
                         <el-skeleton :rows="0"/>
                     </template>
 
+                    <Transition appear>
                     <div class="task-link" style="display: flex; align-items: center;">
                         <Timer :task="row" style="margin-right: 10px;"/>
                         <TaskLink :task="row" style="display: contents;"/>
                     </div>
+                    </Transition>
                 </lazy-component>
             </template>
         </el-table-column>
@@ -83,6 +85,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                         <el-skeleton :rows="0"/>
                     </template>
 
+                    <Transition appear>
                     <div style="display: flex; align-items: center;">
                         <el-avatar
                             :size="24"
@@ -91,6 +94,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                         />
                         <Link :href="$route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
                     </div>
+                    </Transition>
                 </lazy-component>
             </template>
         </el-table-column>
@@ -101,6 +105,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                         <el-skeleton :rows="0" />
                     </template>
 
+                    <Transition appear>
                     <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
                                  @command="updateTask">
                         <el-tag v-if="row.status"
@@ -119,6 +124,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
+                    </Transition>
                 </lazy-component>
             </template>
         </el-table-column>
@@ -129,6 +135,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                         <el-skeleton :rows="0" />
                     </template>
 
+                    <Transition appear>
                     <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
                                  @command="updateTask">
                         <el-tag v-if="row.priority"
@@ -147,6 +154,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
+                    </Transition>
                 </lazy-component>
             </template>
         </el-table-column>
@@ -157,6 +165,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                         <el-skeleton :rows="0" />
                     </template>
 
+                    <Transition appear>
                     <template v-if="row.latest_activity">
                         <div v-if="row.latest_activity" style="display: flex; align-items: center;">
                             <User :user="row.latest_activity.user"/> &nbsp;
@@ -165,9 +174,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                             <Time :show-clock="false" :time="row.latest_activity.created_at"/>
                         </div>
                     </template>
-                    <template v-else>
-
-                    </template>
+                    </Transition>
                 </lazy-component>
             </template>
         </el-table-column>

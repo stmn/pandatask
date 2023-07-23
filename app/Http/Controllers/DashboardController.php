@@ -26,6 +26,7 @@ class DashboardController extends Controller
                 $projects = Project::query()
                     ->select('id', 'name')
                     ->latest('latest_activity_at')
+                    ->withCount('tasks')
                     ->limit(loggedUser()->settings['dashboard_projects'])
                     ->forCurrentUser()
                     ->get();

@@ -2,8 +2,12 @@
 
 namespace App\QueryBuilders;
 
+use App\Models\Traits\useCacheBuilder;
+
 final class UserQueryBuilder extends Builder
 {
+//    use useCacheBuilder;
+
     protected array $searchFields = [
         'id',
         'first_name',

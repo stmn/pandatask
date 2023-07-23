@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ActivityType;
 use App\Enums\ProjectRole;
 use App\Models\Traits\useLatestActivity;
 use App\QueryBuilders\ActivityQueryBuilder;
@@ -36,6 +37,13 @@ class Project extends Model
     protected $appends = [
         'avatar'
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Project $project) {
+            $project->latest_activity_at = now();
+        });
+    }
 
     public static function query(): Builder|ProjectQueryBuilder
     {
@@ -86,10 +94,7 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
-                return '';
-                return Cache::rememberForever('project-avatar-' . $this->name, function () {
-                    return (new Avatar(config('laravolt.avatar')))->create($this->name)->toBase64();
-                });
+                return url('storage/project-avatars/' . $this->id . '.png');
             },
         );
     }

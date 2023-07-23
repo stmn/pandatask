@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="task.subject">
         <el-text truncated>
             <Link :href="$route('project.task', {project: task.project_id, task: task.number})">
                 {{ task.subject }}
