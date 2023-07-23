@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Time extends Model
 {
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     protected $fillable = [
         'project_id',
         'task_id',

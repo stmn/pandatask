@@ -48,6 +48,7 @@ const fullName = computed(() => {
 
         <div>
             <el-avatar
+                v-if="user.avatar"
                 :size="50"
                 style="vertical-align: sub; float: left; margin-right: 10px;"
                 :src="user.avatar"

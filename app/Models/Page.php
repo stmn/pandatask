@@ -19,10 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Page extends Model
 {
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     const HOME = 'home';
 
     protected $fillable = [

@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  */
 class Group extends Model
 {
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     protected $fillable = [
         'name',
         'description',

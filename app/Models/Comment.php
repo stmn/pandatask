@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Comment extends Model
 {
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     protected $fillable = [
         'author_id',
         'content',

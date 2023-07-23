@@ -46,9 +46,9 @@ router.on('success', (event) => {
 })
 
 onMounted(() => {
-    router.reload({
-        only: ['projects'], onSuccess: (response) => {
-            handleProjects(response);
+    // router.reload({
+    //     only: ['projects'], onSuccess: (response) => {
+    //         handleProjects(response);
 
             router.reload({
                 only: ['tasks'], onSuccess: (response) => {
@@ -57,9 +57,9 @@ onMounted(() => {
                 }
             });
 
-            usePageLoading().loading.value = false;
-        }
-    });
+            // usePageLoading().loading.value = false;
+        // }
+    // });
 });
 
 const showSettings = ref(false);

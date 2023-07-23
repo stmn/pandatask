@@ -21,7 +21,7 @@ class TasksController extends Controller
         return Inertia::render('Tasks', [
             'activeIndex' => 'tasks',
             'search' => $request->get('search'),
-            'tasks' => Inertia::lazy(fn() => Task::query()
+            'tasks' => fn() => Task::query()
                 ->select('id', 'project_id', 'subject', 'status_id', 'priority_id', 'latest_activity_id', 'number')
                 ->search($request->get('search'))
                 ->with([
@@ -30,7 +30,7 @@ class TasksController extends Controller
                 ->withCommentsCount()
                 ->forCurrentUser()
                 ->latest('latest_activity_at')
-                ->paginate($this->perPage())),
+                ->paginate($this->perPage()),
         ]);
     }
 }

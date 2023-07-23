@@ -16,10 +16,6 @@ class Status extends Model
 {
     use SoftDeletes;
 
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     protected $fillable = [
         'name',
     ];

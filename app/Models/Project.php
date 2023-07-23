@@ -9,7 +9,6 @@ use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TaskQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -25,10 +24,6 @@ use Laravolt\Avatar\Avatar;
 class Project extends Model
 {
     use SoftDeletes, useLatestActivity;
-
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
 
     protected $fillable = [
         'name',
@@ -91,7 +86,7 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
-                return '#';
+                return '';
                 return Cache::rememberForever('project-avatar-' . $this->name, function () {
                     return (new Avatar(config('laravolt.avatar')))->create($this->name)->toBase64();
                 });

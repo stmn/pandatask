@@ -7,7 +7,6 @@ import User from "~/js/Components/User/UserAvatar.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import Activity from "~/js/Components/Activity/ActivityType.vue";
 import TaskLink from "~/js/Components/Task/TaskLink.vue";
-import TimerButton from "~/js/Components/Task/TimerButton.vue";
 
 const props = defineProps({
     tasks: {},
@@ -56,7 +55,7 @@ const tableRowClassName = ({row, rowIndex}) => {
 </script>
 
 <template>
-    <el-table :data="tasksRows" stripe style="width: 100%" :row-class-name="tableRowClassName">
+    <el-table v-if="1" :data="tasksRows" stripe style="width: 100%" :row-class-name="tableRowClassName">
         <template #empty>
             <div v-if="tasks">No Data</div>
             <div v-else>
@@ -65,83 +64,111 @@ const tableRowClassName = ({row, rowIndex}) => {
         </template>
         <el-table-column prop="subject" min-width="300" class-name="subject-col">
             <template #default="{row}">
-                <div class="task-link" style="display: flex; align-items: center;">
-                    <Timer :task="row" style="margin-right: 10px;"/>
-<!--                    <div style="display: contents">-->
-                    <TaskLink :task="row" style="display: contents;" />
-<!--                    </div>-->
-                </div>
+                <lazy-component>
+                    <template #placeholder>
+                        <el-skeleton :rows="0"/>
+                    </template>
+
+                    <div class="task-link" style="display: flex; align-items: center;">
+                        <Timer :task="row" style="margin-right: 10px;"/>
+                        <TaskLink :task="row" style="display: contents;"/>
+                    </div>
+                </lazy-component>
             </template>
         </el-table-column>
         <el-table-column v-if="showProject" prop="project_id" label="Project" min-width="140">
             <template #default="{row}">
-                <div style="display: flex; align-items: center;">
-                    <el-avatar
-                        :size="24"
-                        style="margin-right: 5px;"
-                        :src="row.project.avatar"
-                    />
-                    <Link :href="$route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
-                </div>
+                <lazy-component>
+                    <template #placeholder>
+                        <el-skeleton :rows="0"/>
+                    </template>
+
+                    <div style="display: flex; align-items: center;">
+                        <el-avatar
+                            :size="24"
+                            style="margin-right: 5px;"
+                            :src="row.project.avatar"
+                        />
+                        <Link :href="$route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
+                    </div>
+                </lazy-component>
             </template>
         </el-table-column>
         <el-table-column prop="status" label="Status" width="150" align="center">
             <template #default="{row}">
-                <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
-                             @command="updateTask">
-                    <el-tag v-if="row.status"
-                            class="status-tag"
-                            size="small"
-                            :color="row.status.color"
-                            :style="`border-color: ${row.status.color};`"
-                            effect="dark">{{ row.status.name }}
-                    </el-tag>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item v-for="status in usePage().props.statuses"
-                                              :disabled="status.id===row.status_id"
-                                              :command="{task: row, data: { status_id: status.id}}"
-                                              v-text="status.name"></el-dropdown-item>
-                        </el-dropdown-menu>
+                <lazy-component>
+                    <template #placeholder>
+                        <el-skeleton :rows="0" />
                     </template>
-                </el-dropdown>
+
+                    <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
+                                 @command="updateTask">
+                        <el-tag v-if="row.status"
+                                class="status-tag"
+                                size="small"
+                                :color="row.status.color"
+                                :style="`border-color: ${row.status.color};`"
+                                effect="dark">{{ row.status.name }}
+                        </el-tag>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="status in usePage().props.statuses"
+                                                  :disabled="status.id===row.status_id"
+                                                  :command="{task: row, data: { status_id: status.id}}"
+                                                  v-text="status.name"></el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </lazy-component>
             </template>
         </el-table-column>
         <el-table-column prop="priority" label="Priority" width="120" align="center">
             <template #default="{row}">
-                <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
-                             @command="updateTask">
-                    <el-tag v-if="row.priority"
-                            class="priority-tag"
-                            size="small"
-                            :color="row.priority.color"
-                            :style="`border-color: ${row.priority.color};`"
-                            effect="plain">{{ row.priority.name }}
-                    </el-tag>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item v-for="priority in usePage().props.priorities"
-                                              :disabled="priority.id===row.priority_id"
-                                              :command="{task: row, data: { priority_id: priority.id}}"
-                                              v-text="priority.name"></el-dropdown-item>
-                        </el-dropdown-menu>
+                <lazy-component>
+                    <template #placeholder>
+                        <el-skeleton :rows="0" />
                     </template>
-                </el-dropdown>
+
+                    <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
+                                 @command="updateTask">
+                        <el-tag v-if="row.priority"
+                                class="priority-tag"
+                                size="small"
+                                :color="row.priority.color"
+                                :style="`border-color: ${row.priority.color};`"
+                                effect="plain">{{ row.priority.name }}
+                        </el-tag>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="priority in usePage().props.priorities"
+                                                  :disabled="priority.id===row.priority_id"
+                                                  :command="{task: row, data: { priority_id: priority.id}}"
+                                                  v-text="priority.name"></el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </lazy-component>
             </template>
         </el-table-column>
         <el-table-column prop="latest_activity_created_at" label="Last activity" min-width="280">
             <template #default="{row}">
-                <template v-if="row.latest_activity">
-                    <div v-if="row.latest_activity" style="display: flex; align-items: center;">
-                        <User :user="row.latest_activity.user"/> &nbsp;
-                        <Activity :activity="row.latest_activity" :task="row" only-icon
-                                  style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
-                        <Time :show-clock="false" :time="row.latest_activity.created_at"/>
-                    </div>
-                </template>
-                <template v-else>
+                <lazy-component>
+                    <template #placeholder>
+                        <el-skeleton :rows="0" />
+                    </template>
 
-                </template>
+                    <template v-if="row.latest_activity">
+                        <div v-if="row.latest_activity" style="display: flex; align-items: center;">
+                            <User :user="row.latest_activity.user"/> &nbsp;
+                            <Activity :activity="row.latest_activity" :task="row" only-icon
+                                      style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
+                            <Time :show-clock="false" :time="row.latest_activity.created_at"/>
+                        </div>
+                    </template>
+                    <template v-else>
+
+                    </template>
+                </lazy-component>
             </template>
         </el-table-column>
     </el-table>

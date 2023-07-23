@@ -8,12 +8,14 @@ export default function useList({only} = {only: []}) {
     const data = reactive({search, sort})
 
     watchDebounced(data, () => {
+        console.log(111);
             router.reload({data, only, preserveState: true})
         },
         {debounce: 200, maxWait: 500},
     )
 
     const handleSortChange = ({order, prop}) => {
+        console.log(222);
         data.sort = (order === 'ascending' ? '' : '-') + prop
         router.reload({data, only, preserveState: true})
     }

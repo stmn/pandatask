@@ -19,9 +19,9 @@ const props = defineProps({
 const {query} = useList({only: ['tasks']});
 
 onMounted(() => {
-    router.reload({
-        only: ['tasks']
-    });
+    // router.reload({
+    //     only: ['tasks']
+    // });
 });
 </script>
 

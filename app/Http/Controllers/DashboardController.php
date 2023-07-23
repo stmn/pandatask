@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'settings' => function () {
                 return loggedUser()->settings;
             },
-            'projects' => Inertia::lazy(function () use ($request) {
+            'projects' => function () use ($request) {
                 $projects = Project::query()
                     ->select('id', 'name')
                     ->latest('latest_activity_at')
@@ -33,7 +33,7 @@ class DashboardController extends Controller
                 session()->put('dashboard-projects', $projects->pluck('id')->toArray());
 
                 return $projects;
-            }),
+            },
             'tasks' => Inertia::lazy(function () use ($request) {
                 $dashboardProjects = session()->get('dashboard-projects');
 

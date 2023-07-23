@@ -25,10 +25,6 @@ class Activity extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    use Cachable;
-
-    protected $cacheCooldownSeconds = 300;
-
     protected $fillable = [
         'user_id',
         'project_id',
@@ -118,6 +114,10 @@ class Activity extends Model implements HasMedia
     {
         return Attribute::make(
             get: function ($details) {
+                if(is_null($details)){
+                    return [];
+                }
+
                 $details = json_decode($details, true);
 
                 $collection = collect();

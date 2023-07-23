@@ -67,6 +67,7 @@ const {query} = useList({only: ['projects']});
                     <div class="card-header">
                         <div flex items-center>
                             <el-avatar
+                                v-if="item.avatar"
                                 :size="32"
                                 style="margin-right: 10px; margin-top: -2px;"
                                 :src="item.avatar"
