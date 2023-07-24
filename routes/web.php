@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Project\ActivityController;
+use App\Http\Controllers\Project\KanbanController;
 use App\Http\Controllers\Project\OverviewController;
 use App\Http\Controllers\Project\TasksController as ProjectTasksController;
 use App\Http\Controllers\Project\TimesheetsController;
@@ -83,6 +84,9 @@ Route::middleware('auth')->group(callback: function () {
 
         Route::get('overview', [OverviewController::class, 'index'])->name('.overview');
         Route::get('tasks', [ProjectTasksController::class, 'index'])->name('.tasks');
+
+        Route::get('kanban', [KanbanController::class, 'index'])->name('.kanban');
+        Route::get('kanban/{status}/load-more', [KanbanController::class, 'tasks'])->name('.kanban.tasks');
 
         Route::get('tasks/create', [ProjectTasksController::class, 'create'])->name('.tasks.create');
         Route::post('tasks/create', [ProjectTasksController::class, 'store'])->name('.tasks.store');

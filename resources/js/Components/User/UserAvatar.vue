@@ -6,6 +6,10 @@ const props = defineProps({
     user: {
         type: Object,
     },
+    size: {
+        type: Number,
+        default: 24
+    },
     onlyAvatar: {
         type: Boolean,
         default: false
@@ -39,7 +43,7 @@ const fullName = computed(() => {
             <span class="user">
                 <el-tooltip :content="fullName" placement="top" :disabled="!onlyAvatar">
                 <el-avatar
-                    :size="24"
+                    :size="props.size"
                     style="vertical-align: sub; margin-right: 5px;"
                     :src="user?.avatar"
                 /></el-tooltip> <b v-if="!onlyAvatar">{{ user?.first_name }} {{ user?.last_name?.[0] }}</b>

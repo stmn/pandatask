@@ -55,7 +55,7 @@ window.addEventListener('focus', function () {
                         <el-popover
                             placement="left"
                             :width="260"
-                            trigger="contextmenu"
+                            trigger="hover"
                             :show-after="600"
                         >
                             <template #default>

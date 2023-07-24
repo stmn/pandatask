@@ -70,10 +70,10 @@ const tableRowClassName = ({row, rowIndex}) => {
                     </template>
 
                     <Transition appear>
-                    <div class="task-link" style="display: flex; align-items: center;">
-                        <Timer :task="row" style="margin-right: 10px;"/>
-                        <TaskLink :task="row" style="display: contents;"/>
-                    </div>
+                        <div class="task-link" style="display: flex; align-items: center;">
+                            <Timer :task="row" style="margin-right: 10px;"/>
+                            <TaskLink :task="row" style="display: contents;"/>
+                        </div>
                     </Transition>
                 </lazy-component>
             </template>
@@ -86,14 +86,17 @@ const tableRowClassName = ({row, rowIndex}) => {
                     </template>
 
                     <Transition appear>
-                    <div style="display: flex; align-items: center;">
-                        <el-avatar
-                            :size="24"
-                            style="margin-right: 5px;"
-                            :src="row.project.avatar"
-                        />
-                        <Link :href="$route('project.tasks', {project: row.project_id})">{{ row.project.name }}</Link>
-                    </div>
+                        <div style="display: flex; align-items: center;">
+                            <el-avatar
+                                :size="24"
+                                style="margin-right: 5px;"
+                                :src="row.project.avatar"
+                            />
+                            <Link :href="$route('project.tasks', {project: row.project_id})">{{
+                                    row.project.name
+                                }}
+                            </Link>
+                        </div>
                     </Transition>
                 </lazy-component>
             </template>
@@ -102,28 +105,28 @@ const tableRowClassName = ({row, rowIndex}) => {
             <template #default="{row}">
                 <lazy-component>
                     <template #placeholder>
-                        <el-skeleton :rows="0" />
+                        <el-skeleton :rows="0"/>
                     </template>
 
                     <Transition appear>
-                    <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
-                                 @command="updateTask">
-                        <el-tag v-if="row.status"
-                                class="status-tag"
-                                size="small"
-                                :color="row.status.color"
-                                :style="`border-color: ${row.status.color};`"
-                                effect="dark">{{ row.status.name }}
-                        </el-tag>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="status in usePage().props.statuses"
-                                                  :disabled="status.id===row.status_id"
-                                                  :command="{task: row, data: { status_id: status.id}}"
-                                                  v-text="status.name"></el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                        <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
+                                     @command="updateTask">
+                            <el-tag v-if="row.status"
+                                    class="status-tag"
+                                    size="small"
+                                    :color="row.status.color"
+                                    :style="`border-color: ${row.status.color};`"
+                                    effect="dark">{{ row.status.name }}
+                            </el-tag>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item v-for="status in usePage().props.statuses"
+                                                      :disabled="status.id===row.status_id"
+                                                      :command="{task: row, data: { status_id: status.id}}"
+                                                      v-text="status.name"></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
                     </Transition>
                 </lazy-component>
             </template>
@@ -132,28 +135,28 @@ const tableRowClassName = ({row, rowIndex}) => {
             <template #default="{row}">
                 <lazy-component>
                     <template #placeholder>
-                        <el-skeleton :rows="0" />
+                        <el-skeleton :rows="0"/>
                     </template>
 
                     <Transition appear>
-                    <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
-                                 @command="updateTask">
-                        <el-tag v-if="row.priority"
-                                class="priority-tag"
-                                size="small"
-                                :color="row.priority.color"
-                                :style="`border-color: ${row.priority.color};`"
-                                effect="plain">{{ row.priority.name }}
-                        </el-tag>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="priority in usePage().props.priorities"
-                                                  :disabled="priority.id===row.priority_id"
-                                                  :command="{task: row, data: { priority_id: priority.id}}"
-                                                  v-text="priority.name"></el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                        <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
+                                     @command="updateTask">
+                            <el-tag v-if="row.priority"
+                                    class="priority-tag"
+                                    size="small"
+                                    :color="row.priority.color"
+                                    :style="`border-color: ${row.priority.color};`"
+                                    effect="plain">{{ row.priority.name }}
+                            </el-tag>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item v-for="priority in usePage().props.priorities"
+                                                      :disabled="priority.id===row.priority_id"
+                                                      :command="{task: row, data: { priority_id: priority.id}}"
+                                                      v-text="priority.name"></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
                     </Transition>
                 </lazy-component>
             </template>
@@ -162,18 +165,18 @@ const tableRowClassName = ({row, rowIndex}) => {
             <template #default="{row}">
                 <lazy-component>
                     <template #placeholder>
-                        <el-skeleton :rows="0" />
+                        <el-skeleton :rows="0"/>
                     </template>
 
                     <Transition appear>
-                    <template v-if="row.latest_activity">
-                        <div v-if="row.latest_activity" style="display: flex; align-items: center;">
-                            <User :user="row.latest_activity.user"/> &nbsp;
-                            <Activity :activity="row.latest_activity" :task="row" only-icon
-                                      style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
-                            <Time :show-clock="false" :time="row.latest_activity.created_at"/>
-                        </div>
-                    </template>
+                        <template v-if="row.latest_activity">
+                            <div v-if="row.latest_activity" style="display: flex; align-items: center;">
+                                <User :user="row.latest_activity.user"/> &nbsp;
+                                <Activity :activity="row.latest_activity" :task="row" only-icon
+                                          style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
+                                <Time :show-clock="false" :time="row.latest_activity.created_at"/>
+                            </div>
+                        </template>
                     </Transition>
                 </lazy-component>
             </template>

@@ -5,10 +5,13 @@
  */
 
 import axios from 'axios';
+// import {usePage} from "@inertiajs/vue3";
 
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+// window.axios.defaults.headers.common['X-CSRF-TOKEN'] = usePage().props.csrf_token;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
