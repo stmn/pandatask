@@ -15,7 +15,7 @@ class StatusesSeeder extends Seeder
     {
         $statuses = [
             [
-                'name' => 'New',
+                'name' => 'Not started',
                 'color' => '#d3ad03',
             ],
             [

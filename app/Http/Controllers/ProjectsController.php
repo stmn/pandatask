@@ -62,7 +62,7 @@ class ProjectsController extends Controller
                 ->when($project, fn($query) => $query->union($project->teamMembers()->selectRaw($fields)))
                 ->get(),
         ])
-            ->baseRoute($project ? 'project' : 'projects', ['project' => $project]);
+            ->baseRoute($project ? 'project.tasks' : 'projects', ['project' => $project]);
     }
 
     /**
@@ -76,6 +76,8 @@ class ProjectsController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'statuses' => 'array',
+            'priorities' => 'array',
         ]);
 
         $project = Project::query()->updateOrCreate([
@@ -84,6 +86,8 @@ class ProjectsController extends Controller
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'client_id' => $request->get('client_id'),
+            'statuses' => $request->get('statuses'),
+            'priorities' => $request->get('priorities'),
         ]);
 
         assert($project instanceof Project);

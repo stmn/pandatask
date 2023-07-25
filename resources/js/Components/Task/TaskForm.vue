@@ -2,6 +2,8 @@
 import User from "~/js/Components/User/UserAvatar.vue";
 import Editor from "~/js/Components/Forms/EditorInput.vue";
 import InputError from "~/js/Components/Forms/InputError.vue";
+import {usePage} from "@inertiajs/vue3";
+import {computed} from "vue";
 
 const props = defineProps({
     modelValue: {
@@ -21,10 +23,27 @@ const props = defineProps({
         required: true
     },
 })
+
+// console.log(111, props.modelValue.tags)
+
+const statuses = computed(() => {
+    return usePage().props.statuses.filter(
+        item => usePage().props.project.statuses.includes(item.id) || item.id === props.modelValue.status_id
+    );
+})
+
+const priorities = computed(() => {
+    return usePage().props.priorities.filter(
+        item => usePage().props.project.priorities.includes(item.id) || item.id === props.modelValue.priority_id
+    );
+})
 </script>
 
 <template>
-    <el-row :gutter="15">
+<!--    a {{ JSON.stringify(usePage().props.milestones) }} b-->
+<!--    {{ JSON.stringify(modelValue.milestone_id) }}-->
+    <el-config-provider size="default">
+    <el-row :gutter="10">
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Subject">
                 <el-input v-model="modelValue.subject" class="focus-me"/>
@@ -33,7 +52,6 @@ const props = defineProps({
         </el-col>
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
             <el-form-item label="Tags">
-                <!--                {{ JSON.stringify(modelValue.tags) }}-->
                 <el-select v-model="modelValue.tags"
                            multiple
                            filterable
@@ -43,10 +61,11 @@ const props = defineProps({
                            style="width: 100%;"
                            fit-input-width>
                 </el-select>
+                <InputError :message="modelValue.errors['task.tags']"/>
             </el-form-item>
         </el-col>
     </el-row>
-    <el-row :gutter="15">
+    <el-row :gutter="10">
         <el-col :lg="24">
             <el-form-item label="Description">
                 <editor v-model="modelValue.description"
@@ -55,7 +74,45 @@ const props = defineProps({
             </el-form-item>
         </el-col>
     </el-row>
-    <el-row :gutter="15">
+
+    <el-row :gutter="10">
+        <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
+            <el-form-item label="Milestone">
+                <el-select v-model="modelValue.milestone_id"
+                           filterable
+                           clearable
+                           default-first-option
+                           placeholder="Select"
+                           style="width: 100%;"
+                           fit-input-width>
+                    <el-option
+                        v-for="item in usePage().props.milestones"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </el-form-item>
+        </el-col>
+        <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
+            <el-row :gutter="10">
+                <el-col :xs="12"  :sm="12" :lg="12">
+                    <el-form-item label="Start date">
+                        <el-date-picker v-model="modelValue.start_date" />
+                        <InputError :message="modelValue.errors['task.start_date']"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :xs="12"  :sm="12" :lg="12">
+                    <el-form-item label="End date">
+                        <el-date-picker v-model="modelValue.end_date"/>
+                        <InputError :message="modelValue.errors['task.end_date']"/>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-col>
+    </el-row>
+
+    <el-row :gutter="10">
         <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
             <el-form-item label="Status">
                 <el-select v-model="modelValue.status_id"
@@ -114,4 +171,5 @@ const props = defineProps({
             </el-form-item>
         </el-col>
     </el-row>
+    </el-config-provider>
 </template>

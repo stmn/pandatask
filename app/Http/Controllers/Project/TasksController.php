@@ -90,6 +90,9 @@ class TasksController extends ProjectController
             'task.description' => [],
             'task.priority_id' => ['required', 'exists:priorities,id'],
             'task.status_id' => ['required', 'exists:statuses,id'],
+            'task.milestone_id' => ['nullable', 'exists:milestones,id'],
+            'task_start_date' => ['date'],
+            'task_end_date' => ['date'],
             'task.private' => ['boolean'],
             'task.tags' => ['array'],
         ], $request->all());

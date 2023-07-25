@@ -8,13 +8,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * @mixin IdeHelperPriority
  */
 class Priority extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,
+        SortableTrait;
 
     protected $fillable = [
         'name',

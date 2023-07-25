@@ -32,10 +32,17 @@ class Project extends Model
         'client_id',
         'latest_activity_id',
         'latest_activity_at',
+        'statuses',
+        'priorities',
     ];
 
     protected $appends = [
         'avatar'
+    ];
+
+    protected $casts = [
+        'statuses' => 'array',
+        'priorities' => 'array',
     ];
 
     protected static function booted(): void
@@ -68,6 +75,11 @@ class Project extends Model
     public function pages(): HasMany|TimeQueryBuilder
     {
         return $this->hasMany(Page::class);
+    }
+
+    public function milestones(): HasMany
+    {
+        return $this->hasMany(Milestone::class);
     }
 
     public function activities(): HasMany|ActivityQueryBuilder

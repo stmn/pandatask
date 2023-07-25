@@ -40,6 +40,7 @@ Route::middleware('auth')->group(callback: function () {
         Route::resource('groups', GroupsController::class)->except(['show']);
         Route::resource('priorities', PrioritiesController::class)->except(['show']);
         Route::resource('statuses', StatusesController::class)->except(['show']);
+        Route::post('statuses/{status}/reorder', [StatusesController::class, 'reorder'])->name('statuses.reorder');
 
 
         Route::redirect('/', route('admin.users.index'));

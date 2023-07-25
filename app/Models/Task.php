@@ -35,7 +35,10 @@ class Task extends Model
         'status_id',
         'latest_activity_id',
         'latest_activity_at',
-        'tags'
+        'tags',
+        'milestone_id',
+        'start_date',
+        'end_date',
     ];
 
     protected $appends = [
@@ -45,6 +48,8 @@ class Task extends Model
     protected $casts = [
         'private' => 'boolean',
         'tags' => 'array',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     protected static function booted(): void

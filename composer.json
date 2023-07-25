@@ -23,6 +23,7 @@
         "laravel/tinker": "^2.8",
         "laravolt/avatar": "^5.0",
         "mehdi-fathi/eloquent-filter": "^3.4",
+        "spatie/eloquent-sortable": "^4.0",
         "spatie/laravel-medialibrary": "^10.0.0",
         "tightenco/ziggy": "^1.6"
     },

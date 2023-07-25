@@ -1,5 +1,6 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3';
+import {Drag, DropList} from "vue-easy-dnd";
+import {Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
 import Page from "@/Pages/Admin/Page.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
@@ -7,7 +8,20 @@ import useList from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
-const {query, handleSortChange} = useList();
+const {query} = useList();
+
+const reorder = ($event) => {
+    const {from, to} = $event;
+    if (from === to) return;
+
+    const status = usePage().props.items.data[from].id;
+    router.post(route('admin.statuses.reorder', {status}), {position: to}, {
+        preserveScroll: true,
+        preserveState: true
+    });
+
+    $event.apply(usePage().props.items.data)
+};
 </script>
 
 <template>
@@ -22,38 +36,47 @@ const {query, handleSortChange} = useList();
             <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
         </div>
 
-        <el-table :data="$page.props.items.data"
-                  :default-sort="{ prop: 'id', order: 'descending' }"
-                  @sort-change="handleSortChange"
-                  stripe
-                  style="width: 100%">
-            <el-table-column label="ID" prop="id" sortable="custom" width="70"/>
-            <el-table-column label="Name" prop="name"/>
-            <el-table-column label="Color" prop="color" width="100">
-                <template #default="scope">
-                    <el-tag :type="scope.row.color" style="border: 0;" effect="dark" :color="scope.row.color">
-                        {{ scope.row.color }}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column align="right" width="100">
-                <template #default="scope">
-                    <Link :href="$route('admin.statuses.edit', {status: scope.row.id})">
-                        <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-edit"/>
-                        </el-button>
-                    </Link>
-                    <el-popconfirm title="Are you sure to delete this?"
-                                   @confirm="router.delete($route('admin.statuses.destroy', {status: scope.row.id}))">
-                        <template #reference>
-                            <el-button type="danger" circle style="margin-left: 5px;">
-                                <i class="fa-solid fa-trash"></i>
-                            </el-button>
-                        </template>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
+        <p>
+            <el-text>Sortable list:</el-text>
+        </p>
+
+        <drop-list :items="$page.props.items.data" @reorder="reorder" mode="cut" v-loading="loading">
+            <template v-slot:item="{item, reorder}">
+                <drag :key="item.name" :data="item" @cut="remove(items1, item)">
+                    <el-card mb-2 shadow="never" w-full cursor-pointer>
+                        <div flex items-center w-full>
+                            <div>
+                                <i class="fa-solid fa-grip-lines mr-2"></i>
+                                {{ item.name }}
+
+                                <el-tag :type="item.color" style="border: 0;" ml-3 effect="dark"
+                                        :color="item.color">
+                                    {{ item.color }}
+                                </el-tag>
+                            </div>
+
+                            <div ml-auto>
+                                <Link :href="$route('admin.statuses.edit', {status: item.id})">
+                                    <el-button :color="$primaryColor()" circle>
+                                        <i class="fas fa-edit"/>
+                                    </el-button>
+                                </Link>
+
+                                <el-popconfirm title="Are you sure to delete this?"
+                                               @confirm="router.delete($route('admin.statuses.destroy', {status: item.id}))">
+                                    <template #reference>
+                                        <el-button type="danger" circle style="margin-left: 5px;">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </div>
+                        </div>
+                    </el-card>
+                </drag>
+            </template>
+            <template v-slot:feedback="{data}"></template>
+        </drop-list>
 
         <Pagination :data="$page.props.items"/>
     </Page>

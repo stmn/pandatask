@@ -10,6 +10,16 @@ import TaskLink from "~/js/Components/Task/TaskLink.vue";
 
 const props = defineProps({
     tasks: {},
+    statuses: {
+        type: Array,
+        required: false,
+        default: () => []
+    },
+    priorities: {
+        type: Array,
+        required: false,
+        default: () => []
+    },
     showProject: {
         type: Boolean,
         required: false,
@@ -51,6 +61,22 @@ const tableRowClassName = ({row, rowIndex}) => {
         return 'timer-active'
     }
     return ''
+}
+
+const statuses = (row) => {
+    const availableStatuses = row?.project?.statuses || usePage().props?.project?.statuses || [];
+
+    return usePage().props.statuses.filter(
+        item => availableStatuses.includes(item.id) || item.id === row.status_id
+    )
+}
+
+const priorities = (row) => {
+    const availablePriorities = row?.project?.priorities || usePage().props?.project?.priorities || [];
+
+    return usePage().props.priorities.filter(
+        item => availablePriorities.includes(item.id) || item.id === row.priority_id
+    )
 }
 </script>
 
@@ -120,7 +146,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                             </el-tag>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item v-for="status in usePage().props.statuses"
+                                    <el-dropdown-item v-for="status in statuses(row)"
                                                       :disabled="status.id===row.status_id"
                                                       :command="{task: row, data: { status_id: status.id}}"
                                                       v-text="status.name"></el-dropdown-item>
@@ -150,7 +176,7 @@ const tableRowClassName = ({row, rowIndex}) => {
                             </el-tag>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item v-for="priority in usePage().props.priorities"
+                                    <el-dropdown-item v-for="priority in priorities(row)"
                                                       :disabled="priority.id===row.priority_id"
                                                       :command="{task: row, data: { priority_id: priority.id}}"
                                                       v-text="priority.name"></el-dropdown-item>

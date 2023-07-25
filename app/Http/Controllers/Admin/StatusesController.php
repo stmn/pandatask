@@ -18,7 +18,7 @@ class StatusesController extends AdminController
         /** @var Collection $items */
         $items = Status::query()
             ->search($request->get('search'))
-            ->sortByString($request->get('sort'))
+            ->sortByString($request->get('sort', 'order_number'))
             ->paginate($this->perPage());
 
         return Inertia::render('Admin/Statuses/List', [
@@ -43,6 +43,15 @@ class StatusesController extends AdminController
         $this->afterUpdate();
     }
 
+    public function reorder(Status $status): void
+    {
+        $this->validate(request(), [
+            'position' => 'required|integer',
+        ]);
+
+        $status->moveTo(request()->get('position'));
+//        Status::setNewOrder([$status->id], request()->get('position'));
+    }
 
     /**
      * @throws AuthorizationException

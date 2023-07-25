@@ -43,7 +43,7 @@ class DashboardController extends Controller
                     $tasks['project_' . $projectId] = Task::query()
                         ->where('project_id', $projectId)
                         ->select('id', 'project_id', 'subject', 'status_id', 'priority_id', 'latest_activity_id', 'number')
-                        ->with(['status', 'priority', 'latestActivity.user'])
+                        ->with(['status', 'priority', 'latestActivity.user', 'project'])
                         ->withCommentsCount()
                         ->forCurrentUser()
                         ->latest('latest_activity_at')

@@ -1,5 +1,5 @@
 <script setup>
-import {useForm} from "@inertiajs/vue3"
+import {useForm, usePage} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {onMounted, ref} from "vue";
@@ -22,7 +22,9 @@ const form = useForm(Object.assign({
     name: '',
     description: null,
     clients: [],
-    team_members: []
+    team_members: [],
+    statuses: [],
+    priorities: [],
 }, props.project))
 
 // console.log(form.teamMembers, props.project?.team_members)
@@ -103,6 +105,26 @@ const activeTab = ref('general');
                         <User :user="item" disable-popover/>
                     </el-option>
                 </el-select>
+            </el-form-item>
+
+            <el-form-item label="Statuses">
+                <el-checkbox-group v-model="form.statuses">
+                    <el-checkbox-button v-for="status in usePage().props.statuses"
+                                        :key="status.id"
+                                        :label="status.id">
+                        {{ status.name }}
+                    </el-checkbox-button>
+                </el-checkbox-group>
+            </el-form-item>
+
+            <el-form-item label="Priorities">
+                <el-checkbox-group v-model="form.priorities">
+                    <el-checkbox-button v-for="priority in usePage().props.priorities"
+                                        :key="priority.id"
+                                        :label="priority.id">
+                        {{ priority.name }}
+                    </el-checkbox-button>
+                </el-checkbox-group>
             </el-form-item>
         </el-form>
 
