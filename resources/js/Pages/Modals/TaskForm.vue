@@ -22,6 +22,7 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    custom_fields,
 });
 
 const form = useForm({
@@ -32,6 +33,7 @@ const form = useForm({
     status_id: props.statuses[0].id,
     priority_id: props.priorities[Math.floor(props.priorities.length / 2)].id,
     tags: null,
+    custom_fields: props.custom_fields || {},
 })
 
 const handleTasks = inject('handleTasks', () => {

@@ -39,6 +39,7 @@ class Task extends Model
         'milestone_id',
         'start_date',
         'end_date',
+        'custom_fields',
     ];
 
     protected $appends = [
@@ -50,6 +51,7 @@ class Task extends Model
         'tags' => 'array',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'custom_fields' => 'array',
     ];
 
     protected static function booted(): void

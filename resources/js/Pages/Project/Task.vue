@@ -65,6 +65,7 @@ const taskForm = useForm({
     start_date: props.task.start_date,
     end_date: props.task.end_date,
     milestone_id: props.task.milestone_id,
+    custom_fields: props.task?.custom_fields || {},
 });
 
 const submit = () => {

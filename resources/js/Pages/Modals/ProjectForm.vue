@@ -183,6 +183,7 @@ const activeTab = ref('general');
                                 <el-option label="Number" value="number"></el-option>
                                 <el-option label="Date" value="date"></el-option>
                                 <el-option label="Select" value="select"></el-option>
+                                <el-option label="Boolean" value="boolean"></el-option>
                             </el-select>
                             <InputError
                                 :message="form.errors['custom_fields.' + form.custom_fields.indexOf(row) + '.type']"/>

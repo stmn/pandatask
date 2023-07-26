@@ -15,7 +15,7 @@ class ProjectRequest extends FormRequest
             'custom_fields' => 'array',
             'custom_fields.*.key' => 'required|distinct|alpha_dash',
             'custom_fields.*.label' => 'required',
-            'custom_fields.*.type' => 'required|in:text,number,date,select',
+            'custom_fields.*.type' => 'required|in:text,number,date,select,boolean',
             'custom_fields.*.options' => 'required_if:custom_fields.*.type,select|array',
         ];
     }

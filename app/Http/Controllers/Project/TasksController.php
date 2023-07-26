@@ -95,6 +95,7 @@ class TasksController extends ProjectController
             'task_end_date' => ['date'],
             'task.private' => ['boolean'],
             'task.tags' => ['array'],
+            'task.custom_fields' => ['array'],
         ], $request->all());
 
         $task = $project->tasks()->create($request->get('task'));
@@ -125,7 +126,10 @@ class TasksController extends ProjectController
             'task.status_id' => ['required', 'exists:statuses,id', 'sometimes'],
             'task.private' => ['boolean'],
             'task.tags' => ['array'],
+            'task.custom_fields' => ['array'],
         ], $request->all());
+
+        dd($request->all());
 
         $activity = [
             'project_id' => $task->project_id,
