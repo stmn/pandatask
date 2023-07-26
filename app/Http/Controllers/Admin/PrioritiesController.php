@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class PrioritiesController extends AdminController
 {
@@ -18,7 +20,7 @@ class PrioritiesController extends AdminController
         /** @var Collection $items */
         $items = Priority::query()
             ->search($request->get('search'))
-            ->sortByString($request->get('sort'))
+            ->sortByString($request->get('sort', 'order_number'))
             ->paginate($this->perPage());
 
         return Inertia::render('Admin/Priorities/List', [
@@ -43,6 +45,19 @@ class PrioritiesController extends AdminController
         $this->afterUpdate();
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ValidationException
+     */
+    public function reorder(Priority $priority): void
+    {
+        $this->validate(request(), [
+            'position' => 'required|integer',
+        ]);
+
+        $priority->moveTo(request()->get('position'));
+    }
 
     /**
      * @throws AuthorizationException

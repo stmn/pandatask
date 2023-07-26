@@ -84,7 +84,7 @@ const handleClick = (index) => {
 
                 <Link preserve-state preserve-scroll :only="['modal']"
                       :href="$route('project.overview', {project: project.id})">
-                    <i class="fa-solid fa-circle-info ml-2"></i>
+                    <i class="fa-solid fa-circle-question ml-2"></i>
                 </Link>
             </div>
         </template>

@@ -30,25 +30,23 @@ const {form, save, isEdit} = useAdminForm({
     <Modal width="50%">
         <template #title>{{ isEdit ? 'Edit priority' : 'Create a new priority' }}</template>
 
-        <el-config-provider>
-            <el-form label-width="140px" label-position="top">
-                <el-row :gutter="10">
-                    <el-col :sm="24" :lg="24">
-                        <div style="display: flex; width: 100%;">
-                            <el-form-item label="Name" :class="{'is-error':form.errors.name}" style="width: 100%;">
-                                <el-input v-model="form.name"/>
-                                <InputError :message="form.errors.name"/>
-                            </el-form-item>
-                            <el-form-item label="Color" :class="{'is-error':form.errors.color}"
-                                          style="width: 70px; margin-left: 10px;">
-                                <el-color-picker v-model="form.color"/>
-                                <InputError :message="form.errors.color"/>
-                            </el-form-item>
-                        </div>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-config-provider>
+        <el-form label-width="140px" label-position="top">
+            <el-row :gutter="10">
+                <el-col :sm="24" :lg="24">
+                    <div style="display: flex; width: 100%;">
+                        <el-form-item label="Name" :class="{'is-error':form.errors.name}" style="width: 100%;">
+                            <el-input v-model="form.name"/>
+                            <InputError :message="form.errors.name"/>
+                        </el-form-item>
+                        <el-form-item label="Color" :class="{'is-error':form.errors.color}"
+                                      style="width: 70px; margin-left: 10px;">
+                            <el-color-picker v-model="form.color"/>
+                            <InputError :message="form.errors.color"/>
+                        </el-form-item>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-form>
 
         <template #footer>
           <span class="dialog-footer">

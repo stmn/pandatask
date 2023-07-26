@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ProjectRole;
+use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
@@ -68,17 +70,11 @@ class ProjectsController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function save(Request $request, ?Project $project = null)
+    public function save(ProjectRequest $request, ?Project $project = null)
     {
         $project
             ? $this->authorize('update', $project)
             : $this->authorize('create', Project::class);
-
-        $request->validate([
-            'name' => 'required',
-            'statuses' => 'array',
-            'priorities' => 'array',
-        ]);
 
         $project = Project::query()->updateOrCreate([
             'id' => $project?->id,
@@ -88,6 +84,7 @@ class ProjectsController extends Controller
             'client_id' => $request->get('client_id'),
             'statuses' => $request->get('statuses'),
             'priorities' => $request->get('priorities'),
+            'custom_fields' => $request->get('custom_fields'),
         ]);
 
         assert($project instanceof Project);

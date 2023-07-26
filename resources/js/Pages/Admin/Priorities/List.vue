@@ -1,19 +1,37 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3';
+import {Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
 import Page from "@/Pages/Admin/Page.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import useList from "@/Composables/useList.js";
+import {Drag, DropList} from "vue-easy-dnd";
 
 defineOptions({layout: [Layout]})
 
 const {query, handleSortChange} = useList();
+
+const reorder = ($event) => {
+    const {from, to} = $event;
+    if (from === to) return;
+
+    const priority = usePage().props.items.data[from].id;
+    router.post(route('admin.priorities.reorder', {priority}), {position: to}, {
+        preserveScroll: true,
+        preserveState: true
+    });
+
+    $event.apply(usePage().props.items.data)
+};
 </script>
 
 <template>
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.priorities.create')" style="margin-right: 15px;">
+            <Link :href="$route('admin.priorities.create')"
+                  :only="[]"
+                  preserve-scroll
+                  preserve-state
+                  style="margin-right: 15px;">
                 <el-button type="success">
                     <i class="fa-solid fa-circle-plus mr-2"></i>Add
                 </el-button>
@@ -22,38 +40,47 @@ const {query, handleSortChange} = useList();
             <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
         </div>
 
-        <el-table :data="$page.props.items.data"
-                  :default-sort="{ prop: 'id', order: 'descending' }"
-                  @sort-change="handleSortChange"
-                  stripe
-                  style="width: 100%">
-            <el-table-column label="ID" prop="id" sortable="custom" width="70"/>
-            <el-table-column label="Name" prop="name"/>
-            <el-table-column label="Color" prop="color" width="100">
-                <template #default="scope">
-                    <el-tag :type="scope.row.color" style="border: 0;" effect="dark" :color="scope.row.color">
-                        {{ scope.row.color }}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column align="right" width="100">
-                <template #default="scope">
-                    <Link :href="$route('admin.priorities.edit', {priority: scope.row.id})">
-                        <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-edit"/>
-                        </el-button>
-                    </Link>
-                    <el-popconfirm title="Are you sure to delete this?"
-                                   @confirm="router.delete($route('admin.priorities.destroy', {priority: scope.row.id}))">
-                        <template #reference>
-                            <el-button type="danger" circle style="margin-left: 5px;">
-                                <i class="fa-solid fa-trash"></i>
-                            </el-button>
-                        </template>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
+        <p>
+            <el-text>Sortable list:</el-text>
+        </p>
+
+        <drop-list :items="$page.props.items.data" @reorder="reorder" mode="cut" v-loading="loading">
+            <template v-slot:item="{item, reorder}">
+                <drag :key="item.id" :data="item">
+                    <el-card mb-2 shadow="never" w-full cursor-pointer>
+                        <div flex items-center w-full>
+                            <div>
+                                <i class="fa-solid fa-grip-lines mr-2"></i>
+                                {{ item.name }}
+
+                                <el-tag :type="item.color" style="border: 0;" ml-3 effect="dark"
+                                        :color="item.color">
+                                    {{ item.color }}
+                                </el-tag>
+                            </div>
+
+                            <div ml-auto>
+                                <Link :href="$route('admin.priorities.edit', {priority: item.id})" preserve-state preserve-scroll>
+                                    <el-button :color="$primaryColor()" circle>
+                                        <i class="fas fa-edit"/>
+                                    </el-button>
+                                </Link>
+
+                                <el-popconfirm title="Are you sure to delete this?"
+                                               @confirm="router.delete($route('admin.priorities.destroy', {priority: item.id}), {preserveScroll: true})">
+                                    <template #reference>
+                                        <el-button type="danger" circle style="margin-left: 5px;">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </div>
+                        </div>
+                    </el-card>
+                </drag>
+            </template>
+            <template v-slot:feedback="{data}"></template>
+        </drop-list>
 
         <Pagination :data="$page.props.items"/>
     </Page>

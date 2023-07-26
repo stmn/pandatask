@@ -2,24 +2,27 @@
 
 namespace App\Models;
 
+use App\Models\Traits\useSortableTrait;
 use App\QueryBuilders\ProjectQueryBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * @mixin IdeHelperPriority
+ * @property int $order_number
  */
 class Priority extends Model
 {
     use SoftDeletes,
-        SortableTrait;
+        useSortableTrait;
 
     protected $fillable = [
         'name',
+        'order_number',
+        'color',
     ];
 
     public const CREATED_AT = null;

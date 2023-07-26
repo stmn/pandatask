@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Laravolt\Avatar\Avatar;
 
 /**
@@ -34,6 +35,7 @@ class Project extends Model
         'latest_activity_at',
         'statuses',
         'priorities',
+        'custom_fields',
     ];
 
     protected $appends = [
@@ -43,6 +45,7 @@ class Project extends Model
     protected $casts = [
         'statuses' => 'array',
         'priorities' => 'array',
+        'custom_fields' => 'array',
     ];
 
     protected static function booted(): void
@@ -100,6 +103,21 @@ class Project extends Model
     public function clients(): BelongsToMany|UserQueryBuilder
     {
         return $this->members()->where('role', ProjectRole::CLIENT);
+    }
+
+    public function setCustomFieldsAttribute(array $value): void
+    {
+        $this->attributes['custom_fields'] = json_encode(collect($value)
+            ->filter(fn($field) => $field['key'] !== '')
+            ->map(fn($field) => [
+                'id' => $field['id'] ?? Str::uuid(),
+                'key' => $field['key'],
+                'label' => $field['label'],
+                'type' => $field['type'],
+                'options' => $field['options'] ?? [],
+            ])
+            ->values()
+            ->toArray());
     }
 
     protected function avatar(): Attribute

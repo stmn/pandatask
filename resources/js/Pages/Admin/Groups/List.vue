@@ -13,7 +13,11 @@ const {query, handleSortChange} = useList();
 <template>
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.groups.create')" style="margin-right: 15px;">
+            <Link :href="$route('admin.groups.create')"
+                  :only="[]"
+                  preserve-scroll
+                  preserve-state
+                  style="margin-right: 15px;">
                 <el-button type="success">
                     <i class="fa-solid fa-circle-plus mr-2"></i>Add
                 </el-button>
@@ -39,13 +43,13 @@ const {query, handleSortChange} = useList();
             </el-table-column>
             <el-table-column align="right" width="100">
                 <template #default="scope">
-                    <Link :href="$route('admin.groups.edit', {group: scope.row.id})">
+                    <Link :href="$route('admin.groups.edit', {group: scope.row.id})" preserve-state preserve-scroll>
                         <el-button :color="$primaryColor()" circle>
                             <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
                     <el-popconfirm v-if="scope.row?.can?.delete" title="Are you sure to delete this?"
-                                   @confirm="router.delete($route('admin.groups.destroy', {group: scope.row.id}))">
+                                   @confirm="router.delete($route('admin.groups.destroy', {group: scope.row.id}), {preserveScroll: true})">
                         <template #reference>
                             <el-button type="danger" circle style="margin-left: 5px;">
                                 <i class="fa-solid fa-trash"></i>

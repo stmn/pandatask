@@ -13,7 +13,11 @@ const {query, handleSortChange} = useList();
 <template>
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.users.create')" style="margin-right: 15px;">
+            <Link :href="$route('admin.users.create')"
+                  :only="[]"
+                  preserve-scroll
+                  preserve-state
+                  style="margin-right: 15px;">
                 <el-button type="success">
                     <i class="fa-solid fa-circle-plus mr-2"></i>Add
                 </el-button>
@@ -42,20 +46,21 @@ const {query, handleSortChange} = useList();
             </el-table-column>
             <el-table-column align="right" width="140">
                 <template #default="scope">
-                    <Link :href="$route('admin.users.edit', {user: scope.row.id})">
+                    <Link :href="$route('admin.users.edit', {user: scope.row.id})" preserve-state preserve-scroll>
                         <el-button :color="$primaryColor()" circle>
                             <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
 
-                    <Link :href="$route('admin.users.impersonate', {user: scope.row.id})" method="post">
+                    <Link :href="$route('admin.users.impersonate', {user: scope.row.id})"
+                          method="post">
                         <el-button :color="$primaryColor()" circle>
                             <i class="fas fa-key"/>
                         </el-button>
                     </Link>
                     &nbsp;
                     <el-popconfirm title="Are you sure to delete this?"
-                                   @confirm="router.delete($route('admin.users.destroy', {user: scope.row.id}))">
+                                   @confirm="router.delete($route('admin.users.destroy', {user: scope.row.id}), {preserveScroll: true})">
                         <template #reference>
                             <el-button type="danger" circle>
                                 <i class="fa-solid fa-trash"></i>

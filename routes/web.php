@@ -38,7 +38,10 @@ Route::middleware('auth')->group(callback: function () {
         Route::resource('users', UsersController::class)->except(['show']);
         Route::post('users/{user}/impersonate', [UsersController::class, 'impersonate'])->name('users.impersonate');
         Route::resource('groups', GroupsController::class)->except(['show']);
+
         Route::resource('priorities', PrioritiesController::class)->except(['show']);
+        Route::post('priorities/{priority}/reorder', [PrioritiesController::class, 'reorder'])->name('priorities.reorder');
+
         Route::resource('statuses', StatusesController::class)->except(['show']);
         Route::post('statuses/{status}/reorder', [StatusesController::class, 'reorder'])->name('statuses.reorder');
 

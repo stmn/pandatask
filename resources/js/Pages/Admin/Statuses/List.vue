@@ -27,7 +27,11 @@ const reorder = ($event) => {
 <template>
     <Page>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.statuses.create')" style="margin-right: 15px;">
+            <Link :href="$route('admin.statuses.create')"
+                  :only="[]"
+                  preserve-scroll
+                  preserve-state
+                  style="margin-right: 15px;">
                 <el-button type="success">
                     <i class="fa-solid fa-circle-plus mr-2"></i>Add
                 </el-button>
@@ -42,7 +46,7 @@ const reorder = ($event) => {
 
         <drop-list :items="$page.props.items.data" @reorder="reorder" mode="cut" v-loading="loading">
             <template v-slot:item="{item, reorder}">
-                <drag :key="item.name" :data="item" @cut="remove(items1, item)">
+                <drag :key="item.id" :data="item">
                     <el-card mb-2 shadow="never" w-full cursor-pointer>
                         <div flex items-center w-full>
                             <div>
@@ -56,14 +60,14 @@ const reorder = ($event) => {
                             </div>
 
                             <div ml-auto>
-                                <Link :href="$route('admin.statuses.edit', {status: item.id})">
+                                <Link :href="$route('admin.statuses.edit', {status: item.id})" preserve-state preserve-scroll>
                                     <el-button :color="$primaryColor()" circle>
                                         <i class="fas fa-edit"/>
                                     </el-button>
                                 </Link>
 
                                 <el-popconfirm title="Are you sure to delete this?"
-                                               @confirm="router.delete($route('admin.statuses.destroy', {status: item.id}))">
+                                               @confirm="router.delete($route('admin.statuses.destroy', {status: item.id}), {preserveScroll: true})">
                                     <template #reference>
                                         <el-button type="danger" circle style="margin-left: 5px;">
                                             <i class="fa-solid fa-trash"></i>

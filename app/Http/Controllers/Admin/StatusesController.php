@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class StatusesController extends AdminController
 {
@@ -43,6 +45,11 @@ class StatusesController extends AdminController
         $this->afterUpdate();
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ValidationException
+     */
     public function reorder(Status $status): void
     {
         $this->validate(request(), [
@@ -50,7 +57,6 @@ class StatusesController extends AdminController
         ]);
 
         $status->moveTo(request()->get('position'));
-//        Status::setNewOrder([$status->id], request()->get('position'));
     }
 
     /**

@@ -24,24 +24,24 @@ const props = defineProps({
     },
 })
 
-// console.log(111, props.modelValue.tags)
-
 const statuses = computed(() => {
+    const availableStatuses = props.statuses || usePage().props?.project?.statuses || [];
+
     return usePage().props.statuses.filter(
-        item => usePage().props.project.statuses.includes(item.id) || item.id === props.modelValue.status_id
+        item => availableStatuses.includes(item.id) || item.id === props.modelValue.status_id
     );
 })
 
 const priorities = computed(() => {
+    const availablePriorities = props.priorities || usePage().props?.project?.priorities || [];
+
     return usePage().props.priorities.filter(
-        item => usePage().props.project.priorities.includes(item.id) || item.id === props.modelValue.priority_id
+        item => availablePriorities.includes(item.id) || item.id === props.modelValue.priority_id
     );
 })
 </script>
 
 <template>
-<!--    a {{ JSON.stringify(usePage().props.milestones) }} b-->
-<!--    {{ JSON.stringify(modelValue.milestone_id) }}-->
     <el-config-provider size="default">
     <el-row :gutter="10">
         <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
