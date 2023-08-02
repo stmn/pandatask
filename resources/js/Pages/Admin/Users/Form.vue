@@ -5,12 +5,8 @@ import InputError from "~/js/Components/Forms/InputError.vue";
 import useAdminForm from "@/Composables/useAdminForm.js";
 
 const props = defineProps({
-    user: {
-        type: Object,
-    },
-    groups: {
-        type: Array,
-    },
+    user: Object,
+    groups: Array,
 });
 
 const {close, redirect} = useModal()
@@ -43,25 +39,41 @@ const {form, save, isEdit} = useAdminForm({
             <el-row :gutter="10">
                 <el-col :sm="12" :lg="6">
                     <el-form-item label="First name" :class="{'is-error':form.errors.first_name}">
-                        <el-input v-model="form.first_name"/>
+                        <el-input v-model="form.first_name">
+                            <template #prefix>
+                                <i class="fa-solid fa-user"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.first_name"/>
                     </el-form-item>
                 </el-col>
                 <el-col :sm="12" :lg="6">
                     <el-form-item label="Last name" :class="{'is-error':form.errors.last_name}">
-                        <el-input v-model="form.last_name"/>
+                        <el-input v-model="form.last_name">
+                            <template #prefix>
+                                <i class="fa-solid fa-user"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.last_name"/>
                     </el-form-item>
                 </el-col>
                 <el-col :sm="12" :lg="6">
                     <el-form-item label="Email" :class="{'is-error':form.errors.email}">
-                        <el-input v-model="form.email"/>
+                        <el-input v-model="form.email">
+                            <template #prefix>
+                                <i class="fa-solid fa-envelope"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.email"/>
                     </el-form-item>
                 </el-col>
                 <el-col :sm="12" :lg="6">
                     <el-form-item label="Phone" :class="{'is-error':form.errors.phone}">
-                        <el-input v-model="form.phone"/>
+                        <el-input v-model="form.phone">
+                            <template #prefix>
+                                <i class="fa-solid fa-phone"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.phone"/>
                     </el-form-item>
                 </el-col>
@@ -76,6 +88,9 @@ const {form, save, isEdit} = useAdminForm({
                                    placeholder="Select"
                                    style="width: 100%;"
                                    fit-input-width>
+                            <template #prefix>
+                                <i class="fa-solid fa-users"></i>
+                            </template>
                             <el-option
                                 v-for="item in groups"
                                 :key="item"
@@ -87,7 +102,11 @@ const {form, save, isEdit} = useAdminForm({
                 </el-col>
                 <el-col :sm="12" :lg="12">
                     <el-form-item label="Job title" :class="{'is-error':form.errors.job_title}">
-                        <el-input v-model="form.job_title"/>
+                        <el-input v-model="form.job_title">
+                            <template #prefix>
+                                <i class="fa-solid fa-briefcase"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.job_title"/>
                     </el-form-item>
                 </el-col>
@@ -96,13 +115,21 @@ const {form, save, isEdit} = useAdminForm({
             <el-row :gutter="10">
                 <el-col :sm="12" :lg="12">
                     <el-form-item label="Password" :class="{'is-error':form.errors.password}">
-                        <el-input v-model="form.password" type="password"/>
+                        <el-input v-model="form.password" type="password">
+                            <template #prefix>
+                                <i class="fa-solid fa-lock"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.password"/>
                     </el-form-item>
                 </el-col>
                 <el-col :sm="12" :lg="12">
                     <el-form-item label="Confirm password" :class="{'is-error':form.errors.confirm_password}">
-                        <el-input v-model="form.confirm_password" type="password"/>
+                        <el-input v-model="form.confirm_password" type="password">
+                            <template #prefix>
+                                <i class="fa-solid fa-lock"></i>
+                            </template>
+                        </el-input>
                         <InputError :message="form.errors.confirm_password"/>
                     </el-form-item>
                 </el-col>

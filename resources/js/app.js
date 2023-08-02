@@ -19,8 +19,8 @@ const app = createInertiaApp({
     title: (title) => `${title} - ${appName}`,
 
     progress: {
-        delay: 0,
         color: '#fff',
+        delay: 0,
         includeCSS: true,
         showSpinner: true,
     },
@@ -40,11 +40,11 @@ const app = createInertiaApp({
         console.log(primaryColor.value)
         app.mixin({
             methods: {
+                $primaryColor: () => primaryColor.value,
+                $route: route,
                 group: function (name) {
                     return this.$page.props.auth.groups?.[name];
-                },
-                $route: route,
-                $primaryColor: () => primaryColor.value
+                }
             },
         })
 
@@ -54,6 +54,9 @@ const app = createInertiaApp({
             document.body.style.setProperty('--brand-text-color', 'var(--el-color-black)')
         }
 
-        return app.mount(el);
+        app.mount(el);
+        document.getElementById('loader')?.remove();
+        // return instance;
     },
 });
+

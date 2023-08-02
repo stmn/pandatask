@@ -1,27 +1,85 @@
 import {router} from "@inertiajs/vue3";
-import {reactive} from "vue";
-import {watchDebounced} from "@vueuse/core";
+import {ref, reactive, watch} from "vue";
+import {useStorage, watchDebounced} from "@vueuse/core";
 
-export default function useList({only} = {only: []}) {
-    const {search, sort} = route().params;
+let list = reactive({
+    only: undefined,
+    search: '',
+    sort: '',
+    order: '',
+    key: 'list',
+    columns: [],
+    selectedColumns: undefined,
+});
 
-    const data = reactive({search, sort})
+export function useCreateList(data) {
+    console.log('useCreateList',data)
 
-    watchDebounced(data, () => {
-        console.log(111);
-            router.reload({data, only, preserveState: true})
-        },
-        {debounce: 200, maxWait: 500},
-    )
+    // Object.keys(updateObj).forEach(key => {
 
-    const handleSortChange = ({order, prop}) => {
-        console.log(222);
-        data.sort = (order === 'ascending' ? '' : '-') + prop
-        router.reload({data, only, preserveState: true})
+    if(data?.key) {
+        data.selectedColumns = useStorage(data.key, data?.selectedColumns || []);
+    }
+
+    list = Object.assign(list, data)
+    // list = reactive({...list, ...data});
+
+    const routeParams = route().params;
+    list.search = routeParams?.search;
+    if (routeParams?.sort) {
+        list.order = routeParams.sort.startsWith('-') ? 'desc' : 'asc';
+    }
+
+    const buildData = () => {
+        const data = {};
+        if(list.sort) {
+            const sortString = (list.order === 'desc' ? '-' : '') + list.sort.value;
+            data.sort = sortString;
+        }
+        data.search = list.search || undefined;
+
+        return data;
+    }
+
+    const reload = () => {
+        console.log('reload', buildData())
+        router.reload({
+            data: buildData(),
+            only: list.only,
+            preserveState: true
+        })
+    }
+
+    watchDebounced(() => list.search, reload, {debounce: 200, maxWait: 500})
+    watchDebounced(() => list.order, reload, {debounce: 100, maxWait: 200})
+    watchDebounced(() => list.sort, reload, {debounce: 100, maxWait: 200})
+
+    return useList();
+}
+
+export function useList() {
+    const changeSort = (sort) => {
+        console.log('sort', {sort})
+        if (sort && sort.value !== list.sort.value) {
+            list.sort = sort;
+        }
+    }
+
+    const changeOrder = (order) => {
+        console.log('order', {order})
+        if (order && list.order !== order) {
+            list.order = order;
+        }
+    }
+
+    const updateColumns = (columns) => {
+        list.columns = columns;
     }
 
     return {
-        query: data,
-        handleSortChange
+        list,
+        changeSort,
+        changeOrder,
+        updateColumns,
     };
 }

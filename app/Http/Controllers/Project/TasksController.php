@@ -22,6 +22,8 @@ class TasksController extends ProjectController
 {
     public function index(Request $request, Project $project): Response
     {
+        $sort = '-latest_activity_at';
+
         return Inertia::render('Project/Tasks', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
@@ -29,14 +31,16 @@ class TasksController extends ProjectController
                 ->select('id', 'name')
                 ->get(),
             'project' => fn() => $project,
+//            'sort' => $request->get('sort', $sort),
             'tasks' => Inertia::lazy(fn() => $project->tasks()
-                ->select('id', 'project_id', 'subject', 'description', 'priority_id', 'status_id', 'private', 'number', 'latest_activity_id')
+                ->select('id', 'project_id', 'subject', 'description', 'priority_id', 'status_id', 'private', 'number', 'latest_activity_id', 'custom_fields')
                 ->search($request->get('search'))
-                ->sortByString($request->get('sort'))
+//                ->sortByString($request->get('sort'))
                 ->with(['priority', 'status', 'latestActivity.user'])
                 ->withCommentsCount()
                 ->forCurrentUser()
-                ->latest('latest_activity_at')
+//                ->latest('latest_activity_at')
+                ->sortByString($request->get('sort', $sort))
                 ->paginate($this->perPage()))
         ]);
     }
@@ -129,7 +133,7 @@ class TasksController extends ProjectController
             'task.custom_fields' => ['array'],
         ], $request->all());
 
-        dd($request->all());
+//        dd($request->all());
 
         $activity = [
             'project_id' => $task->project_id,

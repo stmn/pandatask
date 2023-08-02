@@ -25,7 +25,8 @@ const props = defineProps({
     },
     custom_fields: {
         type: Array,
-        required: true
+        required: false,
+        default: () => []
     }
 })
 
@@ -91,7 +92,7 @@ const priorities = computed(() => {
                                style="width: 100%;"
                                fit-input-width>
                         <el-option
-                            v-for="item in usePage().props.milestones"
+                            v-for="item in $page.props.milestones"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id"

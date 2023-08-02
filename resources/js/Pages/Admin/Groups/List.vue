@@ -1,39 +1,37 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
-import Page from "@/Pages/Admin/Page.vue";
+import AdminPage from "~/js/Pages/Admin/AdminPage.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
-import useList from "@/Composables/useList.js";
+import {useCreateList} from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
-const {query, handleSortChange} = useList();
+const {list, changeSort, changeOrder} = useCreateList();
 </script>
 
 <template>
-    <Page>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.groups.create')"
-                  :only="[]"
-                  preserve-scroll
-                  preserve-state
-                  style="margin-right: 15px;">
-                <el-button type="success">
-                    <i class="fa-solid fa-circle-plus mr-2"></i>Add
-                </el-button>
-            </Link>
+    <AdminPage
+        :add="$route('admin.groups.create')"
+        :search="list.search" @update:search="list.search = $event">
 
-            <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
-        </div>
+        <template #title>
+            <i class="fas fa-user-group mr-2"></i>
+            <span>Groups</span>
+        </template>
 
         <el-table :data="$page.props.items.data"
-                  :default-sort="{ prop: 'id', order: 'descending' }"
-                  @sort-change="handleSortChange"
-                  stripe
-                  style="width: 100%">
-            <el-table-column label="ID" prop="id" sortable="custom" width="70"/>
+                  :default-sort="{ prop: 'id', order: 'ascending' }"
+                  @sort-change="({order, prop}) => { changeSort({value: prop}); changeOrder(order==='descending'?'desc':'asc'); }"
+                  stripe>
+
+            <el-table-column label="ID" prop="id" sortable="custom" width="70"
+                             :sort-orders="['descending', 'ascending']"/>
+
             <el-table-column label="Name" prop="name" width="160"/>
-            <el-table-column label="Description" prop="description"/>
+
+            <el-table-column label="Description" prop="description" min-width="260"/>
+
             <el-table-column label="Color" prop="color" width="100">
                 <template #default="scope">
                     <el-tag :type="scope.row.color" style="border: 0;" effect="dark" :color="scope.row.color">
@@ -41,17 +39,20 @@ const {query, handleSortChange} = useList();
                     </el-tag>
                 </template>
             </el-table-column>
+
+            <!-- Actions -->
+
             <el-table-column align="right" width="100">
                 <template #default="scope">
                     <Link :href="$route('admin.groups.edit', {group: scope.row.id})" preserve-state preserve-scroll>
-                        <el-button :color="$primaryColor()" circle>
+                        <el-button link mx-1>
                             <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
                     <el-popconfirm v-if="scope.row?.can?.delete" title="Are you sure to delete this?"
                                    @confirm="router.delete($route('admin.groups.destroy', {group: scope.row.id}), {preserveScroll: true})">
                         <template #reference>
-                            <el-button type="danger" circle style="margin-left: 5px;">
+                            <el-button type="danger" link mx-1>
                                 <i class="fa-solid fa-trash"></i>
                             </el-button>
                         </template>
@@ -61,5 +62,5 @@ const {query, handleSortChange} = useList();
         </el-table>
 
         <Pagination :data="$page.props.items"/>
-    </Page>
+    </AdminPage>
 </template>

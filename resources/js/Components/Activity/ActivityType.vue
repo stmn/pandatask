@@ -1,6 +1,6 @@
 <script setup>
-import {Link, usePage} from '@inertiajs/vue3'
-import {computed, ref} from "vue";
+import {Link} from '@inertiajs/vue3'
+import {ref} from "vue";
 
 const props = defineProps({
     activity: {
@@ -17,10 +17,6 @@ const props = defineProps({
     }
 })
 
-const page = usePage()
-
-const auth = computed(() => page.props.auth)
-
 const url = ref(route('project.task', {
     project: props.activity.project_id,
     task: props.activity?.task?.number || props.task?.id
@@ -34,7 +30,7 @@ const url = ref(route('project.task', {
                 <i v-if="activity.type === 'task_commented'" class="fa-solid fa-comment-dots"></i>
                 <i v-if="activity.type === 'task_created'" class="fa-solid fa-square-plus"></i>
                 <i v-else class="fa-solid fa-sliders"></i>
-        </el-tooltip>
+            </el-tooltip>
         </span>
     </template>
     <Link v-else :href="url" class="activity">{{ activity.description }}</Link>

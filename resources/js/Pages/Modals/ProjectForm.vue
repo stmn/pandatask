@@ -81,6 +81,9 @@ const activeTab = ref('general');
                                    placeholder="Select"
                                    style="width: 100%;"
                                    fit-input-width>
+                            <template #prefix>
+                                <i class="fa-solid fa-users"></i>
+                            </template>
                             <el-option
                                 v-for="item in clients"
                                 :key="item.id"
@@ -99,6 +102,9 @@ const activeTab = ref('general');
                                    placeholder="Select"
                                    style="width: 100%;"
                                    fit-input-width>
+                            <template #prefix>
+                                <i class="fa-solid fa-users"></i>
+                            </template>
                             <el-option
                                 v-for="item in team_members"
                                 :key="item.id"
@@ -112,7 +118,7 @@ const activeTab = ref('general');
 
                     <el-form-item label="Statuses">
                         <el-checkbox-group v-model="form.statuses">
-                            <el-checkbox-button v-for="status in usePage().props.statuses"
+                            <el-checkbox-button v-for="status in $page.props.statuses"
                                                 :key="status.id"
                                                 :label="status.id">
                                 {{ status.name }}
@@ -122,7 +128,7 @@ const activeTab = ref('general');
 
                     <el-form-item label="Priorities">
                         <el-checkbox-group v-model="form.priorities">
-                            <el-checkbox-button v-for="priority in usePage().props.priorities"
+                            <el-checkbox-button v-for="priority in $page.props.priorities"
                                                 :key="priority.id"
                                                 :label="priority.id">
                                 {{ priority.name }}

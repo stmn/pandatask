@@ -51,7 +51,11 @@ const updatePassword = () => {
                         v-model="form.current_password"
                         type="password"
                         autocomplete="current-password"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-lock"></i>
+                        </template>
+                    </el-input>
                     <InputError :message="form.errors.current_password"/>
                 </el-form-item>
 
@@ -61,7 +65,11 @@ const updatePassword = () => {
                         v-model="form.password"
                         type="password"
                         autocomplete="new-password"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-lock"></i>
+                        </template>
+                    </el-input>
                     <InputError :message="form.errors.password"/>
                 </el-form-item>
 
@@ -70,7 +78,11 @@ const updatePassword = () => {
                         v-model="form.password_confirmation"
                         type="password"
                         autocomplete="new-password"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-lock"></i>
+                        </template>
+                    </el-input>
                     <InputError :message="form.errors.password_confirmation"/>
                 </el-form-item>
 

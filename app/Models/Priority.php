@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\useSortableTrait;
-use App\QueryBuilders\ProjectQueryBuilder;
+use App\QueryBuilders\PriorityQueryBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -28,17 +28,17 @@ class Priority extends Model
     public const CREATED_AT = null;
     public const UPDATED_AT = null;
 
-    public static function query(): Builder|ProjectQueryBuilder
+    public static function query(): Builder|PriorityQueryBuilder
     {
         return parent::query();
     }
 
-    public function newEloquentBuilder($query): ProjectQueryBuilder
+    public function newEloquentBuilder($query): PriorityQueryBuilder
     {
-        return new ProjectQueryBuilder($query);
+        return new PriorityQueryBuilder($query);
     }
 
-    public function tasks(): HasMany|ProjectQueryBuilder
+    public function tasks(): HasMany|PriorityQueryBuilder
     {
         return $this->hasMany(Task::class);
     }

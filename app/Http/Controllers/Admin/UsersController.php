@@ -17,10 +17,12 @@ class UsersController extends AdminController
 {
     public function index(Request $request): Response
     {
+        $sort = '-id';
+
         /** @var Collection $items */
         $items = User::query()
             ->search($request->get('search'))
-            ->sortByString($request->get('sort'))
+            ->sortByString($request->get('sort', $sort))
             ->with('groups')
             ->paginate($this->perPage());
 
@@ -28,7 +30,9 @@ class UsersController extends AdminController
 
         return Inertia::render('Admin/Users/List', [
             'items' => $items,
-            'title' => 'Users'
+            'title' => 'Users',
+            'sort' => $sort,
+            'active_page' => 'users',
         ]);
     }
 

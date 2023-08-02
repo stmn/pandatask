@@ -2,8 +2,7 @@
 import {Head, router} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
 import TasksTable from "~/js/Components/Task/TasksTable.vue";
-import useList from "@/Composables/useList.js";
-import {onMounted} from "vue";
+import {useCreateList} from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
@@ -16,13 +15,7 @@ const props = defineProps({
     },
 });
 
-const {query} = useList({only: ['tasks']});
-
-onMounted(() => {
-    // router.reload({
-    //     only: ['tasks']
-    // });
-});
+const {list} = useCreateList({only: ['tasks']});
 </script>
 
 <template>
@@ -41,8 +34,8 @@ onMounted(() => {
 
     <el-input
         :clearable="true"
-        v-model="query.search"
-        placeholder="Type to search..."
+        v-model="list.search"
+        placeholder="Type to search"
         size="large"
         class="w-full">
         <template #prefix>
@@ -52,5 +45,6 @@ onMounted(() => {
 
     <br><br>
 
-    <TasksTable :tasks="tasks" show-project/>
+    <TasksTable :tasks="tasks" show-project
+                :selected-columns="['project_id', 'status_id', 'priority_id', 'latest_activity_at']"/>
 </template>

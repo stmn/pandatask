@@ -5,7 +5,7 @@ import Pagination from "~/js/Components/Common/AppPagination.vue";
 import User from "~/js/Components/User/UserAvatar.vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Activity from "~/js/Components/Activity/ActivityType.vue";
-import useList from "@/Composables/useList.js";
+import {useCreateList, useList} from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
@@ -20,7 +20,7 @@ const props = defineProps({
     },
 });
 
-const {query} = useList({only: ['projects']});
+const {list} = useCreateList({only: ['projects']});
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const {query} = useList({only: ['projects']});
 
     <el-input
         :clearable="true"
-        v-model="query.search"
+        v-model="list.search"
         placeholder="Type to search"
         size="large"
         autofocus

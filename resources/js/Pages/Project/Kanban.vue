@@ -83,7 +83,7 @@ onMounted(() => {
     <el-input
         :clearable="true"
         v-model="query.search"
-        placeholder="Type to search..."
+        placeholder="Type to search"
         size="large"
         class="w-full">
         <template #prefix>

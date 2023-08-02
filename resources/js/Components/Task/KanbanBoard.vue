@@ -135,7 +135,7 @@ const loadMore = (statusId) => {
     <!--    {{ JSON.stringify(tasks[2])}}-->
     <!--    <el-scrollbar style="border: 1px solid #333; border-radius: 5px;" height="300">-->
     <div flex v-loading="loading">
-        <div v-for="status in usePage().props.statuses" style="min-width: 290px; width: 100%; max-width: 350px;">
+        <div v-for="status in $page.props.statuses" style="min-width: 290px; width: 100%; max-width: 350px;">
             <div flex items-center px-1>
                 <div :style="`background: ${status.color}; width: 16px; height: 16px; border-radius: 100%;`" mr-2
                      my-3></div>

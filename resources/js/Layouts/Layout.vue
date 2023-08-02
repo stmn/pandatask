@@ -43,21 +43,28 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
 <template>
     <ColorPanel/>
 
+    <Transition appear>
     <el-container style="min-height: 100%;">
         <Header style="color: var(--brand-text-color);"/>
 
         <el-main
             v-loading="loading"
             :element-loading-svg="svg"
-            style="background: var(--el-bg-color); color: var(--el-text-color-primary);  border-radius: 15px; margin: 0 20px; position: relative; overflow: hidden;">
+            style="
+            background: var(--el-bg-color);
+            color: var(--el-text-color-primary);
+            border-radius: 15px;
+            margin: 0 20px;
+            position: relative;
+            overflow: hidden;">
             <div>
-                <el-alert v-if="usePage().props.auth.impersonated"
+                <el-alert v-if="$page.props.auth.impersonated"
                           type="warning"
                           show-icon
                           :closable="false"
                           style="margin-bottom: 15px;">
                     <span>
-                        Impersonating as <strong>{{ usePage().props.auth.user.full_name }}</strong>.
+                        Impersonating as <strong>{{ $page.props.auth.user.full_name }}</strong>.
                         <Link :href="$route('leave-impersonation')">Leave impersonation</Link>
                     </span>
                 </el-alert>
@@ -74,6 +81,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
             </small>
         </el-footer>
     </el-container>
+    </Transition>
 
     <Modal/>
     <GlobalTimer/>

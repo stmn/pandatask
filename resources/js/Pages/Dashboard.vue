@@ -70,7 +70,7 @@ const showSettings = ref(false);
 
     <div flex justify-between>
         <div>
-            <b>{{ hello }}</b>, {{ usePage().props.auth.user.first_name }}!
+            <b>{{ hello }}</b>, {{ $page.props.auth.user.first_name }}!
             <i class="fa-regular fa-face-smile-wink ml-1"/>
         </div>
 
@@ -147,7 +147,9 @@ const showSettings = ref(false);
                     </template>
 
                     <Transition appear>
-                    <TasksTable :tasks="project.tasks"/>
+                    <TasksTable :tasks="project.tasks"
+                                :list-columns="['status_id', 'priority_id', 'latest_activity_at']"
+                                :list-key="`tasks_${project.id}`"/>
                     </Transition>
 
                     <div text-right>

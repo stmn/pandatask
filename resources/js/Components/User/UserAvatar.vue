@@ -1,5 +1,5 @@
 <script setup>
-import {usePage,Link} from '@inertiajs/vue3'
+import {Link} from '@inertiajs/vue3'
 import {computed} from "vue";
 
 const props = defineProps({
@@ -20,10 +20,6 @@ const props = defineProps({
     }
 })
 
-const page = usePage()
-
-const auth = computed(() => page.props.auth)
-
 const fullName = computed(() => {
     return props.user?.first_name + ' ' + props.user?.last_name
 })
@@ -42,11 +38,15 @@ const fullName = computed(() => {
         <template #reference>
             <span class="user">
                 <el-tooltip :content="fullName" placement="top" :disabled="!onlyAvatar">
-                <el-avatar
-                    :size="props.size"
-                    style="vertical-align: sub; margin-right: 5px;"
-                    :src="user?.avatar"
-                /></el-tooltip> <b v-if="!onlyAvatar">{{ user?.first_name }} {{ user?.last_name?.[0] }}</b>
+<!--                <el-avatar-->
+<!--                    :size="props.size"-->
+<!--                    style="vertical-align: sub; margin-right: 5px;"-->
+<!--                    :src="user?.avatar"-->
+<!--                >-->
+<!--                    abc-->
+<!--                </el-avatar>-->
+                    <img :src="user?.avatar" loading="lazy" style="width: 24px; height: 24px;" mr-1 />
+                </el-tooltip> <b v-if="!onlyAvatar">{{ user?.first_name }} {{ user?.last_name?.[0] }}</b>
             </span>
         </template>
 
@@ -58,10 +58,11 @@ const fullName = computed(() => {
                 :src="user.avatar"
             />
             <div><b>{{ user?.first_name }} {{ user?.last_name }}</b></div>
-            <div><small>{{ user.job_title }}</small></div>
+            <div><i class="fas fa-fw fa-briefcase mr-1"></i><small>{{ user.job_title }}</small></div>
             <div style="margin-top: 0;">
+
                 <a :href="`mailto:${user.public_email || user.email}`">
-                    {{ user.public_email || user.email }}
+                    <i class="fas fa-fw fa-envelope mr-1"></i>{{ user.public_email || user.email }}
                 </a>
             </div>
             <div v-if="user.active_time" style="margin-top: 10px; border: 1px solid #666; padding: 5px 10px;">
@@ -70,8 +71,10 @@ const fullName = computed(() => {
                     {{ user.active_time.task.project.name }}
                 </Link>
                 <el-tooltip :content="user.active_time.task.subject">
-                <Link :href="$route('project.task', {project: user.active_time.task.project_id, task: user.active_time.task.number})">#{{ user.active_time.task.number }}
-                </Link>
+                    <Link
+                        :href="$route('project.task', {project: user.active_time.task.project_id, task: user.active_time.task.number})">
+                        #{{ user.active_time.task.number }}
+                    </Link>
                 </el-tooltip>
             </div>
         </div>

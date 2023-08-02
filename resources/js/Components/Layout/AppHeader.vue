@@ -74,12 +74,12 @@ router.on('success', (event) => {
                     </el-menu-item>
                     <el-menu-item index="admin" v-if="group('admin')" style="line-height: 1;">
                         <Link :href="$route('admin.users.index')">
-                            <i class="fa-fw fa-solid mr-2"></i>Admin panel
+                            <i class="fa-fw fa-solid fa-solid fa-user-secret mr-2"></i>Admin panel
                         </Link>
                     </el-menu-item>
                     <el-menu-item index="logout">
                         <form method="post" :action="$route('logout')" style="width: 100%;">
-                            <input type="hidden" name="_token" :value="usePage().props.csrf_token">
+                            <input type="hidden" name="_token" :value="$page.props.csrf_token">
                             <el-button style="width: 100%;" type="danger" text bg native-type="submit">Logout
                             </el-button>
                         </form>

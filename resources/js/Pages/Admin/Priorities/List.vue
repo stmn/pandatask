@@ -1,14 +1,14 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
-import Page from "@/Pages/Admin/Page.vue";
+import AdminPage from "~/js/Pages/Admin/AdminPage.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
-import useList from "@/Composables/useList.js";
+import {useCreateList} from "@/Composables/useList.js";
 import {Drag, DropList} from "vue-easy-dnd";
 
 defineOptions({layout: [Layout]})
 
-const {query, handleSortChange} = useList();
+const {list} = useCreateList();
 
 const reorder = ($event) => {
     const {from, to} = $event;
@@ -25,23 +25,22 @@ const reorder = ($event) => {
 </script>
 
 <template>
-    <Page>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.priorities.create')"
-                  :only="[]"
-                  preserve-scroll
-                  preserve-state
-                  style="margin-right: 15px;">
-                <el-button type="success">
-                    <i class="fa-solid fa-circle-plus mr-2"></i>Add
-                </el-button>
-            </Link>
+    <AdminPage
+        :add="$route('admin.priorities.create')"
+        :search="list.search" @update:search="list.search = $event">
 
-            <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
-        </div>
+        <template #title>
+            <i class="fas fa-bars mr-2"></i>
+            <span>Priorities</span>
+        </template>
 
         <p>
-            <el-text>Sortable list:</el-text>
+            <el-text>
+                <el-tooltip placement="right" content="You can reorder priorities by dragging and dropping them.">
+                    <i class="fas fa-info-circle mr-1"></i>
+                </el-tooltip>
+                Sortable list:
+            </el-text>
         </p>
 
         <drop-list :items="$page.props.items.data" @reorder="reorder" mode="cut" v-loading="loading">
@@ -60,8 +59,9 @@ const reorder = ($event) => {
                             </div>
 
                             <div ml-auto>
-                                <Link :href="$route('admin.priorities.edit', {priority: item.id})" preserve-state preserve-scroll>
-                                    <el-button :color="$primaryColor()" circle>
+                                <Link :href="$route('admin.priorities.edit', {priority: item.id})" preserve-state
+                                      preserve-scroll>
+                                    <el-button link mx-1>
                                         <i class="fas fa-edit"/>
                                     </el-button>
                                 </Link>
@@ -69,7 +69,7 @@ const reorder = ($event) => {
                                 <el-popconfirm title="Are you sure to delete this?"
                                                @confirm="router.delete($route('admin.priorities.destroy', {priority: item.id}), {preserveScroll: true})">
                                     <template #reference>
-                                        <el-button type="danger" circle style="margin-left: 5px;">
+                                        <el-button type="danger" link mx-1>
                                             <i class="fa-solid fa-trash"></i>
                                         </el-button>
                                     </template>
@@ -83,5 +83,5 @@ const reorder = ($event) => {
         </drop-list>
 
         <Pagination :data="$page.props.items"/>
-    </Page>
+    </AdminPage>
 </template>

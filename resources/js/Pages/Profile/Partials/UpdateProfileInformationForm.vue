@@ -50,7 +50,11 @@ const submit = () => {
                         required
                         autofocus
                         autocomplete="first_name"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-user"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.first_name"/>
                 </el-form-item>
@@ -62,7 +66,11 @@ const submit = () => {
                         required
                         autofocus
                         autocomplete="last_name"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-user"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.last_name"/>
                 </el-form-item>
@@ -73,7 +81,11 @@ const submit = () => {
                         v-model="form.email"
                         required
                         autocomplete="email"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-envelope"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.email"/>
                 </el-form-item>
@@ -84,7 +96,11 @@ const submit = () => {
                         v-model="form.public_email"
                         required
                         autocomplete="public_email"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-envelope"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.public_email"/>
                 </el-form-item>
@@ -95,7 +111,11 @@ const submit = () => {
                         v-model="form.phone"
                         required
                         autocomplete="phone"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-phone"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.phone"/>
                 </el-form-item>
@@ -106,7 +126,11 @@ const submit = () => {
                         v-model="form.job_title"
                         required
                         autocomplete="job_title"
-                    />
+                    >
+                        <template #prefix>
+                            <i class="fa-solid fa-briefcase"></i>
+                        </template>
+                    </el-input>
 
                     <InputError :message="form.errors.job_title"/>
                 </el-form-item>

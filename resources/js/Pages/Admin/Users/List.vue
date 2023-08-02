@@ -1,41 +1,54 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
-import Page from "@/Pages/Admin/Page.vue";
+import AdminPage from "~/js/Pages/Admin/AdminPage.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
-import useList from "@/Composables/useList.js";
+import {useCreateList} from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
-const {query, handleSortChange} = useList();
+const {list, changeSort, changeOrder} = useCreateList();
 </script>
 
 <template>
-    <Page>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <Link :href="$route('admin.users.create')"
-                  :only="[]"
-                  preserve-scroll
-                  preserve-state
-                  style="margin-right: 15px;">
-                <el-button type="success">
-                    <i class="fa-solid fa-circle-plus mr-2"></i>Add
-                </el-button>
-            </Link>
+    <AdminPage
+        :add="$route('admin.users.create')"
+        :search="list.search" @update:search="list.search = $event">
 
-            <el-input :prefix-icon="Search" v-model="query.search" placeholder="Type to search" clearable/>
-        </div>
+        <template #title>
+            <i class="fas fa-users mr-2"></i>
+            <span>Users</span>
+        </template>
 
         <el-table :data="$page.props.items.data"
                   :default-sort="{ prop: 'id', order: 'descending' }"
-                  @sort-change="handleSortChange"
-                  stripe
-                  style="width: 100%">
-            <el-table-column label="ID" prop="id" sortable="custom" width="70"/>
-            <el-table-column label="First name" prop="first_name"/>
-            <el-table-column label="Last name" prop="last_name"/>
-            <el-table-column label="Email" prop="email"/>
-            <el-table-column label="Group" prop="groups" width="140">
+                  @sort-change="({order, prop}) => { changeSort({value: prop}); changeOrder(order==='descending'?'desc':'asc'); }"
+                  stripe>
+
+            <el-table-column label="ID" prop="id" sortable="custom" width="70"
+                             :sort-orders="['descending', 'ascending']"/>
+
+            <el-table-column width="48" align="center">
+                <template #default="scope">
+                    <div flex items-center>
+                        <img :src="scope.row.avatar" loading="lazy" alt="Avatar"
+                             style="height: 24px; width: 24px; border-radius: 100%;"/>
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="First name" prop="first_name" width="120"/>
+
+            <el-table-column label="Last name" prop="last_name" width="120"/>
+
+            <el-table-column label="Email" prop="email" min-width="260">
+                <template #default="scope">
+                    <i class="fas fa-envelope mr-1"></i>
+                    {{ scope.row.email }}
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Group" prop="groups" width="80">
                 <template #default="scope">
                     <el-tooltip :content="group.name" v-for="group in scope.row.groups">
                         <el-tag :key="group.id" effect="dark" :color="group.color" style="border: 0; margin: 1px;">
@@ -44,25 +57,29 @@ const {query, handleSortChange} = useList();
                     </el-tooltip>
                 </template>
             </el-table-column>
+
+            <!-- Actions -->
+
             <el-table-column align="right" width="140">
                 <template #default="scope">
                     <Link :href="$route('admin.users.edit', {user: scope.row.id})" preserve-state preserve-scroll>
-                        <el-button :color="$primaryColor()" circle>
+                        <el-button link circle mx-1>
                             <i class="fas fa-edit"/>
                         </el-button>
                     </Link>
 
-                    <Link :href="$route('admin.users.impersonate', {user: scope.row.id})"
-                          method="post">
-                        <el-button :color="$primaryColor()" circle>
-                            <i class="fas fa-key"/>
-                        </el-button>
-                    </Link>
-                    &nbsp;
+                    <el-tooltip content="Login as user">
+                        <Link :href="$route('admin.users.impersonate', {user: scope.row.id})" method="post">
+                            <el-button link mx-1>
+                                <i class="fas fa-key"/>
+                            </el-button>
+                        </Link>
+                    </el-tooltip>
+
                     <el-popconfirm title="Are you sure to delete this?"
                                    @confirm="router.delete($route('admin.users.destroy', {user: scope.row.id}), {preserveScroll: true})">
                         <template #reference>
-                            <el-button type="danger" circle>
+                            <el-button type="danger" link mx-1>
                                 <i class="fa-solid fa-trash"></i>
                             </el-button>
                         </template>
@@ -72,5 +89,5 @@ const {query, handleSortChange} = useList();
         </el-table>
 
         <Pagination :data="$page.props.items"/>
-    </Page>
+    </AdminPage>
 </template>

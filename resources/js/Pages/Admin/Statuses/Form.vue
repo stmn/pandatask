@@ -5,9 +5,7 @@ import InputError from "~/js/Components/Forms/InputError.vue";
 import useAdminForm from "@/Composables/useAdminForm.js";
 
 const props = defineProps({
-    status: {
-        type: Object,
-    },
+    status: Object,
 });
 
 const {close, redirect} = useModal()
@@ -16,7 +14,7 @@ const {form, save, isEdit} = useAdminForm({
     values: {
         ...{
             name: '',
-            color: '#000000',
+            color: '#777777',
         },
         ...props.status,
     },

@@ -18,7 +18,7 @@
                                style="width: 100%;"
                                fit-input-width>
                         <el-option
-                            v-for="item in usePage().props.project.custom_fields.find(item => item.key === field.key).options"
+                            v-for="item in $page.props.project?.custom_fields?.find(item => item.key === field.key).options"
                             :key="item"
                             :label="item"
                             :value="item"
@@ -50,7 +50,7 @@ const props = defineProps({
     }
 });
 
-const projectCustomFields = usePage().props.project.custom_fields;
+const projectCustomFields = usePage().props.project?.custom_fields;
 
 // const customFields = ref({});
 // projectCustomFields.forEach(item => {

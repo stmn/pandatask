@@ -1,6 +1,6 @@
 <script setup>
 import {usePage} from '@inertiajs/vue3'
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import {useDateFormat, useStorage, useTimeAgo} from "@vueuse/core";
 
 const props = defineProps({
@@ -22,14 +22,12 @@ const props = defineProps({
 
 const page = usePage()
 
-const auth = computed(() => page.props.auth)
-
 const timeType = props.forceType ? ref(props.forceType) : useStorage('timeType', 'ago'); // ago, date
 
 const dateFormat = 'DD.MM.YYYY hh:mm';
 
 const toggleTimeType = () => {
-    if(props.forceType){
+    if (props.forceType) {
         return;
     }
 

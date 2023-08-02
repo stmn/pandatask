@@ -13,6 +13,8 @@ final class UserQueryBuilder extends Builder
         'first_name',
         'last_name',
         'public_email',
+        'email',
+        'phone',
     ];
 
     public function whereHasGroupType(string $type): self

@@ -32,7 +32,7 @@ class PrioritiesController extends AdminController
     public function edit(Priority $priority): Modal
     {
         return $this->form([
-            'group' => $priority,
+            'priority' => $priority,
         ]);
     }
 
