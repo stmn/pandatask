@@ -52,7 +52,7 @@ const priorities = computed(() => {
         <el-row :gutter="10">
             <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
                 <el-form-item label="Subject">
-                    <el-input v-model="modelValue.subject" class="focus-me"/>
+                    <el-input v-model="modelValue.subject" class="focus-me" maxlength="100" show-word-limit />
                     <InputError :message="modelValue.errors['task.subject']"/>
                 </el-form-item>
             </el-col>
@@ -66,6 +66,9 @@ const priorities = computed(() => {
                                placeholder="Select"
                                style="width: 100%;"
                                fit-input-width>
+                        <template #prefix>
+                            <i class="fas fa-tags"></i>
+                        </template>
                     </el-select>
                     <InputError :message="modelValue.errors['task.tags']"/>
                 </el-form-item>
@@ -160,6 +163,9 @@ const priorities = computed(() => {
                                collapse-tags-tooltip
                                style="width: 100%;"
                                fit-input-width>
+                        <template #prefix>
+                            <i class="fas fa-users"></i>
+                        </template>
                         <el-option
                             v-for="item in users"
                             :key="item.id"

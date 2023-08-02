@@ -18,6 +18,9 @@ class WikiController extends ProjectController
         return Inertia::render('Project/Wiki', [
             'activeTab' => 'pages',
             'project' => fn() => $project,
+            'projects' => fn() => Project::query()
+                ->select('id', 'name')
+                ->get(),
             'page' => function () use ($project, $page) {
                 if ($page) {
                     $page->load('updatedBy');

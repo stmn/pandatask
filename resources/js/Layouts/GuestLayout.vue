@@ -15,7 +15,7 @@ const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).v
     <div class="guest">
         <div>
             <h1 class="logo" style="color: var(--brand-text-color);">
-                <Link href="/" style="color: var(--el-text-color);">
+                <Link href="/" preserve-state style="color: var(--el-text-color);">
                     <Logo style="height:100px;display: inline-block;"/>
                     <br><span :style="`font-weight: 400;`"><b>PANDA</b>TASK</span>
                 </Link>
