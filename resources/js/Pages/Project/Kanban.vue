@@ -4,7 +4,7 @@ import {onMounted, ref} from "vue";
 import Layout from "~/js/Layouts/Layout.vue";
 import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
 import TasksTable from "~/js/Components/Task/TasksTable.vue";
-import useList from "@/Composables/useList.js";
+import {useList} from "@/Composables/useList.js";
 import KanbanBoard from "@/Components/Task/KanbanBoard.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})

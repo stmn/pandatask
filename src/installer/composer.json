@@ -1,0 +1,19 @@
+{
+    "name": "pandatask/installer",
+    "description": "A simple package to greet user.",
+    "license": "MIT",
+    "type": "library",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Pandatask\\Installer\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pandatask\\Installer\\Providers\\InstallerServiceProvider"
+            ]
+        }
+    }
+}

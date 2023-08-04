@@ -31,7 +31,11 @@ class AppServiceProvider extends ServiceProvider
             return collect($this->input($field))->map(fn($row) => $row['id'])->toArray();
         });
 
-        Inertia::share('statuses', fn() => Status::ordered()->get());
-        Inertia::share('priorities', fn() => Priority::ordered()->get());
+//        try {
+//            Inertia::share('statuses', fn() => Status::ordered()->get());
+//            Inertia::share('priorities', fn() => Priority::ordered()->get());
+//        } catch (Throwable $e) {
+//            dd($e);
+//        }
     }
 }

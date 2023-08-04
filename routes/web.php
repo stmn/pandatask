@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\StatusesController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Installer\WizardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Project\ActivityController;
 use App\Http\Controllers\Project\KanbanController;
@@ -30,6 +31,10 @@ use Laravolt\Avatar\Avatar;
 | contains the "web" middleware group. Now create something great!
 |
 */
+if (!file_exists(base_path('storage/app/install.lock'))) {
+    Route::get('/installer', [WizardController::class, 'index'])->name('installer');
+    Route::post('installer/step/{step}', [WizardController::class, 'processStep'])->name('installer.step');
+}
 
 Route::middleware('auth')->group(callback: function () {
     // Admin routes

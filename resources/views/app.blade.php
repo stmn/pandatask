@@ -17,7 +17,7 @@
 
     <style>
         body {
-            --brand-color: {{ Setting::query()->where('name', 'theme.brand_color')->value('value') ?? '#347CE4' }};
+            --brand-color: {{ $brand_color ?? '#347CE4' }};
             --brand-text-color: {{ '#cc0000' }};
         }
 

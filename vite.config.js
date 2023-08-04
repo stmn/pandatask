@@ -16,6 +16,17 @@ const pathSrc = path.resolve(__dirname, 'resources')
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    watch: {
+        exclude: [
+            // Dodaj regułę, która wykluczy śledzenie pliku .env
+            /\.env$/,
+        ],
+    },
+    server: {
+        watch: {
+            ignored: [/\.env/],
+        },
+    },
     resolve: {
         alias: {
             '~/': `${pathSrc}/`,
@@ -35,6 +46,7 @@ export default defineConfig({
         }),
         vue({
             template: {
+                exclude: [/\.env$/],
                 transformAssetUrls: {
                     base: null,
                     includeAbsolute: false,

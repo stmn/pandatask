@@ -7,6 +7,15 @@
         "framework"
     ],
     "license": "MIT",
+    "repositories": {
+        "local": {
+            "type": "path",
+            "url": "./src/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    },
     "require": {
         "php": "^8.2",
         "ext-dom": "*",
@@ -82,6 +91,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
