@@ -16,7 +16,7 @@ const props = defineProps({
     tasks: {
         default: () => []
     },
-    settings: {
+    dashboard_settings: {
         required: true,
     }
 });
@@ -78,7 +78,7 @@ const showSettings = ref(false);
             <!-- Customization Button -->
             <el-popover :visible="showSettings" trigger="click" placement="left" width="300">
                 <template #default>
-                    <Settings :settings="settings" @close="showSettings = false"/>
+                    <Settings :settings="dashboard_settings" @close="showSettings = false"/>
                 </template>
                 <template #reference>
                     <el-button link @click="showSettings = !showSettings">
@@ -136,7 +136,7 @@ const showSettings = ref(false);
             </div>
 
             <div v-else-if="project.tasks === undefined">
-                <el-skeleton :rows="Math.min(project.tasks_count, settings.dashboard_tasks)+2" animated/>
+                <el-skeleton :rows="Math.min(project.tasks_count, dashboard_settings.dashboard_tasks)+2" animated/>
 <!--                <TasksTable :tasks="Array.apply(null, Array(Math.min(project.tasks_count, settings.dashboard_tasks))).map(function(){ return {status: ''}; })"/>-->
             </div>
 

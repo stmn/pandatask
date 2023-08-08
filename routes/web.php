@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\GroupsController;
 use App\Http\Controllers\Admin\PrioritiesController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StatusesController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -50,6 +51,15 @@ Route::middleware('auth')->group(callback: function () {
         Route::resource('statuses', StatusesController::class)->except(['show']);
         Route::post('statuses/{status}/reorder', [StatusesController::class, 'reorder'])->name('statuses.reorder');
 
+        Route::resource('settings', SettingsController::class)->only(['index', 'update']);
+        Route::post('settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        Route::group(['as' => 'settings.', 'prefix' => '/settings/'], function () {
+            foreach (['logo', 'favicon'] as $image) {
+                Route::post('upload-' . $image, [SettingsController::class, 'upload' . ucfirst($image)])->name('upload-' . $image);
+                Route::post('delete-' . $image, [SettingsController::class, 'delete' . ucfirst($image)])->name('delete-' . $image);
+            }
+        });
 
         Route::redirect('/', route('admin.users.index'));
     });

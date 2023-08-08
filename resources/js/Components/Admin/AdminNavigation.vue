@@ -27,12 +27,12 @@
                     <span>Priorities</span>
                 </Link>
             </el-menu-item>
-
-            <!--                <Link :href="route('admin.users.index')">-->
-            <!--                    <el-menu-item index="settings">-->
-            <!--                        <span>Settings</span>-->
-            <!--                    </el-menu-item>-->
-            <!--                </Link>-->
+            <el-menu-item index="Settings">
+                <Link :href="$route('admin.settings.index')" flex items-center>
+                    <i class="fa-solid fa-cog mr-2 fa-fw"></i>
+                    <span>Settings</span>
+                </Link>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>

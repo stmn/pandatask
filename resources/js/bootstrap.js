@@ -10,7 +10,6 @@ import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-console.log(123)
 // window.axios.defaults.headers.common['X-CSRF-TOKEN'] = usePage().props.csrf_token;
 
 /**

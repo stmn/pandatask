@@ -3,7 +3,7 @@ import './bootstrap';
 import {createApp, h} from 'vue';
 import {modal} from "momentum-modal"
 import LazyComponent from 'v-lazy-component'
-import {createInertiaApp} from '@inertiajs/vue3';
+import {createInertiaApp, usePage} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {TinyColor} from "@ctrl/tinycolor";
 import {useCssVar} from "@vueuse/core";
@@ -16,7 +16,7 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 // noinspection JSUnusedLocalSymbols
 const app = createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} - ${usePage().props.settings.brand_name}`,
 
     progress: {
         color: '#fff',
