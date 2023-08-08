@@ -22,7 +22,7 @@ const {list, changeSort, changeOrder} = useList();
 <!--            {{ JSON.stringify(list.selectedColumns) }}-->
     <div float-right>
     <el-text>
-        <div flex items-center style="line-height: 1;">
+        <div flex items-center>
             <el-popover v-if="list.columns.length">
                 <template #default>
                     <el-checkbox-group v-model="list.selectedColumns">
