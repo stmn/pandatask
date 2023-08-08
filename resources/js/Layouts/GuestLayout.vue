@@ -16,8 +16,10 @@ const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).v
         <div>
             <h1 class="logo" style="color: var(--brand-text-color);">
                 <Link href="/" preserve-state style="color: var(--el-text-color);">
-                    <Logo style="height:100px;display: inline-block;"/>
-                    <br><span :style="`font-weight: 400;`"><b>PANDA</b>TASK</span>
+                    <Logo style="max-height:80px;display: inline-block;"/>
+                    <p v-if="!$page.props.settings.brand_logo" class="m-0">
+                        <b style="font-weight: 600;">{{ $page.props.settings.brand_name }}</b>
+                    </p>
                 </Link>
             </h1>
 
