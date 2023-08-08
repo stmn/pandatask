@@ -20,10 +20,7 @@ class Controller extends BaseController
             Inertia::share('statuses', fn() => Status::ordered()->get());
             Inertia::share('priorities', fn() => Priority::ordered()->get());
 
-//            Setting::query()->where('name', 'theme.brand_color')->value('value') ?? '#347CE4'
-            Inertia::share('theme', [
-                'brand_color' => Setting::query()->where('name', 'theme.brand_color')->value('value') ?? '#347CE4',
-            ]);
+            Inertia::share('settings', Setting::getData());
 
             return $next($request);
         });

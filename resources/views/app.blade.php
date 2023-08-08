@@ -17,13 +17,9 @@
 
     <style>
         body {
-            --brand-color: {{ $brand_color ?? '#347CE4' }};
-            --brand-text-color: {{ '#cc0000' }};
+            --brand-color: {{ $page['props']['settings']['brand_color'] ?? '#347CE4' }};
+            --brand-text-color: {{ '#ffffff' }};
         }
-
-        /** {*/
-        /*    --el-color-primary: #0000cc;*/
-        /*}*/
 
         #loader {
             position: fixed;
@@ -35,7 +31,6 @@
             align-items: center;
             justify-content: center;
             background: #000;
-            /*background: var(--el-bg-color);*/
         }
 
         #loader .icon {

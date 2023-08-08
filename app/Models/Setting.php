@@ -13,4 +13,20 @@ class Setting extends Model
         'name',
         'value',
     ];
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'name';
+
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
+
+    public static function getData(): array
+    {
+        return self::query()
+            ->select(['value', 'name'])
+            ->get()
+            ->pluck('value', 'name')
+            ->toArray();
+    }
 }
