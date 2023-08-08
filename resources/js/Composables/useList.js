@@ -25,7 +25,7 @@ export function useCreateList(data) {
     // list = reactive({...list, ...data});
 
     const routeParams = route().params;
-    list.search = routeParams?.search;
+    list.search = routeParams?.search || '';
     if (routeParams?.sort) {
         list.order = routeParams.sort.startsWith('-') ? 'desc' : 'asc';
     }
