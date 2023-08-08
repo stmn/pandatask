@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->string('name')->unique('key');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->string('type');
         });
     }
