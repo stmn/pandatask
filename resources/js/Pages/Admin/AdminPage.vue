@@ -36,7 +36,8 @@ const search = ref(props.search)
 
             <slot name="header">
                 <div mt-3 style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <Link :href="add"
+                    <Link v-if="add"
+                          :href="add"
                           :only="[]"
                           preserve-scroll
                           preserve-state
@@ -46,7 +47,8 @@ const search = ref(props.search)
                         </el-button>
                     </Link>
 
-                    <el-input :prefix-icon="Search"
+                    <el-input v-if="search !== undefined"
+                              :prefix-icon="Search"
                               v-model="search"
                               @input="$emit('update:search', $event)"
                               placeholder="Type to search"

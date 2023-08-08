@@ -1,5 +1,10 @@
 <template>
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+    <img v-if="$page.props.settings.brand_logo"
+         :src="`/storage/${$page.props.settings.brand_logo}`"
+         class="logo"
+         alt="logo">
+
+    <svg v-else version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
          viewBox="0 0 48.427 48.427" style="fill: currentColor; enable-background:new 0 0 48.427 48.427;"
          xml:space="preserve">
 <g>

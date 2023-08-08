@@ -25,21 +25,25 @@ router.on('success', (event) => {
 
 <template>
     <el-header>
-        <div style="display: flex; max-height: var(--el-header-height);">
+        <div style="display: flex; align-items: center; max-height: var(--el-header-height);">
             <div class="brand">
                 <Link :href="$route('dashboard')" :only="[]">
-                    <Logo class="logo"/>
-                    <span><b>PANDA</b>TASK</span>
+                    <Logo class="logo"
+                          style="max-height: 100px;"/>
+                    <b v-if="!$page.props.settings.brand_logo" ml-3>
+                        {{ $page.props.settings.brand_name }}
+                    </b>
                 </Link>
             </div>
             <el-menu
+                style="display: flex; align-items: center;"
                 class="disable-animations"
                 :default-active="activeIndex"
                 mode="horizontal"
                 :ellipsis="false"
                 :collapse-transition="false"
             >
-                <el-menu-item index="dashboard" style="border:0;line-height:1;"
+                <el-menu-item index="dashboard" style="border:0;"
                               :class="{'is-active': $route().current()==='dashboard'}">
                     <Link :href="$route('dashboard')" :only="[]" style="height:100%;display: flex;align-items: center;">
                         <i class="fa-solid fa-house mr-2"></i>
@@ -47,7 +51,7 @@ router.on('success', (event) => {
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="projects" style="border:0;line-height:1"
+                <el-menu-item index="projects" style="border:0;"
                               :class="{'is-active': $route().current()==='projects'}">
                     <Link :href="$route('projects')" :only="['projects']"
                           style="height:100%;display: flex;align-items: center;">
@@ -56,7 +60,7 @@ router.on('success', (event) => {
                     </Link>
                 </el-menu-item>
 
-                <el-menu-item index="tasks" style="border:0;line-height:1"
+                <el-menu-item index="tasks" style="border:0;"
                               :class="{'is-active': $route().current()==='tasks'}">
                     <Link :href="$route('tasks')" :only="['tasks']"
                           style="height:100%;display: flex;align-items: center;">
@@ -67,14 +71,14 @@ router.on('success', (event) => {
 
                 <el-sub-menu index="2" :show-timeout="0" style="margin-left: 20px;">
                     <template #title>More</template>
-                    <el-menu-item index="profile" style="line-height: 1;">
+                    <el-menu-item index="profile" style="">
                         <Link :href="$route('profile.edit')">
-                            <i class="fa-fw fa-solid fa-user-pen mr-2"></i>Edit profile
+                            Edit profile
                         </Link>
                     </el-menu-item>
-                    <el-menu-item index="admin" v-if="group('admin')" style="line-height: 1;">
+                    <el-menu-item index="admin" v-if="group('admin')" style="">
                         <Link :href="$route('admin.users.index')">
-                            <i class="fa-fw fa-solid fa-solid fa-user-secret mr-2"></i>Admin panel
+                            Admin panel
                         </Link>
                     </el-menu-item>
                     <el-menu-item index="logout">
@@ -103,7 +107,7 @@ router.on('success', (event) => {
     color: var(--el-text-color);
     font-size: 14px;
     line-height: var(--el-header-height);
-    padding: 0 20px 0 10px;
+    padding: 0 10px 0 10px;
 
     a {
         color: var(--el-text-color) !important;
@@ -112,8 +116,7 @@ router.on('success', (event) => {
         align-items: center;
 
         .logo {
-            margin-right: 10px;
-            width: 36px;
+            height: 36px;
         }
     }
 }

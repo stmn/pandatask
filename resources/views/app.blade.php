@@ -13,7 +13,7 @@
 
     <title inertia>{{ config('app.name', 'Pandatask') }}</title>
     <!--suppress HtmlUnknownTarget -->
-    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="icon" type="image/png" href="/storage/{{ $page['props']['settings']['brand_favicon'] }}">
 
     <style>
         body {
