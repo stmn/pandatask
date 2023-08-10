@@ -2,6 +2,7 @@
 import {Link, router} from '@inertiajs/vue3'
 import Layout from "@/Layouts/Layout.vue";
 import {ref} from "vue";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 defineOptions({layout: Layout})
 
@@ -58,11 +59,10 @@ const handleClick = (index) => {
     <el-page-header @back="() => router.visit($route('projects'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <el-avatar
-                    :size="24"
-                    style="margin-right: 10px;"
-                    :src="project.avatar"
-                />
+                <BaseAvatar :avatar="project.avatar"
+                            :name="project.name"
+                            :size="24"
+                            class="mr-3" />
 
                 <el-dropdown trigger="click" ref="dropdownRef" @visible-change="onOpen"
                              style="color: inherit; font-size: inherit; line-height: inherit; cursor: pointer;">

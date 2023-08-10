@@ -1,6 +1,6 @@
 <template>
     <img v-if="$page.props.settings.brand_logo"
-         :src="`/storage/${$page.props.settings.brand_logo}`"
+         :src="`${$page.props.settings.brand_logo}`"
          class="logo"
          alt="logo">
 

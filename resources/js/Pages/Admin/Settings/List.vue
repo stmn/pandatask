@@ -48,7 +48,7 @@ function submit() {
                     <div style="display: block;">
                         <span>Logotype</span>
                         <div style="line-height: 20px; font-size: 11px;">
-                            Max size: 512kb, png
+                            Max size: 256kb, png
                         </div>
                     </div>
                 </template>
@@ -67,7 +67,7 @@ function submit() {
                     <div style="display: block;">
                         <span>Favicon</span>
                         <div style="line-height: 20px; font-size: 11px;">
-                            Max size: 128kb, png
+                            Max size: 64kb, png
                         </div>
                     </div>
                 </template>

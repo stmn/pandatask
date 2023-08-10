@@ -1,7 +1,10 @@
 <script setup>
 import InputError from '~/js/Components/Forms/InputError.vue';
-import {useForm, usePage} from '@inertiajs/vue3';
+import {useForm, usePage, router} from '@inertiajs/vue3';
 import {ElMessage} from "element-plus";
+import ImageUpload from "@/Components/Common/ImageUpload.vue";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
+import {computed} from "vue";
 
 defineProps({
     mustVerifyEmail: {
@@ -21,6 +24,7 @@ const form = useForm({
     public_email: user.public_email,
     job_title: user.job_title,
     phone: user.phone,
+    avatar: user.avatar,
 });
 
 const submit = () => {
@@ -29,6 +33,21 @@ const submit = () => {
         onSuccess: () => {
             ElMessage.success('Saved.')
         },
+    });
+};
+
+const avatar = computed(() => {
+    return usePage().props.auth.user.avatar
+});
+
+const handleAvatarChange = (avatar) => {
+    console.log('handleAvatarChange', avatar);
+    router.reload({
+        only: ['auth'],
+        // preserveState: true,
+        onSuccess: () => {
+            // form.avatar = avatar;
+        }
     });
 };
 </script>
@@ -40,6 +59,7 @@ const submit = () => {
         <el-alert show-icon :closable="false" type="info">
             Update your account's profile information and email address.
         </el-alert>
+
         <br>
         <el-card shadow="never">
             <el-form @submit.prevent="submit" label-width="180" label-position="left">
@@ -133,6 +153,30 @@ const submit = () => {
                     </el-input>
 
                     <InputError :message="form.errors.job_title"/>
+                </el-form-item>
+
+                <el-form-item>
+                    <template #label>
+                        <div style="display: block;">
+                            <span>Avatar</span>
+                            <div style="line-height: 20px; font-size: 11px;">
+                                Max size: 128kb, png, jpg
+                            </div>
+                        </div>
+                    </template>
+
+                    <ImageUpload
+                        :imageUrl="$page.props.auth.user.avatar"
+                        :uploadUrl="$route('profile.update-avatar')"
+                        :deleteUrl="$route('profile.delete-avatar')"
+                        @uploaded="handleAvatarChange"
+                    >
+                        <template #image>
+                            <BaseAvatar :avatar="avatar"
+                                        :name="form.first_name + ' ' + form.last_name"
+                                        :size="128" />
+                        </template>
+                    </ImageUpload>
                 </el-form-item>
 
                 <!--            <div v-if="mustVerifyEmail && user.email_verified_at === null">-->

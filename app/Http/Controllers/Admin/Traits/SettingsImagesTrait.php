@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Traits;
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 trait SettingsImagesTrait
@@ -13,7 +14,7 @@ trait SettingsImagesTrait
     public function uploadLogo(): void
     {
         $this->validate(request(), [
-            'file' => 'required|image|mimes:png|max:512',
+            'file' => 'required|image|mimes:png|max:256',
         ]);
 
         $this->uploadImage('brand_logo');
@@ -30,7 +31,7 @@ trait SettingsImagesTrait
     public function uploadFavicon(): void
     {
         $this->validate(request(), [
-            'file' => 'required|image|mimes:png|max:128',
+            'file' => 'required|image|mimes:png|max:64',
         ]);
 
         $this->uploadImage('brand_favicon');
@@ -44,12 +45,20 @@ trait SettingsImagesTrait
     private function uploadImage($name): void
     {
         $file = request()->file('file');
-        $path = $file->storePublicly('public');
-        Setting::query()->where('name', $name)->update(['value' => $path]);
+
+        $this->deleteImage($name);
+
+        $path = $file->storePublicly('public/general');
+        $url = Storage::url($path);
+        Setting::query()->where('name', $name)->update(['value' => $url]);
     }
 
     private function deleteImage($name): void
     {
+        Storage::disk('public')->delete(
+            str_replace('/storage', '', Setting::query()->where('name', $name)->value('value'))
+        );
+
         Setting::query()->where('name', $name)->update(['value' => null]);
     }
 }

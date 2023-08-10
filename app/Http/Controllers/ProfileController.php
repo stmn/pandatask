@@ -34,6 +34,24 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
+    public function updateAvatar(Request $request): void
+    {
+        $request->validate([
+            'file' => ['required', 'image', 'max:128', 'mimes:png,jpg'],
+        ]);
+
+        loggedUser()
+            ->addMediaFromRequest('file')
+            ->usingName('avatar')
+            ->usingFileName('avatar.'.$request->file('file')->getClientOriginalExtension())
+            ->toMediaCollection('avatar');
+    }
+
+    public function deleteAvatar(Request $request): void
+    {
+        loggedUser()->clearMediaCollection('avatar');
+    }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([

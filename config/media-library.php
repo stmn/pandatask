@@ -90,7 +90,7 @@ return [
      * Whether to activate versioning when urls to files get generated.
      * When activated, this attaches a ?v=xx query string to the URL.
      */
-    'version_urls' => false,
+    'version_urls' => true,
 
     /*
      * The media library will try to optimize all converted images by removing
@@ -233,5 +233,5 @@ return [
      * You can specify a prefix for that is used for storing all media.
      * If you set this to `/my-subdir`, all your media will be stored in a `/my-subdir` directory.
      */
-    'prefix' => env('MEDIA_PREFIX', ''),
+    'prefix' => env('MEDIA_PREFIX', '/media'),
 ];

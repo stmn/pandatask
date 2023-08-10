@@ -5,6 +5,7 @@ import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import {onMounted, provide, ref, Transition} from "vue";
 import usePageLoading from "@/Composables/usePageLoading.js";
 import Settings from "~/js/Components/Dashboard/DashboardSettings.vue";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -110,11 +111,10 @@ const showSettings = ref(false);
             <el-divider content-position="left">
                 <Link :href="$route('project', {project: project.id})"
                       flex items-center>
-                    <el-avatar
-                        :size="24"
-                        class="mr-3"
-                        :src="project.avatar"
-                    />
+                    <BaseAvatar :avatar="project.avatar"
+                                :name="project.name"
+                                :size="24"
+                                class="mr-3" />
                     <span>{{ project.name }}</span>
                 </Link>
             </el-divider>

@@ -9,6 +9,7 @@ import Activity from "~/js/Components/Activity/ActivityType.vue";
 import TaskLink from "~/js/Components/Task/TaskLink.vue";
 import 'vue3-easy-data-table/dist/style.css';
 import {useCreateList, useList} from "@/Composables/useList.js";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 const props = defineProps({
     tasks: {},
@@ -188,11 +189,9 @@ updateColumns(columns.value);
                         <td v-if="selectedColumns.includes('project_id')"
                             class="el-table_1_column_9 is-center el-table__cell" rowspan="1" colspan="1">
                             <div flex items-center>
-                                <el-avatar
-                                    :size="24"
-                                    style="margin-right: 5px;"
-                                    :src="row.project.avatar"
-                                />
+                                <BaseAvatar :avatar="row.project.avatar"
+                                            :name="row.project.name"
+                                            :size="24" mr-1 />
                                 <Link :href="$route('project.tasks', {project: row.project_id})">
                                     {{ row.project.name }}
                                 </Link>

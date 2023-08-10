@@ -1,6 +1,8 @@
 <script setup>
 import {Link} from '@inertiajs/vue3'
 import {computed} from "vue";
+import DefaultAvatar from "@/Components/Common/DefaultAvatar.vue";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 const props = defineProps({
     user: {
@@ -38,25 +40,20 @@ const fullName = computed(() => {
         <template #reference>
             <span class="user">
                 <el-tooltip :content="fullName" placement="top" :disabled="!onlyAvatar">
-<!--                <el-avatar-->
-<!--                    :size="props.size"-->
-<!--                    style="vertical-align: sub; margin-right: 5px;"-->
-<!--                    :src="user?.avatar"-->
-<!--                >-->
-<!--                    abc-->
-<!--                </el-avatar>-->
-                    <img :src="user?.avatar" loading="lazy" style="width: 24px; height: 24px;" mr-1 />
+                <BaseAvatar :avatar="user.avatar"
+                            :name="user.full_name"
+                            :size="props.size"
+                            style="vertical-align: sub; margin-right: 5px;"/>
                 </el-tooltip> <b v-if="!onlyAvatar">{{ user?.first_name }} {{ user?.last_name?.[0] }}</b>
             </span>
         </template>
 
         <div>
-            <el-avatar
-                v-if="user.avatar"
-                :size="50"
-                style="vertical-align: sub; float: left; margin-right: 10px;"
-                :src="user.avatar"
-            />
+            <BaseAvatar :avatar="user.avatar"
+                        :name="user.full_name"
+                        :size="50"
+                        style="vertical-align: sub; float: left; margin-right: 10px;"/>
+
             <div><b>{{ user?.first_name }} {{ user?.last_name }}</b></div>
             <div><i class="fas fa-fw fa-briefcase mr-1"></i><small>{{ user.job_title }}</small></div>
             <div style="margin-top: 0;">

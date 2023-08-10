@@ -29,5 +29,7 @@ abstract class ProjectController extends Controller
 
             return $next($request);
         });
+
+        parent::__construct();
     }
 }

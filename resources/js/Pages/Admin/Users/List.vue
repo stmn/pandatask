@@ -4,6 +4,7 @@ import Layout from "~/js/Layouts/Layout.vue";
 import AdminPage from "~/js/Pages/Admin/AdminPage.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import {useCreateList} from "@/Composables/useList.js";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -31,8 +32,9 @@ const {list, changeSort, changeOrder} = useCreateList();
             <el-table-column width="48" align="center">
                 <template #default="scope">
                     <div flex items-center>
-                        <img :src="scope.row.avatar" loading="lazy" alt="Avatar"
-                             style="height: 24px; width: 24px; border-radius: 100%;"/>
+                        <BaseAvatar :avatar="scope.row.avatar"
+                                    :name="scope.row.full_name"
+                                    :size="24" />
                     </div>
                 </template>
             </el-table-column>

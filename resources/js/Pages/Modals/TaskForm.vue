@@ -22,7 +22,11 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    custom_fields,
+    custom_fields: {
+        type: Array,
+        required: false,
+        default: () => []
+    }
 });
 
 const form = useForm({

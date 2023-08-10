@@ -19,13 +19,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravolt\Avatar\Avatar;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @mixin IdeHelperProject
  */
-class Project extends Model
+class Project extends Model implements HasMedia
 {
     use SoftDeletes, useLatestActivity;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -53,6 +56,14 @@ class Project extends Model
         static::creating(function (Project $project) {
             $project->latest_activity_at = now();
         });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+//            ->useFallbackUrl('/storage/default-avatars/?chars=2&name=' . urlencode($this->full_name))
+//            ->useFallbackPath(storage_path('app/public/user-avatars/' . $this->id . '.png')
+            ->singleFile();
     }
 
     public static function query(): Builder|ProjectQueryBuilder
@@ -124,7 +135,8 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
-                return url('storage/project-avatars/' . $this->id . '.png');
+                return $this->getFirstMediaUrl('avatar');
+//                return url('storage/project-avatars/' . $this->id . '.png');
             },
         );
     }

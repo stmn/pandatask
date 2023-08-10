@@ -93,6 +93,8 @@ Route::middleware('auth')->group(callback: function () {
     Route::group(['as' => 'profile.', 'prefix' => '/profile/'], function () {
         Route::get('', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('', [ProfileController::class, 'update'])->name('update');
+        Route::post('update-avatar', [ProfileController::class, 'updateAvatar'])->name('update-avatar');
+        Route::post('delete-avatar', [ProfileController::class, 'deleteAvatar'])->name('delete-avatar');
         Route::delete('', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
@@ -141,7 +143,7 @@ Route::get('storage/project-avatars/{project}.png', function (Project $project) 
     return response()->file($image->dirname . '/' . $image->basename);
 });
 
-Route::get('storage/user-avatars/{user}.png', function (\App\Models\User $user) {
+Route::get('storage/default-avatars/{user}.png', function (\App\Models\User $user) {
     @mkdir(storage_path('app/public/user-avatars/'), 0777, true);
 
     $image = (new Avatar([

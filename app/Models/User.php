@@ -18,15 +18,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravolt\Avatar\Avatar;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @mixin IdeHelperUser
  * @property array $settings
  * @property string $full_name
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use HasFactory, Notifiable, SoftDeletes;//, useCacheBuilder;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'active_time_id',
@@ -55,6 +58,14 @@ class User extends Authenticatable
         'avatar',
         'full_name',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+//            ->useFallbackUrl('/storage/default-avatars/?chars=2&name=' . urlencode($this->full_name))
+//            ->useFallbackPath(storage_path('app/public/user-avatars/' . $this->id . '.png')
+            ->singleFile();
+    }
 
     public static function query(): Builder|UserQueryBuilder
     {
@@ -106,10 +117,27 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
+                return $this->getFirstMediaUrl('avatar');
+//                if(!$url){
+//                    $image = (new Avatar([
+//                        ...config('laravolt.avatar'),
+//                        ...['chars' => 2]
+//                    ]))
+//                        ->create($this->full_name)
+//                        ->save(storage_path('app/public/user-avatars/' . $user->id . '.png'));
+//                }
+
 //                if (!$this->full_name) {
 //                    return null;
 //                }
-                return url('storage/user-avatars/' . $this->id . '.png');
+                //                return Cache::rememberForever('avatar-' . $this->full_name, function () {
+
+//                return (new Avatar([
+//                    ...config('laravolt.avatar'),
+//                    ...['chars' => 2]
+//                ]))->setDimension(64,64)->create($this->full_name)->toSvg();
+
+//                return url('storage/user-avatars/' . $this->id . '.png');
 //                return Cache::rememberForever('avatar-' . $this->full_name, function () {
 //                    return (new Avatar([
 //                        ...config('laravolt.avatar'),

@@ -1,6 +1,7 @@
 <script setup>
 import {Link, router} from "@inertiajs/vue3";
 import {ElMessage} from "element-plus";
+import {ref} from "vue";
 
 const props = defineProps([
     'imageUrl',
@@ -12,7 +13,7 @@ const emit = defineEmits(['uploaded']);
 
 const handleSuccess = (response, uploadFile) => {
     emit('uploaded', URL.createObjectURL(uploadFile.raw));
-    router.reload({only: ['settings']});
+    router.reload({only: ['settings', 'auth']});
 }
 
 const handleError = (err) => {
@@ -21,31 +22,41 @@ const handleError = (err) => {
         duration: 5000,
     });
 }
+
+const uploadRef = ref(null);
 </script>
 <template>
-    <Link v-if="imageUrl"
-          :href="deleteUrl"
-          method="post"
-          preserve-scroll>
-        <el-button size="small" type="danger" plain mb-2>
-            <i class="fas fa-trash-alt mr-2"></i> Remove
-        </el-button>
-    </Link>
 
     <el-upload
+        ref="uploadRef"
         :action="uploadUrl"
         list-type="picture"
         :show-file-list="false"
         :on-success="handleSuccess"
         :on-error="handleError"
-        accept="image/png"
+        accept="image/png, image/jpeg"
         :headers="{'X-CSRF-TOKEN': $page.props.csrf_token, 'Accept': 'application/json'}"
     >
-        <img v-if="imageUrl"
-             :src="`${imageUrl.includes('blob:http')?imageUrl:'/storage/'+imageUrl}`"/>
+        <template #trigger>
+            <el-button size="small" type="primary" plain>
+                <i class="fas fa-upload mr-2"></i> Upload
+            </el-button>
+        </template>
 
-        <el-button v-else size="small" type="primary" plain>
-            <i class="fas fa-upload mr-2"></i> Upload
-        </el-button>
+        <Link v-if="imageUrl"
+              :href="deleteUrl"
+              method="post"
+              preserve-scroll>
+            <el-button size="small" type="danger" plain ml-2 style="margin-top: -1px;">
+                <i class="fas fa-trash-alt mr-2"></i> Remove
+            </el-button>
+        </Link>
+
+        <div mt-2>
+            <slot name="image">
+                <img v-if="imageUrl"
+                     :src="`${imageUrl.includes('blob:http')?imageUrl:imageUrl}`"/>
+            </slot>
+        </div>
     </el-upload>
 </template>

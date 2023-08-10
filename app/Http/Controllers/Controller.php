@@ -19,7 +19,6 @@ class Controller extends BaseController
         $this->middleware(function ($request, $next) {
             Inertia::share('statuses', fn() => Status::ordered()->get());
             Inertia::share('priorities', fn() => Priority::ordered()->get());
-
             Inertia::share('settings', Setting::getData());
 
             return $next($request);
