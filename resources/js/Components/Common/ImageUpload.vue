@@ -1,7 +1,6 @@
 <script setup>
 import {Link, router} from "@inertiajs/vue3";
 import {ElMessage} from "element-plus";
-import {ref} from "vue";
 
 const props = defineProps([
     'imageUrl',
@@ -22,13 +21,10 @@ const handleError = (err) => {
         duration: 5000,
     });
 }
-
-const uploadRef = ref(null);
 </script>
 <template>
 
     <el-upload
-        ref="uploadRef"
         :action="uploadUrl"
         list-type="picture"
         :show-file-list="false"
@@ -54,8 +50,7 @@ const uploadRef = ref(null);
 
         <div mt-2>
             <slot name="image">
-                <img v-if="imageUrl"
-                     :src="`${imageUrl.includes('blob:http')?imageUrl:imageUrl}`"/>
+                <img v-if="imageUrl" :src="imageUrl"/>
             </slot>
         </div>
     </el-upload>

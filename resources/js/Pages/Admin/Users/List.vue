@@ -34,7 +34,7 @@ const {list, changeSort, changeOrder} = useCreateList();
                     <div flex items-center>
                         <BaseAvatar :avatar="scope.row.avatar"
                                     :name="scope.row.full_name"
-                                    :size="24" />
+                                    :size="24"/>
                     </div>
                 </template>
             </el-table-column>

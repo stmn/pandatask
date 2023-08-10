@@ -99,7 +99,7 @@ Route::middleware('auth')->group(callback: function () {
     });
 
     // Project routes
-//dd(1);
+
     Route::group(['as' => 'project', 'prefix' => '/project/{project}/'], function () {
         Route::get('', fn() => redirect()->route('project.tasks', ['project' => request()->route('project')]));
 

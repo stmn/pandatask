@@ -15,7 +15,7 @@ import {computed} from "vue";
 const props = defineProps({
     name: {
         type: String,
-        default: 'O',
+        default: 'X',
     },
     letters: {
         type: Number,

@@ -1,6 +1,6 @@
 <script setup>
 import InputError from '~/js/Components/Forms/InputError.vue';
-import {useForm, usePage, router} from '@inertiajs/vue3';
+import {useForm, usePage} from '@inertiajs/vue3';
 import {ElMessage} from "element-plus";
 import ImageUpload from "@/Components/Common/ImageUpload.vue";
 import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
@@ -42,13 +42,6 @@ const avatar = computed(() => {
 
 const handleAvatarChange = (avatar) => {
     console.log('handleAvatarChange', avatar);
-    router.reload({
-        only: ['auth'],
-        // preserveState: true,
-        onSuccess: () => {
-            // form.avatar = avatar;
-        }
-    });
 };
 </script>
 
@@ -174,7 +167,7 @@ const handleAvatarChange = (avatar) => {
                         <template #image>
                             <BaseAvatar :avatar="avatar"
                                         :name="form.first_name + ' ' + form.last_name"
-                                        :size="128" />
+                                        :size="128"/>
                         </template>
                     </ImageUpload>
                 </el-form-item>

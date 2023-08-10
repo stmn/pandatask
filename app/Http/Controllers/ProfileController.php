@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class ProfileController extends Controller
 {
@@ -34,6 +36,10 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
+    /**
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
     public function updateAvatar(Request $request): void
     {
         $request->validate([
@@ -43,11 +49,11 @@ class ProfileController extends Controller
         loggedUser()
             ->addMediaFromRequest('file')
             ->usingName('avatar')
-            ->usingFileName('avatar.'.$request->file('file')->getClientOriginalExtension())
+            ->usingFileName('avatar.' . $request->file('file')->getClientOriginalExtension())
             ->toMediaCollection('avatar');
     }
 
-    public function deleteAvatar(Request $request): void
+    public function deleteAvatar(): void
     {
         loggedUser()->clearMediaCollection('avatar');
     }

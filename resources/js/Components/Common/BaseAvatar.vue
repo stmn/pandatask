@@ -2,14 +2,13 @@
     <el-avatar
         v-if="avatar"
         :size="size"
-        style="vertical-align: sub;"
         :src="avatar"
+        style="vertical-align: sub;"
     />
     <DefaultAvatar v-else
                    :name="name"
-                   :style="`width: ${size}px; height: ${size}px;`" />
+                   :style="`width: ${size}px; height: ${size}px;`"/>
 </template>
-
 <script setup>
 import DefaultAvatar from "@/Components/Common/DefaultAvatar.vue";
 
@@ -26,9 +25,4 @@ const props = defineProps({
         default: '',
     },
 });
-
 </script>
-
-<style lang="scss" scoped>
-
-</style>
