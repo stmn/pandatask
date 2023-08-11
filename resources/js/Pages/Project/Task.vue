@@ -12,6 +12,7 @@ import TaskForm from "~/js/Components/Task/TaskForm.vue";
 import Editor from "~/js/Components/Forms/EditorInput.vue";
 import {useStorage} from "@vueuse/core";
 import EditorContent from "~/js/Components/Forms/EditorContent.vue";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -123,11 +124,11 @@ const onlyComments = useStorage('onlyComments', true);
             <div style="display: flex; align-items: center;">
                 <Timer :task="task"/>
 
-                <el-avatar
+                <BaseAvatar
                     :size="26"
                     style="margin: 0 10px;"
-                    :src="task.project.avatar"
-                />
+                    :name="project.name"
+                    :avatar="project.avatar" />
                 <span style="margin-right: 5px;">{{ task.subject }}<span class="task-number">#{{ task.number }}</span></span>
                 &nbsp;<el-tag v-if="task.private">Private</el-tag>
             </div>

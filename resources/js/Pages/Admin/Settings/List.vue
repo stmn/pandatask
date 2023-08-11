@@ -40,7 +40,7 @@ function submit() {
             </el-form-item>
 
             <el-form-item label="Color">
-                <el-color-picker v-model="form.brand_color"/>
+                <el-color-picker v-model="form.brand_color" size="large"/>
             </el-form-item>
 
             <el-form-item>

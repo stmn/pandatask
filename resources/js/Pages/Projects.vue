@@ -6,6 +6,7 @@ import User from "~/js/Components/User/UserAvatar.vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Activity from "~/js/Components/Activity/ActivityType.vue";
 import {useCreateList, useList} from "@/Composables/useList.js";
+import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -66,12 +67,11 @@ const {list} = useCreateList({only: ['projects']});
                 <template #header>
                     <div class="card-header">
                         <div flex items-center>
-                            <el-avatar
-                                v-if="item.avatar"
+                            <BaseAvatar
                                 :size="32"
-                                style="margin-right: 10px; margin-top: -2px;"
-                                :src="item.avatar"
-                            />
+                                :name="item.name"
+                                :avatar="item.avatar"
+                                style="margin-right: 10px; margin-top: -2px;" />
 
                             <Link :href="$route('project', {project: item.id})">
                                 {{ item.name }}

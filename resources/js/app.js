@@ -16,7 +16,10 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 // noinspection JSUnusedLocalSymbols
 const app = createInertiaApp({
-    title: (title) => `${title} - ${usePage().props.settings.brand_name}`,
+    title: (title) => {
+        const name = usePage().props.settings.brand_name || '';
+        return `${title}${name ? ' - '+name : name}`
+    },
 
     progress: {
         color: '#fff',
