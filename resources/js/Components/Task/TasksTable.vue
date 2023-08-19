@@ -3,13 +3,15 @@ import {Link, router, usePage} from '@inertiajs/vue3'
 import {computed, inject, ref, Transition} from "vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Timer from "~/js/Components/Task/TimerButton.vue";
-import User from "~/js/Components/User/UserAvatar.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import Activity from "~/js/Components/Activity/ActivityType.vue";
 import TaskLink from "~/js/Components/Task/TaskLink.vue";
 import 'vue3-easy-data-table/dist/style.css';
-import {useCreateList, useList} from "@/Composables/useList.js";
+import {useList} from "@/Composables/useList.js";
 import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
+import UserName from "@/Components/User/UserName.vue";
+import UserAvatar from "@/Components/User/UserAvatar.vue";
+import UserPopover from "@/Components/User/UserPopover.vue";
 
 const props = defineProps({
     tasks: {},
@@ -114,7 +116,7 @@ updateColumns(columns.value);
 </script>
 
 <template>
-<!--        {{ JSON.stringify(selectedColumns) }}-->
+    <!--        {{ JSON.stringify(selectedColumns) }}-->
 
     <div v-if="1"
          class="el-table--fit el-table--striped el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed is-scrolling-none"
@@ -191,7 +193,7 @@ updateColumns(columns.value);
                             <div flex items-center>
                                 <BaseAvatar :avatar="row.project.avatar"
                                             :name="row.project.name"
-                                            :size="24" mr-1 />
+                                            :size="24" mr-1/>
                                 <Link :href="$route('project.tasks', {project: row.project_id})">
                                     {{ row.project.name }}
                                 </Link>
@@ -211,7 +213,7 @@ updateColumns(columns.value);
                                     </template>
 
                                     <!--                    <Transition appear>-->
-                                    <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
+                                    <el-dropdown v-if="row.status" style="width: 100%; max-width: 150px;" size="default" trigger="click"
                                                  @command="updateTask">
                                         <div v-if="row.status"
                                              class="status-tag"
@@ -245,7 +247,7 @@ updateColumns(columns.value);
                                     </template>
 
                                     <!--                    <Transition appear>-->
-                                    <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
+                                    <el-dropdown v-if="row.priority" style="width: 100%; max-width: 150px;" size="default" trigger="click"
                                                  @command="updateTask">
                                         <div v-if="row.priority"
                                              class="priority-tag"
@@ -292,7 +294,12 @@ updateColumns(columns.value);
                                 <!--                    <Transition appear>-->
                                 <template v-if="row.latest_activity">
                                     <div v-if="row.latest_activity" style="display: flex; align-items: center;">
-                                        <User :user="row.latest_activity.user"/> &nbsp;
+                                        <UserPopover :user="row.latest_activity.user">
+                                            <div flex items-center>
+                                                <UserAvatar :user="row.latest_activity.user"/>
+                                                <UserName :user="row.latest_activity.user" class="mx-1"/>
+                                            </div>
+                                        </UserPopover>
                                         <Activity :activity="row.latest_activity" :task="row" only-icon
                                                   style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
                                         <Time :show-clock="false" :time="row.latest_activity.created_at"/>
@@ -446,7 +453,7 @@ updateColumns(columns.value);
                     <Transition appear>
                         <template v-if="row.latest_activity">
                             <div v-if="row.latest_activity" style="display: flex; align-items: center;">
-                                <User :user="row.latest_activity.user"/> &nbsp;
+                                <UserPopover :user="row.latest_activity.user"/> &nbsp;
                                 <Activity :activity="row.latest_activity" :task="row" only-icon
                                           style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
                                 <Time :show-clock="false" :time="row.latest_activity.created_at"/>

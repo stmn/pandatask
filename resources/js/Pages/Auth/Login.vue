@@ -30,7 +30,7 @@ const submit = () => {
         <Head title="Log in"/>
 
         <el-card class="auth-card">
-            <h2>Login</h2>
+            <h2>Log in</h2>
 
             <el-alert type="success" v-if="status" :closable="false" style="margin-bottom: 15px;">
                 {{ status }}

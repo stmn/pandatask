@@ -16,7 +16,7 @@ class DashboardController extends Controller
 
     public function index(Request $request): Response
     {
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Dashboard', [
             'activeIndex' => 'dashboard',
             'hello' => $this->hello[array_rand($this->hello)],
             'dashboard_settings' => function () {

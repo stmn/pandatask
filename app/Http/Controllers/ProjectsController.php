@@ -22,7 +22,7 @@ class ProjectsController extends Controller
     {
         $this->authorize('viewAny', Project::class);
 
-        return Inertia::render('Projects', [
+        return Inertia::render('Projects/Projects', [
             'activeIndex' => 'projects',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()
@@ -51,7 +51,7 @@ class ProjectsController extends Controller
         $project?->load('clients');
 
         $fields = 'id,first_name,last_name';
-        return Inertia::modal('Modals/ProjectForm', [
+        return Inertia::modal('Projects/ProjectsFormModal', [
             'project' => $project,
             'clients' => User::query()
                 ->selectRaw($fields)
@@ -84,7 +84,7 @@ class ProjectsController extends Controller
             'client_id' => $request->get('client_id'),
             'statuses' => $request->get('statuses'),
             'priorities' => $request->get('priorities'),
-            'custom_fields' => $request->get('custom_fields'),
+//            'custom_fields' => $request->get('custom_fields', []),
         ]);
 
         assert($project instanceof Project);

@@ -13,7 +13,7 @@ class TimesheetsController extends ProjectController
 {
     public function index(Project $project): Response
     {
-        return Inertia::render('Project/Timesheets', [
+        return Inertia::render('Project/Timesheets/Timesheets', [
             'activeTab' => 'timesheets',
             'project' => fn() => $project,
             'projects' => fn() => Project::query()
@@ -31,7 +31,7 @@ class TimesheetsController extends ProjectController
     {
         $time?->load('task');
 
-        return Inertia::modal('Modals/TimelineForm', [
+        return Inertia::modal('Task/TaskTimeModal', [
             'project' => $project,
             'time' => $time,
             'tasks' => $project->tasks()->get(),

@@ -1,10 +1,11 @@
 <script setup>
-import {useForm, usePage} from "@inertiajs/vue3"
+import {useForm} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {onMounted, ref} from "vue";
-import User from "~/js/Components/User/UserAvatar.vue";
-import InputError from "~/js/Components/Forms/InputError.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import UserName from "@/Components/User/UserName.vue";
+import UserAvatar from "@/Components/User/UserAvatar.vue";
 
 const props = defineProps({
     project: {
@@ -90,7 +91,10 @@ const activeTab = ref('general');
                                 :label="item.full_name"
                                 :value="item"
                             >
-                                <User :user="item" disable-popover/>
+                                <div flex items-center>
+                                    <UserAvatar :user="item"/>
+                                    <UserName :user="item"/>
+                                </div>
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -111,7 +115,10 @@ const activeTab = ref('general');
                                 :label="item.full_name"
                                 :value="item"
                             >
-                                <User :user="item" disable-popover/>
+                                <div flex items-center>
+                                    <UserAvatar :user="item"/>
+                                    <UserName :user="item"/>
+                                </div>
                             </el-option>
                         </el-select>
                     </el-form-item>

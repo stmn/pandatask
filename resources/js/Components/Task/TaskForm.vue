@@ -1,10 +1,11 @@
 <script setup>
-import User from "~/js/Components/User/UserAvatar.vue";
 import Editor from "~/js/Components/Forms/EditorInput.vue";
 import InputError from "~/js/Components/Forms/InputError.vue";
 import {usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 import CustomFields from "@/Components/Task/CustomFields.vue";
+import UserAvatar from "@/Components/User/UserAvatar.vue";
+import UserName from "@/Components/User/UserName.vue";
 
 const props = defineProps({
     modelValue: {
@@ -52,7 +53,7 @@ const priorities = computed(() => {
         <el-row :gutter="10">
             <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
                 <el-form-item label="Subject">
-                    <el-input v-model="modelValue.subject" class="focus-me" maxlength="100" show-word-limit />
+                    <el-input v-model="modelValue.subject" class="focus-me" maxlength="100" show-word-limit/>
                     <InputError :message="modelValue.errors['task.subject']"/>
                 </el-form-item>
             </el-col>
@@ -107,13 +108,13 @@ const priorities = computed(() => {
                 <el-row :gutter="10">
                     <el-col :xs="12" :sm="12" :md="12" :lg="12">
                         <el-form-item label="Start date">
-                            <el-date-picker v-model="modelValue.start_date" style="width: 100%;" />
+                            <el-date-picker v-model="modelValue.start_date" style="width: 100%;"/>
                             <InputError :message="modelValue.errors['task.start_date']"/>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="12">
                         <el-form-item label="End date">
-                            <el-date-picker v-model="modelValue.end_date" style="width: 100%;" />
+                            <el-date-picker v-model="modelValue.end_date" style="width: 100%;"/>
                             <InputError :message="modelValue.errors['task.end_date']"/>
                         </el-form-item>
                     </el-col>
@@ -172,7 +173,10 @@ const priorities = computed(() => {
                             :label="item.full_name"
                             :value="item"
                         >
-                            <User :user="item" disable-popover/>
+                            <div flex items-center>
+                                <UserAvatar :user="item"/>
+                                <UserName :user="item"/>
+                            </div>
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -184,6 +188,6 @@ const priorities = computed(() => {
             </el-col>
         </el-row>
 
-        <CustomFields v-model="modelValue.custom_fields" />
+        <CustomFields v-model="modelValue.custom_fields"/>
     </el-config-provider>
 </template>

@@ -4,14 +4,15 @@ import {inject} from "vue";
 
 const props = defineProps(['settings']);
 
+const emit = defineEmits(['close']);
+
 const handleTasks = inject('handleTasks');
 const handleProjects = inject('handleProjects');
 
-const emit = defineEmits(['close']);
-
 const submit = () => {
     router.post(route('dashboard.save-settings'), props.settings, {
-        only: ['tasks', 'projects', 'flash'], onSuccess: (response) => {
+        only: ['tasks', 'projects', 'flash'],
+        onSuccess: (response) => {
             handleProjects(response);
             handleTasks(response);
             emit('close');
@@ -62,7 +63,7 @@ const options = [3, 5, 7, 10]
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .dashboard-settings {
     display: flex;
     justify-content: space-between;

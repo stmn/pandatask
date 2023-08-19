@@ -12,7 +12,7 @@ class ProjectRequest extends FormRequest
             'name' => 'required',
             'statuses' => 'array',
             'priorities' => 'array',
-            'custom_fields' => 'array',
+            'custom_fields' => 'nullable|array',
             'custom_fields.*.key' => 'required|distinct|alpha_dash',
             'custom_fields.*.label' => 'required',
             'custom_fields.*.type' => 'required|in:text,number,date,select,boolean',

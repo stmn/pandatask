@@ -83,6 +83,7 @@ const handleClick = (index) => {
                 </el-dropdown>
 
                 <Link preserve-state preserve-scroll :only="['modal']"
+                      replace
                       :href="$route('project.overview', {project: project.id})">
                     <i class="fa-solid fa-circle-question ml-2"></i>
                 </Link>

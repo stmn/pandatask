@@ -2,17 +2,16 @@
 import {Head, router, useForm} from '@inertiajs/vue3';
 import {computed, onMounted, ref} from "vue";
 import Layout from "~/js/Layouts/Layout.vue";
-import {ElMessage} from "element-plus";
-import Timer from "~/js/Components/Task/TimerButton.vue";
-import User from "~/js/Components/User/UserAvatar.vue";
-import Time from "~/js/Components/Common/TimeValue.vue";
-import Timesheets from "~/js/Components/Timesheets/TimesheetsTable.vue";
-import Activities from "~/js/Components/Activity/ActivityList.vue";
-import TaskForm from "~/js/Components/Task/TaskForm.vue";
-import Editor from "~/js/Components/Forms/EditorInput.vue";
+import Timer from "@/Components/Task/TimerButton.vue";
+import Time from "@/Components/Common/TimeValue.vue";
+import Timesheets from "@/Components/Timesheets/TimesheetsTable.vue";
+import Activities from "@/Components/Activity/ActivityList.vue";
+import TaskForm from "@/Components/Task/TaskForm.vue";
+import Editor from "@/Components/Forms/EditorInput.vue";
 import {useStorage} from "@vueuse/core";
-import EditorContent from "~/js/Components/Forms/EditorContent.vue";
+import EditorContent from "@/Components/Forms/EditorContent.vue";
 import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
+import UserPopover from "@/Components/User/UserPopover.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -128,8 +127,10 @@ const onlyComments = useStorage('onlyComments', true);
                     :size="26"
                     style="margin: 0 10px;"
                     :name="project.name"
-                    :avatar="project.avatar" />
-                <span style="margin-right: 5px;">{{ task.subject }}<span class="task-number">#{{ task.number }}</span></span>
+                    :avatar="project.avatar"/>
+                <span style="margin-right: 5px;">{{ task.subject }}<span class="task-number">#{{
+                        task.number
+                    }}</span></span>
                 &nbsp;<el-tag v-if="task.private">Private</el-tag>
             </div>
         </template>
@@ -145,12 +146,12 @@ const onlyComments = useStorage('onlyComments', true);
                     label-suffix=":"
                 >
                     <el-form-item label="Created by">
-                        <div style="display: flex; align-items: center; font-size: 14px;">
-                            <span style="margin: 0 10px 0 0;"><User :user="task.author"/></span>
+                        <div style="display: flex; align-items: center;">
+                            <UserPopover :user="task.author"/> &nbsp;
                             <Time :time="task.created_at"/>
                         </div>
                     </el-form-item>
-<!--                    {{ JSON.stringify(task.description)}}-->
+                    <!--                    {{ JSON.stringify(task.description)}}-->
                     <el-form-item label="Description" prop="desc" v-if="task.description">
                         <el-card shadow="never">
                             <EditorContent :content="task.description"/>
@@ -165,21 +166,21 @@ const onlyComments = useStorage('onlyComments', true);
                     label-position="top"
                     @submit.prevent="submit"
                 >
-<!--                    <div style="display: flex; align-items: center; font-size: 14px;">-->
-<!--                        <span>Created by</span>-->
-<!--                        <span style="margin: 0 10px;"><User :user="task.author"/></span>-->
-<!--                        <Time :time="task.created_at"/>-->
-<!--                    </div>-->
-<!--                    <br>-->
+                    <!--                    <div style="display: flex; align-items: center; font-size: 14px;">-->
+                    <!--                        <span>Created by</span>-->
+                    <!--                        <span style="margin: 0 10px;"></span>-->
+                    <!--                        <Time :time="task.created_at"/>-->
+                    <!--                    </div>-->
+                    <!--                    <br>-->
 
 
-<!--                    <el-form-item label="Description" prop="desc" v-if="task.description">-->
-<!--                        <el-card class="ProseMirror">-->
-<!--                            <div v-html="task.description"></div>-->
-<!--                        </el-card>-->
-<!--                    </el-form-item>-->
+                    <!--                    <el-form-item label="Description" prop="desc" v-if="task.description">-->
+                    <!--                        <el-card class="ProseMirror">-->
+                    <!--                            <div v-html="task.description"></div>-->
+                    <!--                        </el-card>-->
+                    <!--                    </el-form-item>-->
 
-<!--                    {{ JSON.stringify(task) }}-->
+                    <!--                    {{ JSON.stringify(task) }}-->
 
                     <el-tabs v-model="activeTab">
                         <el-tab-pane name="comment">
@@ -197,16 +198,16 @@ const onlyComments = useStorage('onlyComments', true);
 
                             <editor v-model="activityForm.comment" placeholder="Write comment..."/>
                             <br>
-<!--                            <el-form-item>-->
-<!--                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="activityForm.comment"-->
-<!--                                          placeholder="Add comment..."/>-->
+                            <!--                            <el-form-item>-->
+                            <!--                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 12 }" v-model="activityForm.comment"-->
+                            <!--                                          placeholder="Add comment..."/>-->
 
 
-<!--                                <div v-if="activityForm.errors.comment" class="el-form-item__error"-->
-<!--                                     style="padding: 5px 0; position: relative;">-->
-<!--                                    {{ activityForm.errors.comment }}-->
-<!--                                </div>-->
-<!--                            </el-form-item>-->
+                            <!--                                <div v-if="activityForm.errors.comment" class="el-form-item__error"-->
+                            <!--                                     style="padding: 5px 0; position: relative;">-->
+                            <!--                                    {{ activityForm.errors.comment }}-->
+                            <!--                                </div>-->
+                            <!--                            </el-form-item>-->
 
                             <div v-if="activityForm.errors.comment" class="el-form-item__error"
                                  style="padding: 5px 0; position: relative;">
@@ -250,7 +251,7 @@ const onlyComments = useStorage('onlyComments', true);
                                 <TaskForm v-model="taskForm"
                                           :statuses="statuses"
                                           :priorities="priorities"
-                                          :users="users" />
+                                          :users="users"/>
                             </el-config-provider>
                         </el-tab-pane>
                     </el-tabs>
@@ -261,7 +262,7 @@ const onlyComments = useStorage('onlyComments', true);
                         active-text="Is private"
                     />
                     <br><br>
-<!--                    {{ JSON.stringify(activityForm.errors) }}-->
+                    <!--                    {{ JSON.stringify(activityForm.errors) }}-->
                     <el-form-item>
                         <el-button type="success" @click="submit"
                                    :loading="activityForm.processing"
@@ -317,7 +318,7 @@ const onlyComments = useStorage('onlyComments', true);
         <!--                            <el-tag size="small">School</el-tag>-->
         <!--                        </el-descriptions-item>-->
         <!--                        <el-descriptions-item label="Assignees">-->
-        <!--                            <User v-for="user in task.assignees" :user="user" only-avatar/>-->
+
         <!--                        </el-descriptions-item>-->
         <!--                    </el-descriptions>-->
         <!--                </div>-->

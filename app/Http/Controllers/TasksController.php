@@ -18,7 +18,7 @@ class TasksController extends Controller
     {
         $this->authorize('viewAny', Task::class);
 
-        return Inertia::render('Tasks', [
+        return Inertia::render('Tasks/Tasks', [
             'activeIndex' => 'tasks',
             'search' => $request->get('search'),
             'tasks' => fn() => Task::query()

@@ -1,32 +1,19 @@
 <script setup>
 import {Head} from '@inertiajs/vue3';
-import {ref} from "vue";
 import Layout from "~/js/Layouts/Layout.vue";
 import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
 import {useDateFormat} from "@vueuse/core";
-import User from "~/js/Components/User/UserAvatar.vue";
 import Modal from "~/js/Layouts/Modal.vue";
+import UserAvatar from "@/Components/User/UserAvatar.vue";
+import UserPopover from "@/Components/User/UserPopover.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
 const props = defineProps({
-    activeTab: {
-        type: String,
-        required: true,
-        default: 'overview'
-    },
     project: {
         type: Object,
     },
-    activities: {
-        type: Array,
-    },
-    times: {
-        type: Array,
-    },
 });
-
-const activeTab = ref(props.activeTab);
 </script>
 
 <template>
@@ -50,7 +37,6 @@ const activeTab = ref(props.activeTab);
             <!--                <el-statistic title="All tasks" :value="150"/>-->
             <!--            </el-col>-->
             <!--        </el-row>-->
-
             <!--        <br>-->
 
             <el-divider content-position="left">General</el-divider>
@@ -62,9 +48,13 @@ const activeTab = ref(props.activeTab);
             >
                 <el-descriptions-item label="Client">
                     <div style="display: flex; padding: 5px;">
-                        <User v-for="client in project.clients" :user="client"
-                              only-avatar
-                              style="display: inline; margin: 10px;"/>
+                        <UserPopover :user="client"
+                                     v-for="client in project.clients"
+                                     style="display: inline; margin: 10px;">
+                            <div>
+                                <UserAvatar :user="client" tooltip/>
+                            </div>
+                        </UserPopover>
                     </div>
                 </el-descriptions-item>
                 <el-descriptions-item label="Created at">
@@ -72,9 +62,13 @@ const activeTab = ref(props.activeTab);
                 </el-descriptions-item>
                 <el-descriptions-item label="Team members">
                     <div style="display: flex; padding: 5px;">
-                        <User v-for="member in project.team_members" :user="member"
-                              only-avatar
-                              style="display: inline; margin: 10px;"/>
+                        <UserPopover :user="member"
+                                     v-for="member in project.team_members"
+                                     style="display: inline; margin: 10px;">
+                            <div>
+                                <UserAvatar :user="member" tooltip/>
+                            </div>
+                        </UserPopover>
                     </div>
                 </el-descriptions-item>
                 <el-descriptions-item label="Description">

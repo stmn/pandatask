@@ -5,7 +5,6 @@ import {Drag, Drop} from "vue-easy-dnd";
 import TaskLink from "@/Components/Task/TaskLink.vue";
 import UserAvatar from "@/Components/User/UserAvatar.vue";
 
-
 const props = defineProps({
     project: {},
     tasks: {},
@@ -183,7 +182,7 @@ const loadMore = (statusId) => {
                                 <UserAvatar v-for="assignee in item.assignees"
                                             :key="assignee.id"
                                             :user="assignee"
-                                            only-avatar
+                                            tooltip
                                             :size="20"/>
                             </div>
                         </el-card>

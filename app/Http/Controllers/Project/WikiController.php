@@ -15,7 +15,7 @@ class WikiController extends ProjectController
 {
     public function index(Project $project, ?Page $page = null): Response
     {
-        return Inertia::render('Project/Wiki', [
+        return Inertia::render('Project/Wiki/Wiki', [
             'activeTab' => 'pages',
             'project' => fn() => $project,
             'projects' => fn() => Project::query()

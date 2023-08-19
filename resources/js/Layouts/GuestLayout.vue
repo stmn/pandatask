@@ -68,6 +68,7 @@ const color = ref(new TinyColor(useCssVar('--el-color-primary', document.body).v
 
         h2 {
             margin: 0 0 20px 0;
+            font-size: 20px;
         }
 
         .el-button {

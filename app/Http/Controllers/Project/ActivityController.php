@@ -10,7 +10,7 @@ class ActivityController extends ProjectController
 {
     public function index(Project $project): Response
     {
-        return Inertia::render('Project/Activity', [
+        return Inertia::render('Project/Activity/Activity', [
             'activeTab' => 'activity',
             'project' => $project,
             'projects' => fn() => Project::query()

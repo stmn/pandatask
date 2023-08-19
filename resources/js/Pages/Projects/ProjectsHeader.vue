@@ -1,13 +1,14 @@
 <script setup>
-import {Head, router} from '@inertiajs/vue3';
+import {Link, router} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
-import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import {useCreateList} from "@/Composables/useList.js";
 
 defineOptions({layout: [Layout]})
 
 const props = defineProps({
-    tasks: {},
+    projects: {
+        required: true
+    },
     search: {
         type: String,
         required: false,
@@ -15,17 +16,24 @@ const props = defineProps({
     },
 });
 
-const {list} = useCreateList({only: ['tasks']});
+const {list} = useCreateList({only: ['projects']});
 </script>
 
 <template>
-    <Head title="Tasks"/>
-
     <el-page-header @back="() => router.visit($route('dashboard'))">
         <template #content>
-            <div flex items-center>
-                <i class="fas fa-list-check mr-2"></i>
-                <span>Tasks</span>
+            <div style="display: flex; align-items: center;">
+                <i class="fa-solid fa-rectangle-list mr-2"></i>
+                <span>Projects</span>
+            </div>
+        </template>
+        <template #extra>
+            <div class="flex items-center">
+                <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
+                    <el-button type="success">
+                        <i class="fa-solid fa-circle-plus mr-2"></i> Create
+                    </el-button>
+                </Link>
             </div>
         </template>
     </el-page-header>
@@ -37,14 +45,10 @@ const {list} = useCreateList({only: ['tasks']});
         v-model="list.search"
         placeholder="Type to search"
         size="large"
+        autofocus
         class="w-full">
         <template #prefix>
             <i class="fa-solid fa-search"></i>
         </template>
     </el-input>
-
-    <br><br>
-
-    <TasksTable :tasks="tasks" show-project
-                :selected-columns="['project_id', 'status_id', 'priority_id', 'latest_activity_at']"/>
 </template>

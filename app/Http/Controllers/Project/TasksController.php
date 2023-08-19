@@ -22,9 +22,10 @@ class TasksController extends ProjectController
 {
     public function index(Request $request, Project $project): Response
     {
+//        dd($_GET);
         $sort = '-latest_activity_at';
 
-        return Inertia::render('Project/Tasks', [
+        return Inertia::render('Project/Tasks/Tasks', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()
@@ -54,7 +55,7 @@ class TasksController extends ProjectController
 
         $task->load('author', 'project', 'assignees');
 
-        return Inertia::render('Project/Task', [
+        return Inertia::render('Task/Task', [
             'project' => $project,
             'task' => $task,
             'activities' => fn() => $task->activities()
@@ -77,7 +78,7 @@ class TasksController extends ProjectController
 
     public function create(Project $project): Modal
     {
-        return Inertia::modal('Modals/TaskForm', [
+        return Inertia::modal('Task/TaskForm', [
             'project' => $project,
             'statuses' => fn() => Status::all(),
             'priorities' => fn() => Priority::all(),

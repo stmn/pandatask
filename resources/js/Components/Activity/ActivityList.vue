@@ -2,9 +2,10 @@
 import {Link, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
-import User from "~/js/Components/User/UserAvatar.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import EditorContent from "~/js/Components/Forms/EditorContent.vue";
+import UserPopover from "@/Components/User/UserPopover.vue";
+import UserAvatar from "@/Components/User/UserAvatar.vue";
 
 const props = defineProps({
     task: {
@@ -42,7 +43,7 @@ const auth = computed(() => page.props.auth)
                     class="animated fadeIn" :key="event.id"
                     :id="`activity_${event.id}`">
                     <div style="display: flex; align-items: center;">
-                        <User :user="event.user"/>
+                        <UserPopover :user="event.user"/>
                         <span style="margin: 0 5px;">{{ event.description }}</span>
                         <Link style="margin-right: 5px;" :href="event.task.url" v-if="showTask">{{
                                 event.task.subject
@@ -76,13 +77,13 @@ const auth = computed(() => page.props.auth)
                             <template v-if="detail.attached">
                                 Added <b>{{ detail.field }}</b>
                                 <template v-if="detail.field==='assignees'">
-                                    <User v-for="user in detail.attached" :key="user.id" :user="user"/>
+                                    <UserAvatar v-for="user in detail.attached" :key="user.id" :user="user" tooltip/>
                                 </template>
                             </template>
                             <template v-if="detail.detached">
                                 Removed <b>{{ detail.field }}</b>
                                 <template v-if="detail.field==='assignees'">
-                                    <User v-for="user in detail.detached" :key="user.id" :user="user"/>
+                                    <UserAvatar v-for="user in detail.detached" :key="user.id" :user="user" tooltip/>
                                 </template>
                             </template>
                             <template v-else>

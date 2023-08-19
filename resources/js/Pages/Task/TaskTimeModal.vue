@@ -2,7 +2,7 @@
 import {useForm} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
-import InputError from "~/js/Components/Forms/InputError.vue";
+import InputError from "@/Components/Forms/InputError.vue";
 
 const props = defineProps({
     project: Object,

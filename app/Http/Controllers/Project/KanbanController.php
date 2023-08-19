@@ -23,7 +23,7 @@ class KanbanController extends ProjectController
 {
     public function index(Request $request, Project $project): Response
     {
-        return Inertia::render('Project/Kanban', [
+        return Inertia::render('Project/Kanban/Kanban', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
             'projects' => fn() => Project::query()

@@ -1,15 +1,19 @@
 <script setup>
 import {Head, Link, router} from '@inertiajs/vue3';
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import Layout from "~/js/Layouts/Layout.vue";
 import ProjectLayout from "~/js/Layouts/ProjectLayout.vue";
-import TasksTable from "~/js/Components/Task/TasksTable.vue";
 import {useList} from "@/Composables/useList.js";
-import ListContainer from "@/Components/List/ListContainer.vue";
+import KanbanBoard from "@/Components/Task/KanbanBoard.vue";
 
 defineOptions({layout: [Layout, ProjectLayout]})
 
 const props = defineProps({
+    activeTab: {
+        type: String,
+        required: true,
+        default: 'overview'
+    },
     search: {
         type: String,
         required: false,
@@ -24,6 +28,10 @@ const props = defineProps({
     },
 });
 
+const activeTab = ref(props.activeTab);
+
+const {query} = useList({only: ['tasks']});
+
 onMounted(() => {
     router.reload({only: ['tasks']});
 });
@@ -32,26 +40,35 @@ onMounted(() => {
 <template>
     <Head :title="project.name + ' - Tasks'"/>
 
-    <!--    {{ JSON.stringify(list) }}-->
-    <div flex items-center mb-3>
+    <el-input
+        :clearable="true"
+        v-model="query.search"
+        placeholder="Type to search"
+        size="large"
+        class="w-full">
+        <template #prefix>
+            <i class="fa-solid fa-search"></i>
+        </template>
+    </el-input>
+
+    <br><br>
+
+    <div flex items-center>
         <Link preserve-state preserve-scroll :only="['modal']"
               :href="$route('project.tasks.create', {project: project.id})">
             <el-button type="success">
                 <i class="fa-solid fa-circle-plus mr-2"></i>Add
             </el-button>
         </Link>
+
+        <div ml-auto>
+            Group by <u>status</u>
+            <el-divider direction="vertical"></el-divider>
+            Sort by <u>priority</u>
+        </div>
     </div>
 
-    <ListContainer searchable sortable columns
-                   :only="['tasks']"
-                   :sort="{value: 'latest_activity_at', label: 'Latest activity'}"
-                   :list-key="`tasks_${project.id}`"
-                   :selected-columns="['status_id', 'priority_id', 'latest_activity_at']">
-        <template #default="{list}">
-            <TasksTable :tasks="tasks"
-                        :selected-columns="list.selectedColumns"/>
-        </template>
-    </ListContainer>
+    <KanbanBoard :tasks="tasks" :project="project"/>
 </template>
 
 <style>

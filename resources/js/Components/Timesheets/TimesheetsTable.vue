@@ -3,9 +3,9 @@ import {Link, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Timer from "~/js/Components/Task/TimerButton.vue";
-import User from "~/js/Components/User/UserAvatar.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
 import TaskLink from "@/Components/Task/TaskLink.vue";
+import UserPopover from "@/Components/User/UserPopover.vue";
 
 const props = defineProps({
     task: {
@@ -62,13 +62,13 @@ const timeBetweenTwoDates = (date1, date2) => {
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
-                    <TaskLink :task="row.task" style="display: contents;" />
+                    <TaskLink :task="row.task" style="display: contents;"/>
                 </div>
             </template>
         </el-table-column>
         <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
             <template #default="{row}">
-                <User :user="row.author" :only-avatar="onlyAvatar"/>
+                <UserPopover :user="row.author"/>
             </template>
         </el-table-column>
         <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">

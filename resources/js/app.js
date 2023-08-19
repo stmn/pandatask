@@ -18,7 +18,7 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 const app = createInertiaApp({
     title: (title) => {
         const name = usePage().props.settings.brand_name || '';
-        return `${title}${name ? ' - '+name : name}`
+        return `${title}${name ? ' - ' + name : name}`
     },
 
     progress: {
@@ -40,7 +40,7 @@ const app = createInertiaApp({
             .use(LazyComponent);
 
         const primaryColor = useCssVar('--brand-color', document.body, {observe: true});
-        console.log(primaryColor.value)
+
         app.mixin({
             methods: {
                 $primaryColor: () => primaryColor.value,
@@ -59,7 +59,6 @@ const app = createInertiaApp({
 
         app.mount(el);
         document.getElementById('loader')?.remove();
-        // return instance;
     },
 });
 
