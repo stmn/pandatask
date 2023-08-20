@@ -1,4 +1,5 @@
 <template>
+    <div class="tasks-filters">
     <template v-for="tag in tags">
         <el-tag closable mr-2 @close="tag.handleClose">{{ tag.name }}</el-tag>
     </template>
@@ -28,6 +29,7 @@
         </template>
     </el-popover>
     </el-config-provider>
+    </div>
 </template>
 
 <script setup>
@@ -134,29 +136,36 @@ watch(filtersValues.value, (value) => {
 </script>
 
 <style lang="scss">
-.el-popper {
-    padding: 5px 15px 5px 15px !important;
-}
-.el-collapse {
-    border: 0;
-    .el-collapse-item__header {
-        border: 0;
-        --el-collapse-header-height: 40px;
-    }
-    // last header
-
-    .el-collapse-item__wrap {
-        border: 0;
-    }
-    .el-collapse-item__content {
-        margin: 0;
-        padding: 0;
+.tasks-filters {
+    .el-popper {
+        padding: 5px 15px 5px 15px !important;
     }
 
-    .el-card {
-        background: var(--el-border-color-extra-light);
-        .el-card__body {
-            padding: 10px 15px;
+    .el-collapse {
+        border: 0;
+
+        .el-collapse-item__header {
+            border: 0;
+            --el-collapse-header-height: 40px;
+        }
+
+        // last header
+
+        .el-collapse-item__wrap {
+            border: 0;
+        }
+
+        .el-collapse-item__content {
+            margin: 0;
+            padding: 0;
+        }
+
+        .el-card {
+            background: var(--el-border-color-extra-light);
+
+            .el-card__body {
+                padding: 10px 15px;
+            }
         }
     }
 }
