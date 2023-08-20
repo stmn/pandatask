@@ -8,8 +8,8 @@ import TaskLink from "@/Components/Task/TaskLink.vue";
 import UserPopover from "@/Components/User/UserPopover.vue";
 
 const props = defineProps({
-    task: {
-        type: Object,
+    showTask: {
+        type: Boolean,
         required: false
     },
     times: {
@@ -27,9 +27,7 @@ const props = defineProps({
     }
 })
 
-const page = usePage()
-
-const auth = computed(() => page.props.auth)
+const auth = computed(() => usePage().props.auth)
 
 const timeBetweenTwoDates = (date1, date2) => {
     const seconds = Math.floor((Date.parse(date2) - Date.parse(date1)) / 1000);
@@ -58,7 +56,7 @@ const timeBetweenTwoDates = (date1, date2) => {
             </div>
         </template>
 
-        <el-table-column v-if="cols.includes('task_id') && !task" prop="task_id" min-width="200">
+        <el-table-column v-if="cols.includes('task_id') && showTask" prop="task_id" min-width="200">
             <template #default="{row}">
                 <div style="display: flex; align-items: center;">
                     <Timer :task="row.task" style="margin-right: 5px;"/>
@@ -66,16 +64,19 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </div>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
             <template #default="{row}">
                 <UserPopover :user="row.author"/>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">
             <template #default="{row}">
                 <Time :show-clock="false" :time="row.start_at" force-type="date"/>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="150">
             <template #default="{row}">
                 <Time :show-clock="false" v-if="row.end_at" :time="row.end_at" force-type="date"/>
@@ -84,6 +85,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </span>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('time')" prop="time" label="Time" width="105">
             <template #default="{row}">
                 <template v-if="row.end_at">
@@ -93,6 +95,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </template>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="90">
             <template #default="{row}">
                 <el-popover
@@ -112,6 +115,7 @@ const timeBetweenTwoDates = (date1, date2) => {
                 </el-popover>
             </template>
         </el-table-column>
+
         <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">
             <template #default="{row}">
                 <Link preserve-state preserve-scroll :only="['modal', 'times']"

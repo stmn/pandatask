@@ -25,7 +25,7 @@ const options = [3, 5, 7, 10]
 
 <template>
     <div class="dashboard-settings">
-        <div>
+        <div py-2>
             Show
             <el-dropdown trigger="click">
                 <u>{{ settings.dashboard_projects }} projects</u>
@@ -57,7 +57,7 @@ const options = [3, 5, 7, 10]
             each.
         </div>
 
-        <el-button type="success" size="small" @click="submit">
+        <el-button type="success" size="small" @click="submit" ml-2>
             <i class="fa-solid fa-check"></i>
         </el-button>
     </div>

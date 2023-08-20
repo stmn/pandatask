@@ -18,11 +18,11 @@ class ActivityController extends ProjectController
                 ->get(),
             'activities' => fn() => $project
                 ->activities()
-                ->select('id', 'project_id', 'task_id', 'user_id', 'comment_id', 'created_at', 'type')
-                ->with(['task', 'user', 'comment'])
+                ->select('id', 'project_id', 'task_id', 'user_id', 'comment_id', 'created_at', 'type', 'details')
+                ->with(['task', 'user', 'comment', 'media'])
                 ->latest()
                 ->paginate($this->perPage())
-                ->appends('details'),
+                //->appends('details'),
         ]);
     }
 }

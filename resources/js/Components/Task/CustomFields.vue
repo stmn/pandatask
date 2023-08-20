@@ -1,9 +1,4 @@
 <template>
-<!--    {{ JSON.stringify(usePage().props.project.custom_fields) }}-->
-<!--    <hr>-->
-<!--    {{ JSON.stringify(modelValue) }}-->
-<!--    <hr>-->
-
     <el-row :gutter="10">
         <el-col v-for="field in projectCustomFields"
                 :key="key"

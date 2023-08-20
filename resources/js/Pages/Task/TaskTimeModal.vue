@@ -62,7 +62,7 @@ const create = () => form.post(url, {
                     v-model="form.end_at"
                     type="datetime"
                 />
-                <el-button @click="form.end_at = new Date()">
+                <el-button ml-2 @click="form.end_at = new Date()">
                     <i class="fa-solid fa-clock mr-2"></i>Now
                 </el-button>
                 <InputError :message="form.errors.end_at"/>

@@ -14,30 +14,26 @@ const props = defineProps({
 <template>
     <el-popover
         placement="top-start"
-        :width="300"
+        :width="320"
         trigger="click"
         :persistent="false"
         transition="none"
         :hide-after="0"
     >
         <template #reference>
+            <span style="cursor: pointer; display: inline-block;">
             <slot>
                 <div flex items-center>
-                    <UserAvatar :user="user"/>
+                    <span mr-1>
+                        <UserAvatar :user="user"/>
+                    </span>
                     <UserName :user="user" class="mx-1"/>
                 </div>
             </slot>
-            <!--            <span class="user">-->
-            <!--                <el-tooltip :content="fullName" placement="top" :disabled="!onlyAvatar">-->
-            <!--                <BaseAvatar :avatar="user.avatar"-->
-            <!--                            :name="user.full_name"-->
-            <!--                            :size="props.size"-->
-            <!--                            style="vertical-align: sub; margin-right: 5px;"/>-->
-            <!--                </el-tooltip>-->
-            <!--            </span>-->
+            </span>
         </template>
 
-        <div py-2>
+        <div style="line-height: 24px;">
             <BaseAvatar :avatar="user.avatar"
                         :name="user.full_name"
                         :size="50"
@@ -66,7 +62,3 @@ const props = defineProps({
         </div>
     </el-popover>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

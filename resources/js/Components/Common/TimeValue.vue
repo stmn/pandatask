@@ -1,5 +1,4 @@
 <script setup>
-import {usePage} from '@inertiajs/vue3'
 import {ref} from "vue";
 import {useDateFormat, useStorage, useTimeAgo} from "@vueuse/core";
 
@@ -19,8 +18,6 @@ const props = defineProps({
         default: true
     }
 })
-
-const page = usePage()
 
 const timeType = props.forceType ? ref(props.forceType) : useStorage('timeType', 'ago'); // ago, date
 
@@ -45,13 +42,19 @@ const toggleTimeType = () => {
 </template>
 
 <style lang="scss" scoped>
-.time.not-forced {
-    cursor: pointer;
+.time {
+    font-size: 13px;
+    white-space: nowrap;
+    i {
 
-    color: var(--el-text-color-secondary);
+    }
+    &.not-forced {
+        cursor: pointer;
+        color: var(--el-text-color-secondary);
 
-    &:hover {
-        text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 </style>

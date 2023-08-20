@@ -18,5 +18,9 @@ const activeTab = ref(props.activeTab);
 
 <template>
     <Head :title="project.name + ' - Activities'"/>
-    <ActivityList :activities="activities" show-task/>
+    <div mt-3>
+        <ActivityList :activities="activities"
+                      show-details
+                      show-task/>
+    </div>
 </template>

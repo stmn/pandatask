@@ -11,3 +11,9 @@ const props = defineProps({
         {{ user?.first_name }} {{ user?.last_name?.[0] }}
     </span>
 </template>
+
+<style lang="scss" scoped>
+ span {
+     white-space: nowrap;
+ }
+</style>

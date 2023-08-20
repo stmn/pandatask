@@ -6,7 +6,7 @@
             </Link>
         </el-text>
 
-        <span class="task-number">#{{ task.number }}</span>
+        <TaskNumber :number="task.number" mx-1 />
 
         <template v-if="task.comments_count">
             <i class="task-comments fa-solid fa-comment-dots" style="margin: 1px 2px 0 6px;"></i>
@@ -17,20 +17,9 @@
 
 <script setup>
 import {Link} from "@inertiajs/vue3";
+import TaskNumber from "@/Components/Task/TaskNumber.vue";
 
 defineProps({
     task: Object
 })
 </script>
-
-<style scoped>
-.task-number {
-    background: var(--el-bg-color);
-    padding: 0 3px;
-    margin-left: 5px;
-    margin-right: 5px;
-    word-break: keep-all;
-    font-size: 13px;
-    line-height: 22px;
-}
-</style>

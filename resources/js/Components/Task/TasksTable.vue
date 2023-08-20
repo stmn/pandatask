@@ -4,7 +4,7 @@ import {computed, inject, ref, Transition} from "vue";
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Timer from "~/js/Components/Task/TimerButton.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
-import Activity from "~/js/Components/Activity/ActivityType.vue";
+import ActivityType from "~/js/Components/Activity/ActivityType.vue";
 import TaskLink from "~/js/Components/Task/TaskLink.vue";
 import 'vue3-easy-data-table/dist/style.css';
 import {useList} from "@/Composables/useList.js";
@@ -202,7 +202,7 @@ updateColumns(columns.value);
 
                         <td v-if="selectedColumns.includes('status_id')"
                             class="el-table_1_column_9 is-center el-table__cell" rowspan="1" colspan="1">
-                            <div class="cell">
+                            <div class="cell" style="max-width: 180px; margin: auto;">
                                 <lazy-component>
                                     <template #placeholder>
                                         <div v-if="row.status"
@@ -213,7 +213,7 @@ updateColumns(columns.value);
                                     </template>
 
                                     <!--                    <Transition appear>-->
-                                    <el-dropdown v-if="row.status" style="width: 100%; max-width: 150px;" size="default" trigger="click"
+                                    <el-dropdown v-if="row.status" style="width: 100%;" size="default" trigger="click"
                                                  @command="updateTask">
                                         <div v-if="row.status"
                                              class="status-tag"
@@ -237,7 +237,7 @@ updateColumns(columns.value);
                         <td v-if="selectedColumns.includes('priority_id')"
                             class="el-table_1_column_4 is-center el-table__cell"
                             rowspan="1" colspan="1">
-                            <div class="cell">
+                            <div class="cell" style="max-width: 150px; margin: auto;">
                                 <lazy-component>
                                     <template #placeholder>
                                         <div v-if="row.priority"
@@ -247,7 +247,7 @@ updateColumns(columns.value);
                                     </template>
 
                                     <!--                    <Transition appear>-->
-                                    <el-dropdown v-if="row.priority" style="width: 100%; max-width: 150px;" size="default" trigger="click"
+                                    <el-dropdown v-if="row.priority" style="width: 100%;" size="default" trigger="click"
                                                  @command="updateTask">
                                         <div v-if="row.priority"
                                              class="priority-tag"
@@ -300,7 +300,7 @@ updateColumns(columns.value);
                                                 <UserName :user="row.latest_activity.user" class="mx-1"/>
                                             </div>
                                         </UserPopover>
-                                        <Activity :activity="row.latest_activity" :task="row" only-icon
+                                        <ActivityType :activity="row.latest_activity" :task="row" only-icon
                                                   style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
                                         <Time :show-clock="false" :time="row.latest_activity.created_at"/>
                                     </div>
@@ -454,7 +454,7 @@ updateColumns(columns.value);
                         <template v-if="row.latest_activity">
                             <div v-if="row.latest_activity" style="display: flex; align-items: center;">
                                 <UserPopover :user="row.latest_activity.user"/> &nbsp;
-                                <Activity :activity="row.latest_activity" :task="row" only-icon
+                                <ActivityType :activity="row.latest_activity" :task="row" only-icon
                                           style="margin: 0 5px; color: var(--el-color-primary-dark-2);"/>
                                 <Time :show-clock="false" :time="row.latest_activity.created_at"/>
                             </div>

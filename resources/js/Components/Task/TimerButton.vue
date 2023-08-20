@@ -8,9 +8,7 @@ const props = defineProps({
     }
 })
 
-const page = usePage()
-
-const auth = computed(() => page.props.auth)
+const auth = computed(() => usePage().props.auth)
 
 const isRun = computed(() => {
     if (!props.task) {
@@ -38,13 +36,13 @@ const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
         <template v-if="isRun">
             <slot name="stop">
                 <i class="fa-solid fa-circle-stop hover-opacity"
-                   style="font-size: 26px; cursor: pointer; color: var(--el-color-danger-light-3);"></i>
+                   style="color: var(--el-color-danger-light-3);"></i>
             </slot>
         </template>
         <template v-else>
             <slot name="play">
                 <i class="fa-solid fa-circle-play hover-opacity"
-                   style="font-size: 26px; cursor: pointer; color: var(--el-color-info);"></i>
+                   style="color: var(--el-color-info);"></i>
             </slot>
         </template>
     </Link>
@@ -57,5 +55,10 @@ const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
     &:hover {
         color: var(--el-text-color-primary)
     }
+}
+
+i {
+    font-size: 26px;
+    cursor: pointer;
 }
 </style>

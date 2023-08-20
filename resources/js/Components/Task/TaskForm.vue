@@ -51,19 +51,22 @@ const priorities = computed(() => {
 <template>
     <el-config-provider size="default">
         <el-row :gutter="10">
-            <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
+            <el-col :lg="8" :xl="8" :md="8" :sm="8" :xs="24">
                 <el-form-item label="Subject">
                     <el-input v-model="modelValue.subject" class="focus-me" maxlength="100" show-word-limit/>
                     <InputError :message="modelValue.errors['task.subject']"/>
                 </el-form-item>
             </el-col>
-            <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
+            <el-col :lg="8" :xl="8" :md="8" :sm="8" :xs="12">
                 <el-form-item label="Tags">
                     <el-select v-model="modelValue.tags"
                                multiple
                                filterable
                                allow-create
                                default-first-option
+                               :max-collapse-tags="1"
+                               collapse-tags
+                               collapse-tags-tooltip
                                placeholder="Select"
                                style="width: 100%;"
                                fit-input-width>
@@ -72,6 +75,34 @@ const priorities = computed(() => {
                         </template>
                     </el-select>
                     <InputError :message="modelValue.errors['task.tags']"/>
+                </el-form-item>
+            </el-col>
+            <el-col :lg="8" :xl="8" :md="8" :sm="8" :xs="12">
+                <el-form-item label="Assignees">
+                    <el-select v-model="modelValue.assignees"
+                               value-key="id"
+                               filterable multiple
+                               placeholder="Select"
+                               :max-collapse-tags="1"
+                               collapse-tags
+                               collapse-tags-tooltip
+                               style="width: 100%;"
+                               fit-input-width>
+                        <template #prefix>
+                            <i class="fas fa-users"></i>
+                        </template>
+                        <el-option
+                            v-for="item in users"
+                            :key="item.id"
+                            :label="item.full_name"
+                            :value="item"
+                        >
+                            <div flex items-center>
+                                <UserAvatar :user="item"/>
+                                <UserName :user="item"/>
+                            </div>
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -86,7 +117,7 @@ const priorities = computed(() => {
         </el-row>
 
         <el-row :gutter="10">
-            <el-col :lg="12" :xl="12" :md="12" :sm="12" :xs="24">
+            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="24">
                 <el-form-item label="Milestone">
                     <el-select v-model="modelValue.milestone_id"
                                filterable
@@ -154,40 +185,29 @@ const priorities = computed(() => {
                 </el-form-item>
             </el-col>
             <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
-                <el-form-item label="Assignees">
-                    <el-select v-model="modelValue.assignees"
-                               value-key="id"
-                               filterable multiple
-                               placeholder="Select"
-                               :max-collapse-tags="1"
-                               collapse-tags
-                               collapse-tags-tooltip
-                               style="width: 100%;"
-                               fit-input-width>
-                        <template #prefix>
-                            <i class="fas fa-users"></i>
-                        </template>
-                        <el-option
-                            v-for="item in users"
-                            :key="item.id"
-                            :label="item.full_name"
-                            :value="item"
-                        >
-                            <div flex items-center>
-                                <UserAvatar :user="item"/>
-                                <UserName :user="item"/>
-                            </div>
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+
             </el-col>
-            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
-                <el-form-item label="Private" style="text-align: left;">
-                    <el-switch v-model="modelValue.private"/>
-                </el-form-item>
-            </el-col>
+<!--            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">-->
+<!--                <el-form-item label="Private" style="text-align: left;">-->
+<!--                    <el-switch v-model="modelValue.private"/>-->
+<!--                </el-form-item>-->
+<!--            </el-col>-->
         </el-row>
 
         <CustomFields v-model="modelValue.custom_fields"/>
     </el-config-provider>
 </template>
+
+<style lang="scss" scoped>
+:deep(.el-form-item__label) {
+    margin-bottom: 4px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+:deep(.el-select__tags) {
+    height: 30px;
+}
+:deep(.el-form-item--default) {
+    margin-bottom: 9px;
+}
+</style>

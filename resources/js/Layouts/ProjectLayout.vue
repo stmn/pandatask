@@ -59,14 +59,16 @@ const handleClick = (index) => {
     <el-page-header @back="() => router.visit($route('projects'))">
         <template #content>
             <div style="display: flex; align-items: center;">
-                <BaseAvatar :avatar="project.avatar"
-                            :name="project.name"
-                            :size="24"
-                            class="mr-3" />
+
 
                 <el-dropdown trigger="click" ref="dropdownRef" @visible-change="onOpen"
                              style="color: inherit; font-size: inherit; line-height: inherit; cursor: pointer;">
-                    <span>{{ project.name }} <i class="fa-solid fa-angle-down" style="opacity: 0.4;"></i></span>
+                    <div flex items-center class="hover:underline decoration-2 decoration-zinc-500">
+                        <BaseAvatar :avatar="project.avatar"
+                                    :name="project.name"
+                                    :size="24"
+                                    class="mr-2"/>{{ project.name }}
+                    </div>
 
                     <template #dropdown>
                         <el-select ref="projectsSelectRef" :persistent="false" v-model="projectValue"
@@ -85,7 +87,7 @@ const handleClick = (index) => {
                 <Link preserve-state preserve-scroll :only="['modal']"
                       replace
                       :href="$route('project.overview', {project: project.id})">
-                    <i class="fa-solid fa-circle-question ml-2"></i>
+                    <i class="fa-solid fa-circle-question ml-4"></i>
                 </Link>
             </div>
         </template>

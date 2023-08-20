@@ -13,11 +13,11 @@
 html {
     .el-card {
         $color: map.get(light.$bg-color, 'overlay');
-        border-color: darken($color, 5%);
+        border-color: darken($color, 3%);
 
         .el-card__header {
             $color: map.get(light.$bg-color, 'overlay');
-            background: darken($color, 5%);
+            background: darken($color, 3%);
             border: 0;
         }
     }
@@ -27,11 +27,11 @@ html {
 html.dark {
     .el-card {
         $color: map.get(dark.$bg-color, 'overlay');
-        border-color: lighten($color, 5%) !important;
+        border-color: lighten($color, 3%) !important;
         border: 0;
 
         .el-card__header {
-            background: lighten($color, 5%);
+            background: lighten($color, 3%);
         }
     }
 }

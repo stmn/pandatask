@@ -6,6 +6,10 @@ const props = defineProps({
     user: {
         type: Object,
     },
+    size: {
+        type: Number,
+        default: undefined
+    },
     tooltip: {
         type: Boolean,
         default: false
@@ -22,6 +26,6 @@ const fullName = computed(() => {
         <BaseAvatar :avatar="user.avatar"
                     :name="user.full_name"
                     :size="props.size"
-                    style="vertical-align: sub; margin-right: 5px;"/>
+                    style="vertical-align: middle;"/>
     </el-tooltip>
 </template>

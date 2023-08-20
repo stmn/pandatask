@@ -23,7 +23,6 @@ const handleError = (err) => {
 }
 </script>
 <template>
-
     <el-upload
         :action="uploadUrl"
         list-type="picture"

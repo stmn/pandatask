@@ -136,7 +136,6 @@ watch(filtersValues.value, (value) => {
 <style lang="scss">
 .el-popper {
     padding: 5px 15px 5px 15px !important;
-    //padding-top: 5px !important;
 }
 .el-collapse {
     border: 0;

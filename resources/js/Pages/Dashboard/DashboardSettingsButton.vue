@@ -11,7 +11,7 @@ const showSettings = ref(false);
 
 <template>
     <!-- Customization Button -->
-    <el-popover :visible="showSettings" trigger="click" placement="left" width="300">
+    <el-popover :visible="showSettings" trigger="click" placement="left" width="320">
         <template #default>
             <DashboardSettings :settings="settings" @close="showSettings = false"/>
         </template>
