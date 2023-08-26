@@ -1,8 +1,8 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3'
-import Layout from "@/Layouts/Layout.vue";
 import {ref} from "vue";
 import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
+import Layout from "~/js/Layouts/Layout.vue";
 
 defineOptions({layout: Layout})
 
@@ -56,6 +56,7 @@ const handleClick = (index) => {
 </script>
 
 <template>
+<!--    <Layout>-->
     <el-page-header @back="() => router.visit($route('projects'))">
         <template #content>
             <div style="display: flex; align-items: center;">
@@ -95,10 +96,13 @@ const handleClick = (index) => {
         <template #extra>
             <Link preserve-state preserve-scroll :only="['modal']"
                   :href="$route('projects.edit', {project: project.id})">
-                <el-button :color="$primaryColor()">
-                    <i class="fas fa-pen-to-square mr-2"></i> Edit
+                <el-button type="primary">
+                    <i class="fas fa-pen-to-square mr-2"></i> Edit project
                 </el-button>
             </Link>
+
+            <slot name="buttons" />
+            <div id="test"></div>
         </template>
     </el-page-header>
 
@@ -113,4 +117,5 @@ const handleClick = (index) => {
     </el-tabs>
 
     <slot/>
+<!--    </Layout>-->
 </template>

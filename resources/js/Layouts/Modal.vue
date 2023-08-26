@@ -40,3 +40,10 @@ const handleClose = () => {
         </template>
     </el-dialog>
 </template>
+
+<style lang="scss">
+.el-dialog__body {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+</style>

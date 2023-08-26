@@ -1,11 +1,12 @@
 <script setup>
-import {Head, router} from '@inertiajs/vue3';
+import {Head, Link, router} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
 import {onMounted, provide, ref} from "vue";
 import DashboardDemoNotification from "~/js/Pages/Dashboard/DashboardDemoNotification.vue";
 import DashboardSettingsButton from "~/js/Pages/Dashboard/DashboardSettingsButton.vue";
 import DashboardHello from "~/js/Pages/Dashboard/DashboardHello.vue";
 import DashboardProjects from "~/js/Pages/Dashboard/DashboardProjects.vue";
+import HeroCard from "@/Components/Common/HeroCard.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -54,7 +55,7 @@ onMounted(() => {
 <template>
     <Head title="Dashboard"/>
 
-    <div flex justify-between>
+    <div flex justify-between style="height: 100%;">
         <div>
             <DashboardHello :hello="hello"/>
         </div>
@@ -63,9 +64,19 @@ onMounted(() => {
         </div>
     </div>
 
-    <DashboardDemoNotification/>
+<!--    <DashboardDemoNotification/>-->
 
-    <br>
+    <HeroCard v-if="!projects.length"
+              title="Welcome to Pandatask!"
+              description="It looks like you don't have access to any projects yet.">
+        <template #buttons>
+            <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
+                <el-button type="success" size="large">
+                    <i class="fa-solid fa-circle-plus mr-2"></i> Create first project
+                </el-button>
+            </Link>
+        </template>
+    </HeroCard>
 
     <DashboardProjects :projects="projects"/>
 </template>

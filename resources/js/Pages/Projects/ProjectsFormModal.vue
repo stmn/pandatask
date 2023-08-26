@@ -1,5 +1,5 @@
 <script setup>
-import {useForm} from "@inertiajs/vue3"
+import {useForm, usePage} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {onMounted, ref} from "vue";
@@ -33,7 +33,10 @@ const form = useForm(Object.assign({
     custom_fields: [],
 }, props.project))
 
-console.log(form.custom_fields)
+if(!props.project){
+    form.statuses = usePage().props.statuses.map((status) => status.id);
+    form.priorities = usePage().props.priorities.map((status) => status.id);
+}
 
 const {close, redirect} = useModal()
 
@@ -61,7 +64,7 @@ const activeTab = ref('general');
     <Modal>
         <template #title>{{ project ? 'Edit project' : 'Create a new project' }}</template>
 
-        <el-tabs v-model="activeTab">
+        <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane name="general">
                 <template #label>
                     <i class="fa-solid fa-home mr-2"></i> General

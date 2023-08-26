@@ -185,13 +185,19 @@ const priorities = computed(() => {
                 </el-form-item>
             </el-col>
             <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
+                <el-form-item style="text-align: left;">
+                    <template #label>
+                        <span>Private task</span>
+                        <el-tooltip effect="dark" content="Only team members can see private tasks">
+                            <i class="fas fa-question-circle ml-2"></i>
+                        </el-tooltip>
+                    </template>
+                    <el-switch v-model="modelValue.private"/>
+                </el-form-item>
+            </el-col>
+            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
 
             </el-col>
-<!--            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">-->
-<!--                <el-form-item label="Private" style="text-align: left;">-->
-<!--                    <el-switch v-model="modelValue.private"/>-->
-<!--                </el-form-item>-->
-<!--            </el-col>-->
         </el-row>
 
         <CustomFields v-model="modelValue.custom_fields"/>

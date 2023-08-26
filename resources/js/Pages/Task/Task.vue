@@ -65,6 +65,11 @@ const taskForm = useForm({
 });
 
 const submit = () => {
+    console.log('submit', {
+        task: taskForm.data(),
+        activity: activityForm.data(),
+    })
+
     activityForm.transform((data) => ({
         task: taskForm.data(),
         activity: activityForm.data(),

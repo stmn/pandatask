@@ -4,6 +4,7 @@ import Layout from "~/js/Layouts/Layout.vue";
 import ProjectsHeader from "~/js/Pages/Projects/ProjectsHeader.vue";
 import ProjectsList from "~/js/Pages/Projects/ProjectsList.vue";
 import ProjectsListItem from "~/js/Pages/Projects/ProjectsListItem.vue";
+import HeroCard from "@/Components/Common/HeroCard.vue";
 
 defineOptions({layout: [Layout]})
 
@@ -26,7 +27,10 @@ const props = defineProps({
             <ProjectsListItem :item="item"/>
         </template>
         <template #empty>
-            <el-empty description="Projects not found"/>
+            <HeroCard title="Projects not found"
+                      description="It looks like you don't have access to any projects yet."
+                      type="not-found">
+            </HeroCard>
         </template>
     </ProjectsList>
 </template>

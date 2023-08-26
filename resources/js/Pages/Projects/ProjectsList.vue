@@ -16,7 +16,5 @@ const props = defineProps({
 
         <pagination :data="projects"/>
     </div>
-    <div v-else>
-        <slot name="empty"/>
-    </div>
+    <slot v-else name="empty"/>
 </template>

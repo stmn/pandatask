@@ -57,7 +57,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
             margin: 0 20px;
             position: relative;
             overflow: hidden;">
-            <div>
+            <div style="height: 100%;min-height: calc(100vh - 160px);display:flex;flex-direction:column;">
                 <el-alert v-if="$page.props.auth.impersonated"
                           type="warning"
                           show-icon

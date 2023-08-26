@@ -1,10 +1,9 @@
 <template>
     <div class="tasks-filters">
-    <template v-for="tag in tags">
-        <el-tag closable mr-2 @close="tag.handleClose">{{ tag.name }}</el-tag>
-    </template>
+<!--    <template v-for="tag in tags">-->
+<!--        <el-tag closable mr-2 @close="tag.handleClose">{{ tag.name }}</el-tag>-->
+<!--    </template>-->
 
-    <br><br>
     <el-config-provider size="default">
     <el-popover trigger="hover" :width="240">
         <template #default>
@@ -25,7 +24,7 @@
             </el-collapse>
         </template>
         <template #reference>
-            <span>Filters <i class="fa-solid fa-chevron-down"></i></span>
+            <span><i class="fa-solid fa-angle-down mr-1" style="vertical-align: middle;"></i>Filters</span>
         </template>
     </el-popover>
     </el-config-provider>

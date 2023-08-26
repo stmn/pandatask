@@ -30,8 +30,8 @@ const props = defineProps({
 
         <ActivityHeader :event="event" :show-task="showTask" />
 
-        <ActivityComment v-if="event?.comment"
-                         :comment="event?.comment">
+        <ActivityComment v-if="event?.comment || event.media?.length"
+                         :comment="event?.comment || {'content': ''}">
             <template #after>
                 <ActivityAttachments
                     v-if="event.media?.length"

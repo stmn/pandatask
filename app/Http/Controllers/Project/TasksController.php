@@ -9,6 +9,7 @@ use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
+use Arr;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -120,10 +121,10 @@ class TasksController extends ProjectController
      */
     public function update(Request $request, Project $project, Task $task): void
     {
-        $request->validate([
+        $validated = $request->validate([
             'activity.comment' => [],
             'activity.files' => [],
-            'activity.private' => [],
+            'activity.private' => ['boolean'],
             'task.assignees' => ['array'],
             'task.subject' => ['required', 'sometimes'],
             'task.description' => [],
@@ -134,8 +135,6 @@ class TasksController extends ProjectController
             'task.custom_fields' => ['array'],
         ], $request->all());
 
-//        dd($request->all());
-
         $activity = [
             'project_id' => $task->project_id,
             'type' => ActivityType::TASK_CHANGED,
@@ -144,7 +143,7 @@ class TasksController extends ProjectController
                 'attached' => [],
                 'detached' => [],
             ],
-            'private' => $request->get('private', false),
+            'private' => $validated['activity']['private'] ?? false,
         ];
 
         if ($request->input('task')) {
@@ -188,8 +187,9 @@ class TasksController extends ProjectController
         $activity = $task->activities()->create($activity);
         assert($activity instanceof Activity);
 
-        if ($request->file('files')) {
-            foreach ($request->file('files') as $file) {
+        $files = Arr::get($request->allFiles(), 'activity.files', []);
+        if ($files) {
+            foreach ($files as $file) {
                 $activity->addMedia($file['raw'])->toMediaCollection('files');
             }
         }

@@ -8,17 +8,19 @@ const props = defineProps({
 </script>
 
 <template>
-    <el-alert :closable="false" type="info">
+    <el-card :closable="false" type="info" shadow="never">
         <div flex items-center>
-            No tasks found.
+            <el-text>
+                No tasks found.
+            </el-text>
 
             <Link preserve-state
                   :href="$route('project.tasks.create', {project: project.id})"
-                  class="ml-2">
-                <el-button type="success" size="small">
+                  class="ml-4">
+                <el-button type="success">
                     <i class="fas fa-circle-plus mr-2"/>Add
                 </el-button>
             </Link>
         </div>
-    </el-alert>
+    </el-card>
 </template>

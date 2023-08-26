@@ -19,43 +19,25 @@ use Illuminate\Support\Facades\DB;
 /**
  * This seeder is used to generate demo data for the application.
  */
-class DemoDatabaseSeeder extends Seeder
+class DemoDatabaseSeeder extends BaseSeeder
 {
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
+        $this->truncateDatabase();
+
         $projectsNumber = 200 / 10;
         $tasksPerProject = 800 / 10;
         $maxCommentsNumber = 40 / 10;
 
-        DB::table('comments')->truncate();
-        DB::table('activities')->truncate();
-        DB::table('times')->truncate();
-        DB::table('task_users')->truncate();
-        DB::table('tasks')->truncate();
-        DB::table('project_members')->truncate();
-        DB::table('projects')->truncate();
-        DB::table('group_users')->truncate();
-        DB::table('groups')->truncate();
-        DB::table('users')->truncate();
-
         $this->call(GroupsSeeder::class);
         $this->call(PrioritiesSeeder::class);
         $this->call(StatusesSeeder::class);
+        $this->call(AdminSeeder::class);
 
         $faker = Factory::create();
-
-        /** @var User $user */
-        $user = User::factory()->create([
-            'first_name' => 'Adam',
-            'last_name' => 'Smith',
-            'email' => 'admin@demo.com',
-            'password' => bcrypt('demo'),
-        ]);
-
-        $user->groups()->attach(1);
 
         // create random 20 team members
 

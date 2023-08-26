@@ -29,11 +29,18 @@ onMounted(() => {
 <template>
     <Head :title="project.name + ' - Timesheets'"/>
 
-    <Link preserve-state :href="$route('project.timesheets.create', {project: project.id})">
-        <el-button type="success">
-            <i class="fas fa-circle-plus mr-2"></i>Add
-        </el-button>
-    </Link>
+<!--    <ProjectLayout :project="project" :active-tab="activeTab">-->
+<!--        <template #buttons>-->
+<!--            <Link preserve-state-->
+<!--                  :href="$route('project.timesheets.create', {project: project.id})"-->
+<!--                  class="ml-2"-->
+<!--            >-->
+<!--                <el-button type="success">-->
+<!--                    <i class="fas fa-circle-plus mr-2"></i>Add time-->
+<!--                </el-button>-->
+<!--            </Link>-->
+<!--        </template>-->
 
-    <TimesheetsTable :times="times"/>
+        <TimesheetsTable show-task :times="times"/>
+<!--    </ProjectLayout>-->
 </template>
