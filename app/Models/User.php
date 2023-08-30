@@ -6,6 +6,7 @@ use App\Models\Traits\useCacheBuilder;
 use App\QueryBuilders\GroupQueryBuilder;
 use App\QueryBuilders\ProjectQueryBuilder;
 use App\QueryBuilders\TimeQueryBuilder;
+use App\QueryBuilders\UserNotificationQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -99,6 +100,11 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(Project::class, 'project_members');
     }
 
+    public function userNotifications(): HasMany|UserNotificationQueryBuilder
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
     // Actions
 
     public function isAdmin(): bool
@@ -146,6 +152,33 @@ class User extends Authenticatable implements HasMedia
 //                });
             },
         );
+    }
+
+    public function getAvatar()
+    {
+        $initials = function () {
+            $words = explode(' ', $this->full_name);
+            $initialsArray = array_map(fn($word) => strtoupper($word[0]), $words);
+            return implode('', $initialsArray);
+        };
+
+        $color = function () use ($initials) {
+            $backgrounds = config('laravolt.avatar.backgrounds');
+            return $backgrounds[ord($initials()[0]) % count($backgrounds)];
+        };
+
+        return (new Avatar([
+            ...config('laravolt.avatar'),
+            ...[
+                'name' => $this->full_name,
+                'chars' => 2,
+                'themes' => [],
+                'shape' => 'square',
+                'backgrounds' => [$color()]
+            ]
+        ]))
+            ->create($this->full_name)
+            ->toBase64();
     }
 
     protected function fullName(): Attribute

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Priority;
+use App\Models\Setting;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
 
         Request::macro('ids', function (string $field): array {
             return collect($this->input($field))->map(fn($row) => $row['id'])->toArray();
+        });
+
+        $settings = Setting::getData();
+        view()->composer('*', function ($view) use ($settings) {
+            $view->with([
+                'settings' => $settings,
+            ]);
         });
 
 //        try {

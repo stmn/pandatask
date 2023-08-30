@@ -4,6 +4,7 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import {Head} from '@inertiajs/vue3';
 import Layout from "~/js/Layouts/Layout.vue";
+import NotificationsForm from "~/js/Pages/Profile/Partials/NotificationsForm.vue";
 
 defineProps({
     mustVerifyEmail: {
@@ -27,6 +28,8 @@ defineProps({
         />
 
         <UpdatePasswordForm/>
+
+        <NotificationsForm/>
 
         <!-- <DeleteUserForm />-->
     </Layout>

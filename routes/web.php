@@ -93,6 +93,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::group(['as' => 'profile.', 'prefix' => '/profile/'], function () {
         Route::get('', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('', [ProfileController::class, 'update'])->name('update');
+        Route::patch('update-notifications', [ProfileController::class, 'updateNotifications'])->name('update-notifications');
         Route::post('update-avatar', [ProfileController::class, 'updateAvatar'])->name('update-avatar');
         Route::post('delete-avatar', [ProfileController::class, 'deleteAvatar'])->name('delete-avatar');
         Route::delete('', [ProfileController::class, 'destroy'])->name('destroy');

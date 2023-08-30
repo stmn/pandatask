@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Group;
 use App\Models\User;
+use App\Notifications\UserCreated;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,13 +88,14 @@ class UsersController extends AdminController
      */
     protected function save(User $user = new User()): void
     {
-        $this->validate(request(), [
+        $validated = $this->validate(request(), [
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => (!$user->exists ? 'required' : 'nullable') . '|min:6',
             'confirm_password' => (!$user->exists ? 'required' : 'nullable') . '|same:password',
             'groups' => 'nullable|array',
+            'send_welcome_email' => 'nullable|boolean',
         ]);
 
         $user->fill(request()->except('password'));
@@ -105,5 +107,11 @@ class UsersController extends AdminController
         $user->groups()->sync(request()->ids('groups'));
 
         $user->save();
+
+        if($validated['send_welcome_email']) {
+            $user->notify(
+                new UserCreated($user, $validated['password'])
+            );
+        }
     }
 }

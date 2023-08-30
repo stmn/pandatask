@@ -22,6 +22,7 @@ const {form, save, isEdit} = useAdminForm({
             password: '',
             confirm_password: '',
             groups: [],
+            send_welcome_email: true,
         },
         ...props.user
     },
@@ -29,6 +30,17 @@ const {form, save, isEdit} = useAdminForm({
     plural: 'users',
     onSuccess: redirect,
 });
+
+const generateRandomPassword = () => {
+    const length = 8;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let retVal = "";
+    for (let i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    form.password = retVal;
+    form.confirm_password = retVal;
+}
 </script>
 
 <template>
@@ -115,6 +127,12 @@ const {form, save, isEdit} = useAdminForm({
             <el-row :gutter="10">
                 <el-col :sm="12" :lg="12">
                     <el-form-item label="Password" :class="{'is-error':form.errors.password}">
+                        <template #label>
+                            Password &nbsp;
+                            <el-button type="link" size="small" @click="generateRandomPassword">
+                                <i class="fa-solid fa-random mr-2"></i> Generate password
+                        </el-button>
+                        </template>
                         <el-input v-model="form.password" type="password">
                             <template #prefix>
                                 <i class="fa-solid fa-lock"></i>
@@ -134,6 +152,11 @@ const {form, save, isEdit} = useAdminForm({
                     </el-form-item>
                 </el-col>
             </el-row>
+
+            <template v-if="!form.id">
+            <el-checkbox v-model="form.send_welcome_email"
+                         label="Send email to user with login details"></el-checkbox>
+            </template>
         </el-form>
 
         <template #footer>

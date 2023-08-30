@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ActivityType;
 use App\Enums\ProjectRole;
 use App\Models\Traits\useLatestActivity;
 use App\QueryBuilders\ActivityQueryBuilder;
@@ -16,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravolt\Avatar\Avatar;
 use Spatie\MediaLibrary\HasMedia;
@@ -131,6 +129,33 @@ class Project extends Model implements HasMedia
             ->toArray());
     }
 
+    public function getAvatar()
+    {
+        $initials = function () {
+            $words = explode(' ', $this->name);
+            $initialsArray = array_map(fn($word) => strtoupper($word[0]), $words);
+            return implode('', $initialsArray);
+        };
+
+        $color = function () use ($initials) {
+            $backgrounds = config('laravolt.avatar.backgrounds');
+            return $backgrounds[ord($initials()[0]) % count($backgrounds)];
+        };
+
+        return (new Avatar([
+            ...config('laravolt.avatar'),
+            ...[
+                'name' => $this->name,
+                'chars' => 2,
+                'themes' => [],
+                'shape' => 'square',
+                'backgrounds' => [$color()]
+            ]
+        ]))
+            ->create($this->name)
+            ->toBase64();
+    }
+
     protected function avatar(): Attribute
     {
         return Attribute::make(
@@ -138,6 +163,13 @@ class Project extends Model implements HasMedia
                 return $this->getFirstMediaUrl('avatar');
 //                return url('storage/project-avatars/' . $this->id . '.png');
             },
+        );
+    }
+
+    protected function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => route('project', $this),
         );
     }
 }
