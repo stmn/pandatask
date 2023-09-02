@@ -18,6 +18,7 @@ const {addPage} = useWiki();
             Here you can create pages and write documentation for your project.
         </el-text>
 
+        <template v-if="$can('create pages', $page.props.project)">
         <br>
 
         <el-button :color="$primaryColor()"
@@ -26,5 +27,6 @@ const {addPage} = useWiki();
                    @click="addPage">
             <i class="fa-solid fa-circle-plus mr-2"></i>Add page
         </el-button>
+        </template>
     </div>
 </template>

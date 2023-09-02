@@ -23,6 +23,13 @@ abstract class ProjectController extends Controller
                 abort(403, 'You don\'t have access to this project.');
             }
 
+            Inertia::share('project', fn() => $project);
+
+            Inertia::share('projects', fn() => Project::query()
+                ->select('id', 'name')
+                ->forCurrentUser()
+                ->get());
+
             Inertia::share('milestones', fn() => $project->milestones()
                 ->select('id', 'name')
                 ->get());

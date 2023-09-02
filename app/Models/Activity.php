@@ -139,6 +139,12 @@ class Activity extends Model implements HasMedia
                             'old' => $old->only('name', 'color'),
                             'new' => $new->only('name', 'color'),
                         ]);
+                    } else {
+                        $collection->push([
+                            'field' => $key,
+                            'old' => $change[0],
+                            'new' => $change[1],
+                        ]);
                     }
                 }
                 foreach (Arr::get($details, 'attached', []) as $key => $attached) {

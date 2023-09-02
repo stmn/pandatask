@@ -15,7 +15,7 @@ const props = defineProps({
     &nbsp;
     <Link preserve-state preserve-scroll
           :href="$route('project.tasks.create', {project: project.id})"
-          :only="['modal']">
+          :only="['modal', 'project']">
         <el-button type="success">
             <i class="fas fa-circle-plus mr-2"/>Add task
         </el-button>

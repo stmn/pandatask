@@ -15,7 +15,7 @@ class TaskPolicy
         }
     }
 
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Project $project = null): bool
     {
         return true;
     }

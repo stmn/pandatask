@@ -69,7 +69,7 @@ onMounted(() => {
     <HeroCard v-if="!projects.length"
               title="Welcome to Pandatask!"
               description="It looks like you don't have access to any projects yet.">
-        <template #buttons>
+        <template #buttons v-if="$can('create projects')">
             <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
                 <el-button type="success" size="large">
                     <i class="fa-solid fa-circle-plus mr-2"></i> Create first project

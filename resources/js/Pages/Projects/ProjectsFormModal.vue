@@ -33,7 +33,7 @@ const form = useForm(Object.assign({
     custom_fields: [],
 }, props.project))
 
-if(!props.project){
+if (!props.project) {
     form.statuses = usePage().props.statuses.map((status) => status.id);
     form.priorities = usePage().props.priorities.map((status) => status.id);
 }

@@ -97,7 +97,7 @@ class User extends Authenticatable implements HasMedia
 
     public function projects(): BelongsToMany|ProjectQueryBuilder
     {
-        return $this->belongsToMany(Project::class, 'project_members');
+        return $this->belongsToMany(Project::class, 'project_members', 'member_id');
     }
 
     public function userNotifications(): HasMany|UserNotificationQueryBuilder

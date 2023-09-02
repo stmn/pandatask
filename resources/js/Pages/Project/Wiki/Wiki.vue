@@ -26,7 +26,7 @@ const {editing, adding, form, cancel, addPage, savePage, deletePage} = useWiki()
         <HeroCard v-if="!pages.length && !adding" title="Pages not found"
                   description="Here you can create pages and write documentation for your project."
                   type="not-found">
-            <template #buttons>
+            <template #buttons v-if="$can('create pages', $page.props.project)">
                 <el-button type="primary"
                            mt-6
                            size="large"
@@ -38,7 +38,7 @@ const {editing, adding, form, cancel, addPage, savePage, deletePage} = useWiki()
 
         <el-row v-else :gutter="30">
             <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="{span: 24}" style="margin-bottom: 15px;">
-                <div style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
+                <div v-if="$can('create pages', project)" style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
                     <el-button :color="$primaryColor()"
                                @click="addPage">
                         <i class="fa-solid fa-circle-plus mr-2"></i>Add page
@@ -49,7 +49,7 @@ const {editing, adding, form, cancel, addPage, savePage, deletePage} = useWiki()
             </el-col>
 
             <el-col :lg="18" :xl="18" :md="18" :sm="18" :xs="{span: 24}">
-                <div style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
+                <div v-if="$can('create pages', $page.props.project)" style="display: flex; width: 100%; height: 32px; margin-bottom: 15px;">
                     <el-button v-if="editing || adding"
                                :color="$primaryColor()"
                                @click="cancel">

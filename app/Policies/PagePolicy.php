@@ -3,11 +3,9 @@
 namespace App\Policies;
 
 use App\Models\Project;
-use App\Models\Time;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class TimePolicy
+class PagePolicy
 {
     public function __construct()
     {
@@ -19,17 +17,18 @@ class TimePolicy
         return true;
     }
 
-    public function create(User $user, Project $project): bool|Response
+    public function create(User $user, Project $project): bool
     {
-        if($user->isClient()){
-            return Response::deny('As a client you can not create time entries.');
-        }
-
         return !$user->isClient() && $user->can('view', $project);
     }
 
-    public function update(User $user, Time $time): bool
+    public function update(User $user, Project $project): bool
     {
-        return $time->author->is(loggedUser());
+        return !$user->isClient() && $user->can('view', $project);
+    }
+
+    public function delete(User $user, Project $project): bool
+    {
+        return !$user->isClient() && $user->can('view', $project);
     }
 }

@@ -179,8 +179,11 @@ updateColumns(columns.value);
                                     <!--                                    </template>-->
 
                                     <!--                                <Transition appear>-->
-                                    <div class="task-link" style="display: flex; align-items: center;">
-                                        <Timer :task="row" style="margin-right: 10px;"/>
+                                    <div :class="$can('create time', $page.props.project)?'task-link':''"
+                                         style="display: flex; align-items: center;">
+                                        <Timer v-if="$can('create time', $page.props.project)"
+                                               :task="row"
+                                               style="margin-right: 10px;"/>
                                         <TaskLink :task="row" style="display: contents;"/>
                                     </div>
                                     <!--                                </Transition>-->

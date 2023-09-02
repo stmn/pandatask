@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Time;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TimerController extends Controller
@@ -24,7 +25,7 @@ class TimerController extends Controller
         /** @var Task $task */
         $task = Task::query()->findOrFail($request->get('task'));
 
-        $this->authorize('view', $task->project);
+        $this->authorize('create', [Time::class, $task->project]);
 
         /** @var Time|null $time */
         $time = loggedUser()->times()->pending()->first();
@@ -58,5 +59,15 @@ class TimerController extends Controller
         } else {
             $this->error(self::MESSAGE_REJECTED);
         }
+    }
+
+    public function check(Request $request): JsonResponse
+    {
+        /** @var Task $task */
+        $task = Task::query()->findOrFail($request->get('task'));
+
+        return response()->json([
+            'assigned' => $task->assignees()->where('user_id', loggedUser()->id)->exists(),
+        ]);
     }
 }

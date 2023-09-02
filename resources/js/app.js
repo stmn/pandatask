@@ -47,6 +47,10 @@ const app = createInertiaApp({
                 $route: route,
                 group: function (name) {
                     return this.$page.props.auth.groups?.[name];
+                },
+                $can: function (permission, model = null) {
+                    const permissions = model?.permissions || this.$page.props.auth.permissions;
+                    return permissions?.[permission];
                 }
             },
         })

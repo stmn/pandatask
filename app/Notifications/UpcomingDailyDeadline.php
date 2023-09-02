@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Collection;
@@ -23,10 +22,10 @@ class UpcomingDailyDeadline extends BaseNotification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Upcoming daily deadlines ('.$this->tasks->count().') ⏰')
+            ->subject('Upcoming daily deadlines (' . $this->tasks->count() . ') ⏰')
             ->markdown('mail.upcoming-daily-deadline', [
-            'tasks' => $this->tasks,
-        ]);
+                'tasks' => $this->tasks,
+            ]);
     }
 
     public function toArray(object $notifiable): array

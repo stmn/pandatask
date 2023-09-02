@@ -32,7 +32,11 @@ const props = defineProps({
 })
 
 const statuses = computed(() => {
-    const availableStatuses = props.statuses || usePage().props?.project?.statuses || [];
+    const availableStatuses = usePage().props?.project?.statuses || [];
+
+    console.log({availableStatuses}, usePage().props.statuses.filter(
+        item => availableStatuses.includes(item.id) || item.id === props.modelValue.status_id
+    ));
 
     return usePage().props.statuses.filter(
         item => availableStatuses.includes(item.id) || item.id === props.modelValue.status_id
@@ -40,7 +44,7 @@ const statuses = computed(() => {
 })
 
 const priorities = computed(() => {
-    const availablePriorities = props.priorities || usePage().props?.project?.priorities || [];
+    const availablePriorities = usePage().props?.project?.priorities || [];
 
     return usePage().props.priorities.filter(
         item => availablePriorities.includes(item.id) || item.id === props.modelValue.priority_id
@@ -139,13 +143,13 @@ const priorities = computed(() => {
                 <el-row :gutter="10">
                     <el-col :xs="12" :sm="12" :md="12" :lg="12">
                         <el-form-item label="Start date">
-                            <el-date-picker v-model="modelValue.start_date" style="width: 100%;"/>
+                            <el-date-picker v-model="modelValue.start_date" value-format="YYYY-MM-DD" style="width: 100%;"/>
                             <InputError :message="modelValue.errors['task.start_date']"/>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="12">
                         <el-form-item label="End date">
-                            <el-date-picker v-model="modelValue.end_date" style="width: 100%;"/>
+                            <el-date-picker v-model="modelValue.end_date" value-format="YYYY-MM-DD" style="width: 100%;"/>
                             <InputError :message="modelValue.errors['task.end_date']"/>
                         </el-form-item>
                     </el-col>
@@ -184,7 +188,9 @@ const priorities = computed(() => {
                     </el-select>
                 </el-form-item>
             </el-col>
-            <el-col :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
+            <el-col
+                v-if="!group('client')"
+                :lg="6" :xl="6" :md="6" :sm="6" :xs="12">
                 <el-form-item style="text-align: left;">
                     <template #label>
                         <span>Private task</span>

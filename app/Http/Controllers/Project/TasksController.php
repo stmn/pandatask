@@ -9,6 +9,11 @@ use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Status;
 use App\Models\Task;
+use App\Models\User;
+use App\Notifications\NewTaskComment;
+use App\Notifications\NewTaskStatus;
+use App\Notifications\ProjectAssigned;
+use App\Notifications\TaskAssigned;
 use Arr;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
@@ -23,16 +28,13 @@ class TasksController extends ProjectController
 {
     public function index(Request $request, Project $project): Response
     {
+        $this->authorize('viewAny', [Task::class, $project]);
 //        dd($_GET);
         $sort = '-latest_activity_at';
 
         return Inertia::render('Project/Tasks/Tasks', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
-            'projects' => fn() => Project::query()
-                ->select('id', 'name')
-                ->get(),
-            'project' => fn() => $project,
 //            'sort' => $request->get('sort', $sort),
             'tasks' => Inertia::lazy(fn() => $project->tasks()
                 ->select('id', 'project_id', 'subject', 'description', 'priority_id', 'status_id', 'private', 'number', 'latest_activity_id', 'custom_fields')
@@ -57,7 +59,7 @@ class TasksController extends ProjectController
         $task->load('author', 'project', 'assignees');
 
         return Inertia::render('Task/Task', [
-            'project' => $project,
+//            'project' => $project,
             'task' => $task,
             'activities' => fn() => $task->activities()
                 ->with(['user', 'comment', 'media'])
@@ -72,15 +74,16 @@ class TasksController extends ProjectController
                 ->with(['author'])
                 ->latest()
                 ->get(),
-            'statuses' => fn() => Status::all(),
-            'priorities' => fn() => Priority::all(),
+//            'statuses' => fn() => Status::all(),
+//            'priorities' => fn() => Priority::all(),
         ]);
     }
 
     public function create(Project $project): Modal
     {
+        $this->authorize('create', [Task::class, $project]);
+
         return Inertia::modal('Task/TaskForm', [
-            'project' => $project,
             'statuses' => fn() => Status::all(),
             'priorities' => fn() => Priority::all(),
             'users' => fn() => $project->members()->get(),
@@ -133,8 +136,10 @@ class TasksController extends ProjectController
             'task.private' => ['boolean'],
             'task.tags' => ['array'],
             'task.custom_fields' => ['array'],
+            'task.start_date' => ['date'],
+            'task.end_date' => ['date'],
         ], $request->all());
-
+//dd($validated, $request->all());
         $activity = [
             'project_id' => $task->project_id,
             'type' => ActivityType::TASK_CHANGED,
@@ -147,13 +152,16 @@ class TasksController extends ProjectController
         ];
 
         if ($request->input('task')) {
-            $original = $task->getOriginal();
+            $original = $task->getRawOriginal();
             $data = $request->get('task');
             if (isset($data['description']) && $data['description'] === '<p></p>') {
                 $data['description'] = str_replace("<p></p>", "", $data['description']);
             }
+//            dump($data, request()->all());
             $task->update($data);
             $changes = $task->getChanges();
+//            dd($original,$changes);
+            $changes = Arr::except($changes, ['updated_at', 'description']);
 
             foreach ($changes as $key => $change) {
                 $oldValues = $original[$key];
@@ -172,20 +180,44 @@ class TasksController extends ProjectController
             $activity['type'] = ActivityType::TASK_COMMENTED;
         }
 
-        if ($request->has('task.assignees') && $request->get('task')['assignees'] !== NULL) {
-            $result = $task->assignees()->sync(
-                collect($request->get('task')['assignees'])->pluck('id')
+//        dd($request->all());
+//        if ($request->has('task.assignees')) {
+            $assignees = $task->assignees()->sync(
+                collect($request->get('task')['assignees'] ?? [])->pluck('id')
             );
-            if ($result['attached']) {
-                $activity['details']['attached']['assignees'] = $result['attached'];
+//            dd($assignees);
+            if ($assignees['attached']) {
+                $activity['details']['attached']['assignees'] = $assignees['attached'];
+                User::query()
+//                    ->where('id', '!=', loggedUser()->id)
+                    ->whereIn('id', $assignees['attached'])
+                    ->each(fn(User $user) => $user->notify(
+                        new TaskAssigned($task)
+                    ));
             }
-            if ($result['detached']) {
-                $activity['details']['detached']['assignees'] = $result['detached'];
+            if ($assignees['detached']) {
+                $activity['details']['detached']['assignees'] = $assignees['detached'];
+            }
+//        }
+
+        if($activity['details']['changed'] || $activity['details']['attached'] || $activity['details']['detached']) {
+            $activity = $task->activities()->create($activity);
+            assert($activity instanceof Activity);
+
+            if($activity->type === ActivityType::TASK_COMMENTED) {
+                $task->assignees()
+                    ->where('id', '!=', loggedUser()->id)
+                    ->get()
+                    ->each(fn(User $user) => $user->notify(new NewTaskComment($activity)));
+            } elseif(
+                $activity['details']->where('field', 'status_id')->isNotEmpty()
+            ) {
+                $task->assignees()
+                    ->where('id', '!=', loggedUser()->id)
+                    ->get()
+                    ->each(fn(User $user) => $user->notify(new NewTaskStatus($activity)));
             }
         }
-
-        $activity = $task->activities()->create($activity);
-        assert($activity instanceof Activity);
 
         $files = Arr::get($request->allFiles(), 'activity.files', []);
         if ($files) {

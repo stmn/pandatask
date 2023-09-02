@@ -18,7 +18,7 @@ const handleClose = () => {
             redirectURL, {
                 preserveScroll: true,
                 preserveState: true,
-                only: ['times', 'tasks'],
+                only: ['times', 'tasks', 'projects'],
             })
     }
 }

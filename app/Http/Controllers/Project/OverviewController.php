@@ -15,9 +15,6 @@ class OverviewController extends ProjectController
         return Inertia::modal('Project/OverviewModal', [
             'activeTab' => 'overview',
             'project' => $project,
-            'projects' => fn() => Project::query()
-                ->select('id', 'name')
-                ->get(),
             'activities' => fn() => $project->activities()
                 ->with(['task', 'user'])
                 ->latest()

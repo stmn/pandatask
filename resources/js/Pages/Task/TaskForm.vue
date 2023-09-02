@@ -1,5 +1,5 @@
 <script setup>
-import {useForm} from "@inertiajs/vue3"
+import {useForm, usePage} from "@inertiajs/vue3"
 import Modal from "../../Layouts/Modal.vue"
 import {useModal} from "momentum-modal";
 import {inject, onMounted} from "vue";
@@ -44,8 +44,8 @@ const handleTasks = inject('handleTasks', () => {
 });
 
 const {close, redirect, show} = useModal()
-
-const url = route('project.tasks.create', {project: props.project.id});
+console.log(123,usePage().props);
+const url = route('project.tasks.create', {project: usePage().props.project.id});
 
 const create = (open = 0) => form.transform((data) => ({
     task: form.data(),

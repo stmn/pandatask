@@ -44,13 +44,14 @@ class Task extends Model
 
     protected $appends = [
         'url',
+        'permissions',
     ];
 
     protected $casts = [
         'private' => 'boolean',
         'tags' => 'array',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'start_date' => 'date:Y-m-d',
+        'end_date' => 'date:Y-m-d',
         'custom_fields' => 'array',
     ];
 
@@ -124,6 +125,15 @@ class Task extends Model
     {
         return Attribute::make(
             get: fn() => route('project.task', ['project' => $this->project_id, 'task' => $this])
+        );
+    }
+
+    protected function permissions(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => [
+
+            ],
         );
     }
 

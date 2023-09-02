@@ -2,30 +2,32 @@
 
 namespace App\Console;
 
+use App\Jobs\SendUpcomingDeadlineNotifications;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Log;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-
+        // upcoming deadlines in week
         $schedule->call(function () {
-            Log::info('Cron works!');
-        })->everyMinute();
+            (new SendUpcomingDeadlineNotifications(
+                SendUpcomingDeadlineNotifications::REMINDER_TYPE_WEEKLY
+            ))->handle();
+        })->mondays()->at('08:00');
+
+        // upcoming deadlines in day
+        $schedule->call(function () {
+            (new SendUpcomingDeadlineNotifications(
+                SendUpcomingDeadlineNotifications::REMINDER_TYPE_DAILY
+            ))->handle();
+        })->dailyAt('08:00');
     }
 
-    /**
-     * Register the commands for the application.
-     */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

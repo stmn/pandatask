@@ -3,7 +3,6 @@ import UserAvatar from "@/Components/User/UserAvatar.vue";
 
 const props = defineProps({
     details: {
-        type: Array,
         required: false
     },
 })
@@ -12,6 +11,7 @@ const props = defineProps({
 <template>
     <div v-if="details.length" class="activity-details">
         <div v-for="detail in details" class="activity-details__item">
+
             <!-- attached -->
 
             <template v-if="detail.attached">
@@ -55,16 +55,19 @@ const props = defineProps({
 
                 <template v-if="detail.field==='priority_id' || detail.field==='status_id'">
                     from
-                    <el-tag class="priority-tag"
+                    <div class="priority-tag"
                             :style="`max-width: 100px; border-color: ${detail.old.color};`"
                             :color="detail.old.color">{{ detail.old.name }}
-                    </el-tag>
+                    </div>
                     to
-                    <el-tag class="priority-tag"
+                    <div class="priority-tag"
                             :style="`max-width: 100px; border-color: ${detail.new.color};`"
                             :color="detail.new.color">{{ detail.new.name }}
-                    </el-tag>
+                    </div>
                 </template>
+                <tempalte v-else>
+                    from <b>{{ detail.old }}</b> to <b>{{ detail.new }}</b>
+                </tempalte>
             </template>
         </div>
     </div>

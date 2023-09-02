@@ -104,11 +104,11 @@ class UsersController extends AdminController
             $user->password = Hash::make(request()->password);
         }
 
-        $user->groups()->sync(request()->ids('groups'));
-
         $user->save();
 
-        if($validated['send_welcome_email']) {
+        $user->groups()->sync(request()->ids('groups'));
+
+        if ($user->wasRecentlyCreated && $validated['send_welcome_email']) {
             $user->notify(
                 new UserCreated($user, $validated['password'])
             );

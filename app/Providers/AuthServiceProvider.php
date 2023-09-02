@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Activity;
 use App\Models\Comment;
 use App\Models\Group;
+use App\Models\Page;
 use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Status;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Policies\ActivityPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\GroupPolicy;
+use App\Policies\PagePolicy;
 use App\Policies\PriorityPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\StatusPolicy;
@@ -38,6 +40,7 @@ class AuthServiceProvider extends ServiceProvider
         Project::class => ProjectPolicy::class,
         Status::class => StatusPolicy::class,
         Task::class => TaskPolicy::class,
+        Page::class => PagePolicy::class,
         Time::class => TimePolicy::class,
         User::class => UserPolicy::class,
     ];

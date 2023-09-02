@@ -40,7 +40,8 @@ class Project extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'avatar'
+        'avatar',
+        'permissions',
     ];
 
     protected $casts = [
@@ -170,6 +171,22 @@ class Project extends Model implements HasMedia
     {
         return Attribute::make(
             get: fn() => route('project', $this),
+        );
+    }
+
+    protected function permissions(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => [
+                'view any tasks' => loggedUser()->can('viewAny', [Task::class, $this]),
+                'view any activity' => loggedUser()->can('viewAny', [Activity::class, $this]),
+                'view any timesheets' => loggedUser()->can('viewAny', [Time::class, $this]),
+                'view any pages' => loggedUser()->can('viewAny', [Page::class, $this]),
+                'create pages' => loggedUser()->can('create', [Page::class, $this]),
+                'create tasks' => loggedUser()->can('create', [Task::class, $this]),
+                'create time' => loggedUser()->can('create', [Time::class, $this]),
+                'edit project' => loggedUser()->can('update', $this),
+            ],
         );
     }
 }

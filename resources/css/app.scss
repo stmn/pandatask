@@ -81,6 +81,8 @@ html.dark {
 }
 
 .status-tag, .priority-tag {
+    display: inline-block;
+    text-align: center;
     color: var(--el-text-color) !important;
     background: var(--el-color-primary-light-9) !important;
     border-bottom: 2px solid #000;
@@ -90,6 +92,7 @@ html.dark {
     font-size: 12px;
     //height: 20px;
     line-height: 20px;
+    min-width: 130px;
 
     &.status-tag {
         width: 95%;
@@ -117,6 +120,10 @@ html.dark {
 .el-page-header__header {
     line-height: 32px !important;
     height: 32px !important;
+}
+
+.el-dropdown .el-tooltip__trigger {
+    outline: none;
 }
 
 // card

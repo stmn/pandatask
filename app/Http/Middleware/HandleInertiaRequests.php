@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\ActivityType;
+use App\Models\Project;
 use App\QueryBuilders\ActivityQueryBuilder;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -46,6 +47,9 @@ class HandleInertiaRequests extends Middleware
                         'user' => $user,
                         'impersonated' => session()->has('impersonated'),
                         'groups' => $user->groups()->get()->keyBy('type'),
+                        'permissions' => [
+                            'create projects' => $user->can('create', Project::class),
+                        ]
                     ];
                 }
 

@@ -51,9 +51,9 @@ const timeBetweenTwoDates = (date1, date2) => {
 </script>
 
 <template>
-<!--    <template v-if="times === undefined">-->
+    <!--    <template v-if="times === undefined">-->
 
-<!--    </template>-->
+    <!--    </template>-->
     <template v-if="!times?.data?.length">
         <HeroCard title="Timesheets not found"
                   description="Timesheets are used to track time spent on tasks."
@@ -82,7 +82,7 @@ const timeBetweenTwoDates = (date1, date2) => {
 
             <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
                 <template #default="{row}">
-                    <UserPopover :user="row.author" />
+                    <UserPopover :user="row.author"/>
                 </template>
             </el-table-column>
 
@@ -133,8 +133,10 @@ const timeBetweenTwoDates = (date1, date2) => {
 
             <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">
                 <template #default="{row}">
-                    <Link preserve-state preserve-scroll :only="['modal', 'times']"
-                          :href="$route('project.timesheets.edit', {project: row.project_id, time: row.id})">
+                    <Link
+                        v-if="$can('update time', row)"
+                        preserve-state preserve-scroll :only="['modal', 'times']"
+                        :href="$route('project.timesheets.edit', {project: row.project_id, time: row.id})">
                         <el-button type="primary" size="small"><i class="fa-solid fa-pen-to-square"></i></el-button>
                     </Link>
                 </template>

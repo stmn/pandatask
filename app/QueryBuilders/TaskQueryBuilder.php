@@ -23,7 +23,10 @@ final class TaskQueryBuilder extends Builder
     {
         if ($user->isClient()) {
              $this->where('private', 0);
-             $this->whereIn('project_id', $user->projects()->pluck('id'));
+        }
+
+        if(!$user->isAdmin()) {
+            $this->whereIn('project_id', $user->projects()->pluck('id'));
         }
 
         return $this;

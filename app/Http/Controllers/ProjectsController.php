@@ -6,9 +6,9 @@ use App\Enums\ProjectRole;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\ProjectAssigned;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Momentum\Modal\Modal;
@@ -32,6 +32,14 @@ class ProjectsController extends Controller
                     'latestActivity.task',
                     'latestActivity.user'
                 ])
+                // with info about stats (how many tasks, how many completed, how many in progress)
+//                ->withCount([
+//                    'tasks as tasks_1' => fn($query) => $query->where('status_id', 1),
+//                    'tasks as tasks_2' => fn($query) => $query->where('status_id', 2),
+//                    'tasks as tasks_3' => fn($query) => $query->where('status_id', 3),
+//                    'tasks as tasks_4' => fn($query) => $query->where('status_id', 4),
+//                    'tasks as tasks_5' => fn($query) => $query->where('status_id', 5),
+//                ])
                 ->forCurrentUser()
                 ->latest('latest_activity_at')
                 ->paginate($this->perPage()),
@@ -89,15 +97,23 @@ class ProjectsController extends Controller
 
         assert($project instanceof Project);
 
-        $project->clients()->syncWithPivotValues(
+        $clients = $project->clients()->syncWithPivotValues(
             collect($request->get('clients'))->pluck('id'),
             ['role' => ProjectRole::CLIENT]
         );
 
-        $project->teamMembers()->syncWithPivotValues(
+        $members = $project->teamMembers()->syncWithPivotValues(
             collect($request->get('team_members'))->pluck('id'),
             ['role' => ProjectRole::TEAM_MEMBER]
         );
+
+        User::query()
+            ->where('id', '!=', loggedUser()->id)
+            ->whereIn('id', array_merge($clients['attached'], $members['attached']))
+            ->get()
+            ->each(fn(User $user) => $user->notify(
+                new ProjectAssigned($project)
+            ));
 
         if ($project->wasRecentlyCreated) {
             return to_route('project.tasks', ['project' => $project]);

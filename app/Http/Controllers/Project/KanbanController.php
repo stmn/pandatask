@@ -26,10 +26,6 @@ class KanbanController extends ProjectController
         return Inertia::render('Project/Kanban/Kanban', [
             'activeTab' => 'tasks',
             'search' => $request->get('search'),
-            'projects' => fn() => Project::query()
-                ->select('id', 'name')
-                ->get(),
-            'project' => fn() => $project,
             'tasks' => function() use ($project) {
                     $tasks = [];
 

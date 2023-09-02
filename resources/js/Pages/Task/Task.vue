@@ -185,17 +185,19 @@ const onlyComments = useStorage('onlyComments', true);
                     <i class="fa-solid fa-check mr-2"></i>Submit
                 </el-button>
 
-                <el-switch
-                    ml-5
-                    v-model="activityForm.private"
-                    size="small"
-                    active-text="Private"
-                />
+                <template v-if="!group('client')">
+                    <el-switch
+                        ml-5
+                        v-model="activityForm.private"
+                        size="small"
+                        active-text="Private"
+                    />
 
-                <el-tooltip content="If enabled only your team members will be able to see this activity."
-                            placement="left">
-                    <i class="fa-solid fa-question-circle ml-2"></i>
-                </el-tooltip>
+                    <el-tooltip content="If enabled only your team members will be able to see this activity."
+                                placement="left">
+                        <i class="fa-solid fa-question-circle ml-2"></i>
+                    </el-tooltip>
+                </template>
             </div>
         </el-form-item>
     </el-form>

@@ -1,5 +1,5 @@
 <script setup>
-import {Link, usePage} from '@inertiajs/vue3'
+import {router, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 
 const props = defineProps({
@@ -21,18 +21,52 @@ const isRun = computed(() => {
 const visible = computed(() => auth.value.user.active_time?.task_id || props.task?.id);
 
 const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
+
+const toggleTimer = () => {
+    const toggle = () => {
+        router.visit(url.value, {
+            method: 'post',
+            data: {task: props.task?.id},
+            preserveState: true,
+            preserveScroll: true,
+            only: ['auth', 'flash', 'times'],
+        })
+    }
+
+    if (!isRun.value) {
+        axios.post(route('timer.check', {task: props.task.id}))
+            .then(({data}) => {
+                const isAdmin = usePage().props.auth.groups?.admin;
+                if (!data.assigned && !isAdmin) {
+                    ElMessageBox.confirm(
+                        'You are not assigned to this task. Do you want to start the timer anyway?',
+                        'Warning',
+                        {
+                            confirmButtonText: 'Start timer',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning',
+                        }
+                    ).then(() => {
+                        toggle()
+                    });
+                } else {
+                    toggle()
+                }
+            }).catch(error => {
+            console.log(error)
+        });
+
+    } else {
+        toggle()
+    }
+}
 </script>
 
 <template>
-    <Link v-if="visible"
-          :href="url"
-          method="post"
-          as="span"
+    <span v-if="visible"
+          @click="toggleTimer"
           style="display: inline-flex;"
-          :data="{ task: task?.id }"
-          :only="['auth', 'flash', 'times']"
-          class="timer"
-          preserve-scroll>
+          class="timer">
         <template v-if="isRun">
             <slot name="stop">
                 <i class="fa-solid fa-circle-stop hover-opacity"
@@ -42,10 +76,10 @@ const url = computed(() => route(isRun.value ? 'timer.stop' : 'timer.start'))
         <template v-else>
             <slot name="play">
                 <i class="fa-solid fa-circle-play hover-opacity"
-                   style="color: var(--el-color-info);"></i>
+                   style="color: var(--el-color-primary-light-3);"></i>
             </slot>
         </template>
-    </Link>
+    </span>
 </template>
 
 <style lang="scss" scoped>

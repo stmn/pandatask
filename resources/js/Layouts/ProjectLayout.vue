@@ -95,6 +95,7 @@ const handleClick = (index) => {
 
         <template #extra>
             <Link preserve-state preserve-scroll :only="['modal']"
+                  v-if="$can('edit project', project)"
                   :href="$route('projects.edit', {project: project.id})">
                 <el-button type="primary">
                     <i class="fas fa-pen-to-square mr-2"></i> Edit project
@@ -109,11 +110,15 @@ const handleClick = (index) => {
     <br>
 
     <el-tabs v-model="activeTab" @tab-click="handleClick">
-        <el-tab-pane :name="tab.name" v-for="tab in tabs">
-            <template #label>
-                <i :class="`fa-solid ${tab.icon} mr-2`"></i> {{ tab.name.charAt(0).toUpperCase() + tab.name.slice(1) }}
-            </template>
-        </el-tab-pane>
+        <template v-for="tab in tabs">
+            <el-tab-pane
+                v-if="$can('view any '+tab.name, $page.props.project)"
+                :name="tab.name">
+                <template #label>
+                    <i :class="`fa-solid ${tab.icon} mr-2`"></i> {{ tab.name.charAt(0).toUpperCase() + tab.name.slice(1) }}
+                </template>
+            </el-tab-pane>
+        </template>
     </el-tabs>
 
     <slot/>

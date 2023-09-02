@@ -7,6 +7,7 @@ use App\QueryBuilders\TimeQueryBuilder;
 use App\QueryBuilders\UserQueryBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -28,6 +29,10 @@ class Time extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
+    ];
+
+    protected $appends = [
+        'permissions',
     ];
 
     public static function query(): Builder|TimeQueryBuilder
@@ -73,5 +78,14 @@ class Time extends Model
         ]);
 
         return true;
+    }
+
+    protected function permissions(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => [
+                'update time' => loggedUser()->can('update', $this),
+            ],
+        );
     }
 }

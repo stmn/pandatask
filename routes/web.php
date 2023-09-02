@@ -86,6 +86,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::group(['as' => 'timer.', 'prefix' => '/timer/'], function () {
         Route::post('start', [TimerController::class, 'start'])->name('start');
         Route::post('stop', [TimerController::class, 'stop'])->name('stop');
+        Route::post('check', [TimerController::class, 'check'])->name('check');
     });
 
     // Profile

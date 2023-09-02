@@ -18,7 +18,7 @@ class DashboardController extends Controller
     {
         return Inertia::render('Dashboard/Dashboard', [
             'activeIndex' => 'dashboard',
-            'hello' => $this->hello[array_rand($this->hello)],
+            'hello' => fn() => $this->hello[array_rand($this->hello)],
             'dashboard_settings' => function () {
                 return loggedUser()->settings;
             },

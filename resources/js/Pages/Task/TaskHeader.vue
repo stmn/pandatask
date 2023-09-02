@@ -26,11 +26,13 @@ const props = defineProps({
     <el-page-header @back="() => router.visit($route('project.tasks', {project: props.project.id}))">
         <template #content>
             <div flex items-center>
-                <Timer :task="task"/>
+                <Timer v-if="$can('create time', $page.props.project)"
+                       style="margin-right: 10px;"
+                       :task="task"/>
 
                 <BaseAvatar
                     :size="26"
-                    style="margin: 0 10px;"
+                    style="margin-right: 10px;"
                     :name="project.name"
                     :avatar="project.avatar"/>
 

@@ -27,7 +27,7 @@ const {list} = useCreateList({only: ['projects']});
                 <span>Projects</span>
             </div>
         </template>
-        <template #extra>
+        <template #extra v-if="$can('create projects')">
             <div class="flex items-center">
                 <Link preserve-state preserve-scroll :only="['modal', 'flash']" :href="$route('projects.create')">
                     <el-button type="success">

@@ -9,7 +9,8 @@ const {list, changeSort, changeOrder} = useList();
 <template>
     <div flex>
         <Link preserve-state preserve-scroll :only="['modal']"
-              :href="$route('project.tasks.create', {project: 1})">
+              v-if="$can('create tasks', $page.props.project)"
+              :href="$route('project.tasks.create', {project: $page.props.project.id})">
         <el-button size="default" type="success" mr-2>
             <i class="fa-solid fa-circle-plus mr-2"></i>
             Add
