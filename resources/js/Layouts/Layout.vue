@@ -76,8 +76,7 @@ const svg = `<path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.
         <el-footer style="color: var(--brand-text-color);">
             <br>
             <small>
-                All rights reserved &copy;
-                <a href="https://pandatask.app" rel="nofollow" target="_blank"><b>Pandatask</b></a> v1.0
+                &copy; <a href="https://pandatask.app" rel="nofollow" target="_blank"><b>Pandatask</b></a> v1.0
             </small>
         </el-footer>
     </el-container>

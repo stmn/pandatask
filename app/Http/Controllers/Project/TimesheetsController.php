@@ -22,7 +22,7 @@ class TimesheetsController extends ProjectController
         return Inertia::render('Project/Timesheets/Timesheets', [
             'activeTab' => 'timesheets',
             'times' => Inertia::lazy(fn() => $project->times()
-                ->select('id', 'project_id', 'task_id', 'comment', 'start_at', 'end_at', 'author_id')
+                ->select('id', 'project_id', 'task_id', 'comment', 'start_at', 'end_at', 'time', 'author_id')
                 ->with(['task', 'author'])
                 ->forCurrentUser()
                 ->latest()
@@ -35,7 +35,7 @@ class TimesheetsController extends ProjectController
      */
     public function form(Project $project, ?Time $time = null): Modal
     {
-        if($time){
+        if ($time) {
             $this->authorize('update', [$time]);
         } else {
             $this->authorize('create', [Time::class, $project]);
@@ -76,5 +76,17 @@ class TimesheetsController extends ProjectController
                 'active_time_id' => null,
             ]);
         }
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function delete(Project $project, Time $time): void
+    {
+        $this->authorize('delete', [$time]);
+
+        $this->success('Time entry deleted.');
+
+        $time->delete();
     }
 }

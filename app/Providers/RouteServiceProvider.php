@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -26,6 +27,13 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        Route::bind('project', function ($value) {
+            $project = Project::withTrashed()->find($value);
+            abort_if(!$project, 404, 'Project not found.');
+            abort_if($project->deleted_at, 404, 'Project has been deleted.');
+            return $project;
         });
 
         $this->routes(function () {

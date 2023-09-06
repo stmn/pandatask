@@ -8,10 +8,14 @@ class ProjectRequest extends FormRequest
 {
     public function rules(): array
     {
+        $optionalDeleteRule = $this->input('delete_project', false) ? '|same:name' : '';
+
         return [
             'name' => 'required',
             'statuses' => 'array',
             'priorities' => 'array',
+            'delete_project' => 'boolean',
+            'delete_project_name' => 'required_if:delete_project,true' . $optionalDeleteRule,
             'custom_fields' => 'nullable|array',
             'custom_fields.*.key' => 'required|distinct|alpha_dash',
             'custom_fields.*.label' => 'required',

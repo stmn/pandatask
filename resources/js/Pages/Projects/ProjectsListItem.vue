@@ -70,7 +70,7 @@ const props = defineProps({
                               :href="$route('projects.edit', {project: item.id})">
                             <el-dropdown-item>
                                 <el-text size="small">
-                                    <i class="fas fa-edit pr-1"/>Edit project
+                                    <i class="fas fa-edit pr-1"/>Settings
                                 </el-text>
                             </el-dropdown-item>
                         </Link>

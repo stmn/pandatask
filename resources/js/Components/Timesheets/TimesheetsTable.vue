@@ -1,6 +1,5 @@
 <script setup>
-import {Link, usePage} from '@inertiajs/vue3'
-import {computed} from "vue";
+import {Link, router} from '@inertiajs/vue3'
 import Time from "~/js/Components/Common/TimeValue.vue";
 import Timer from "~/js/Components/Task/TimerButton.vue";
 import Pagination from "~/js/Components/Common/AppPagination.vue";
@@ -9,142 +8,134 @@ import UserPopover from "@/Components/User/UserPopover.vue";
 import HeroCard from "@/Components/Common/HeroCard.vue";
 
 const props = defineProps({
-    showTask: {
-        type: Boolean,
-        required: false
-    },
-    times: {
-        required: true
-    },
-    onlyAvatar: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    cols: {
-        type: Array,
-        required: false,
-        default: ['timer', 'task_id', 'start_at', 'end_at', 'time', 'comment', 'author_id', 'actions']
-    }
+  showTask: {
+    type: Boolean,
+    required: false
+  },
+  times: {
+    type: Array,
+    required: true
+  },
+  onlyAvatar: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  cols: {
+    type: Array,
+    required: false,
+    default: ['timer', 'task_id', 'start_at', 'end_at', 'time', 'comment', 'author_id', 'actions']
+  }
 })
 
-console.log('ee ', props.times)
-
-const auth = computed(() => usePage().props.auth)
-
-const timeBetweenTwoDates = (date1, date2) => {
-    const seconds = Math.floor((Date.parse(date2) - Date.parse(date1)) / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
-    let parts = [];
-    if (hours) {
-        parts.push(`${hours.toString().padStart(1, '0')}<span style="opacity: 0.5;">h</span>`)
-    }
-    if ((minutes % 60)) {
-        parts.push(`${(minutes % 60).toString().padStart(2, '0')}<span style="opacity: 0.5;">m</span>`)
-    }
-    parts.push(`${(seconds % 60).toString().padStart(2, '0')}<span style="opacity: 0.5;">s</span>`)
-
-    return parts.join(' ');
+const onConfirmDelete = (time) => {
+  Inertia.delete(route('project.timesheets.delete', {project: time.project_id, time: time.id}))
 }
 </script>
 
 <template>
-    <!--    <template v-if="times === undefined">-->
+  <template v-if="(times?.data && !times?.data?.length)">
+    <HeroCard title="Timesheets not found"
+              description="Timesheets are used to track time spent on tasks."
+              type="not-found"/>
+  </template>
+  <div v-else>
+    <el-table :data="times?.data || times" stripe style="width: 100%">
+      <template #empty>
+        <div v-if="times">
+          <HeroCard title="Timesheets not found"
+                    type="not-found"/>
+        </div>
+        <div v-else>
+          <i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
+        </div>
+      </template>
 
-    <!--    </template>-->
-    <template v-if="!times?.data?.length">
-        <HeroCard title="Timesheets not found"
-                  description="Timesheets are used to track time spent on tasks."
-                  type="not-found"/>
-    </template>
-    <div v-else>
-        <el-table :data="times?.data || times" stripe style="width: 100%">
-            <template #empty>
-                <div v-if="times">
-                    <HeroCard title="Timesheets not found"
-                              type="not-found"/>
-                </div>
-                <div v-else>
-                    <i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
-                </div>
-            </template>
+      <el-table-column v-if="cols.includes('task_id') && showTask" prop="task_id" min-width="200">
+        <template #default="{row}">
+          <div style="display: flex; align-items: center;">
+            <Timer :task="row.task" style="margin-right: 5px;"/>
+            <TaskLink :task="row.task" style="display: contents;"/>
+          </div>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('task_id') && showTask" prop="task_id" min-width="200">
-                <template #default="{row}">
-                    <div style="display: flex; align-items: center;">
-                        <Timer :task="row.task" style="margin-right: 5px;"/>
-                        <TaskLink :task="row.task" style="display: contents;"/>
-                    </div>
-                </template>
-            </el-table-column>
+      <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
+        <template #default="{row}">
+          <UserPopover :user="row.author"/>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('author_id')" prop="author_id" label="User" min-width="140">
-                <template #default="{row}">
-                    <UserPopover :user="row.author"/>
-                </template>
-            </el-table-column>
+      <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">
+        <template #default="{row}">
+          <Time :show-clock="false" :time="row.start_at" force-type="date"/>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('start_at')" prop="start_at" label="Start" width="150">
-                <template #default="{row}">
-                    <Time :show-clock="false" :time="row.start_at" force-type="date"/>
-                </template>
-            </el-table-column>
-
-            <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="150">
-                <template #default="{row}">
-                    <Time :show-clock="false" v-if="row.end_at" :time="row.end_at" force-type="date"/>
-                    <span v-else>
+      <el-table-column v-if="cols.includes('end_at')" prop="end_at" label="End" width="150">
+        <template #default="{row}">
+          <Time :show-clock="false" v-if="row.end_at" :time="row.end_at" force-type="date"/>
+          <span v-else>
                     <b>Pending</b>
                 </span>
-                </template>
-            </el-table-column>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('time')" prop="time" label="Time" width="105">
-                <template #default="{row}">
-                    <template v-if="row.end_at">
-                        <div style="width: 90px; text-align: right;"
-                             v-html="timeBetweenTwoDates(row.start_at, row.end_at)">
-                        </div>
-                    </template>
-                </template>
-            </el-table-column>
+      <el-table-column v-if="cols.includes('time')" prop="time" label="Time" width="105">
+        <template #default="{row}">
+          <template v-if="row.formatted_time">
+            <div style="width: 90px; text-align: right; word-break: keep-all; white-space: nowrap;"
+                 v-html="row.formatted_time">
+            </div>
+          </template>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="90">
-                <template #default="{row}">
-                    <el-popover
-                        v-if="row.comment"
-                        placement="left"
-                        :width="200"
-                        trigger="click"
-                    >
-                        <template #reference>
-                            <el-button size="small">
-                                <i class="fa-solid fa-comment-dots"></i>
-                            </el-button>
-                        </template>
-                        <template #default>
-                            <small>{{ row.comment }}</small>
-                        </template>
-                    </el-popover>
-                </template>
-            </el-table-column>
+      <el-table-column v-if="cols.includes('comment')" prop="comment" label="Comment" min-width="90">
+        <template #default="{row}">
+          <el-popover
+              v-if="row.comment"
+              placement="left"
+              :width="200"
+              trigger="hover"
+          >
+            <template #reference>
+              <el-button size="small">
+                <i class="fa-solid fa-comment-dots"></i>
+              </el-button>
+            </template>
+            <template #default>
+              <small>{{ row.comment }}</small>
+            </template>
+          </el-popover>
+        </template>
+      </el-table-column>
 
-            <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="90">
-                <template #default="{row}">
-                    <Link
-                        v-if="$can('update time', row)"
-                        preserve-state preserve-scroll :only="['modal', 'times']"
-                        :href="$route('project.timesheets.edit', {project: row.project_id, time: row.id})">
-                        <el-button type="primary" size="small"><i class="fa-solid fa-pen-to-square"></i></el-button>
-                    </Link>
-                </template>
-            </el-table-column>
-        </el-table>
+      <el-table-column v-if="cols.includes('actions')" fixed="right" prop="actions" label="Actions" width="110">
+        <template #default="{row}">
+          <Link
+              v-if="$can('update time', row)"
+              preserve-state preserve-scroll :only="['modal', 'times']"
+              :href="$route('project.timesheets.edit', {project: row.project_id, time: row.id})">
+            <el-button type="primary" size="small"><i class="fa-solid fa-pen-to-square"></i></el-button>
+          </Link>
 
-        <br>
+          <el-popconfirm title="Are you sure?"
+                         v-if="$can('delete time', row)"
+                         @confirm="router.delete(
+              $route('project.timesheets.delete', {project: row.project_id, time: row.id}),
+              {preserveScroll: true, preserveState: true, only: ['times', 'auth', 'flash']})">
+            )">
+            <template #reference>
+              <el-button type="danger" size="small" ml-2><i class="fa-solid fa-trash"></i></el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
 
-        <Pagination v-if="times?.data" :data="times"/>
-    </div>
+    <br>
+
+    <Pagination v-if="times?.data" :data="times"/>
+  </div>
 </template>

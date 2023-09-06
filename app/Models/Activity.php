@@ -43,6 +43,7 @@ class Activity extends Model implements HasMedia
 
     protected $appends = [
         'description',
+        'permissions',
     ];
 
     protected static function booted(): void
@@ -75,22 +76,22 @@ class Activity extends Model implements HasMedia
 
     public function user(): BelongsTo|UserQueryBuilder
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function project(): BelongsTo|ProjectQueryBuilder
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class)->withTrashed();
     }
 
     public function task(): BelongsTo|TaskQueryBuilder
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Task::class)->withTrashed();
     }
 
     public function author(): BelongsTo|UserQueryBuilder
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function comment(): BelongsTo|CommentQueryBuilder
@@ -100,7 +101,7 @@ class Activity extends Model implements HasMedia
 
     public function activity(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     protected function description(): Attribute
@@ -114,7 +115,7 @@ class Activity extends Model implements HasMedia
     {
         return Attribute::make(
             get: function ($details) {
-                if(is_null($details)){
+                if (is_null($details)) {
                     return [];
                 }
 
@@ -168,6 +169,15 @@ class Activity extends Model implements HasMedia
 
                 return $collection;
             },
+        );
+    }
+
+    protected function permissions(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => [
+                'delete activity' => loggedUser()->can('delete', $this),
+            ],
         );
     }
 }

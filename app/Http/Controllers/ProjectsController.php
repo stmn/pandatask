@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Notifications\ProjectAssigned;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,8 +30,8 @@ class ProjectsController extends Controller
                 ->selectRaw('id,name,description,latest_activity_id')
                 ->search($request->get('search'))
                 ->with([
-                    'latestActivity.task',
-                    'latestActivity.user'
+                    'latestActivity.task' => fn($query) => $query->withTrashed(),
+                    'latestActivity.user' => fn($query) => $query->withTrashed(),
                 ])
                 // with info about stats (how many tasks, how many completed, how many in progress)
 //                ->withCount([
@@ -84,6 +85,10 @@ class ProjectsController extends Controller
             ? $this->authorize('update', $project)
             : $this->authorize('create', Project::class);
 
+        if ($project && $request->get('delete_project')) {
+            return $this->delete($project);
+        }
+
         $project = Project::query()->updateOrCreate([
             'id' => $project?->id,
         ], [
@@ -120,5 +125,23 @@ class ProjectsController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function delete(Project $project): RedirectResponse
+    {
+        $this->authorize('delete', $project);
+
+        if($project->tasks()->withTrashed()->exists()) {
+            $project->delete();
+        } else {
+            $project->forceDelete();
+        }
+
+        $this->success('Project deleted.');
+
+        return to_route('projects');
     }
 }

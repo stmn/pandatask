@@ -1,5 +1,5 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3'
+import {Link, router, usePage} from '@inertiajs/vue3'
 import {ref} from "vue";
 import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 import Layout from "~/js/Layouts/Layout.vue";
@@ -15,6 +15,8 @@ const props = defineProps({
 /**
  * Project dropdown
  */
+
+console.log('eee ', props.project, usePage().props)
 
 const projectValue = ref('')
 const projectsSelectRef = ref();
@@ -98,7 +100,7 @@ const handleClick = (index) => {
                   v-if="$can('edit project', project)"
                   :href="$route('projects.edit', {project: project.id})">
                 <el-button type="primary">
-                    <i class="fas fa-pen-to-square mr-2"></i> Edit project
+                    <i class="fas fa-pen-to-square mr-2"></i> Project settings
                 </el-button>
             </Link>
 

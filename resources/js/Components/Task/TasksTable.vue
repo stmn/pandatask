@@ -12,6 +12,8 @@ import BaseAvatar from "@/Components/Common/BaseAvatar.vue";
 import UserName from "@/Components/User/UserName.vue";
 import UserAvatar from "@/Components/User/UserAvatar.vue";
 import UserPopover from "@/Components/User/UserPopover.vue";
+import ImageUpload from "@/Components/Common/ImageUpload.vue";
+import TaskDropdown from "@/Components/Task/TaskDropdown.vue";
 
 const props = defineProps({
     tasks: {},
@@ -134,6 +136,7 @@ updateColumns(columns.value);
                                      :class="`col-custom col-custom__${field?.type}`">
                             </template>
                             <col v-if="selectedColumns.includes('latest_activity_at')" class="col-activity">
+                          <col class="col-actions">
                         </colgroup>
                         <thead>
                         <tr>
@@ -166,6 +169,9 @@ updateColumns(columns.value);
                                 v-if="selectedColumns.includes('latest_activity_at')"
                                 colspan="1" rowspan="1">
                                 <div class="cell">Latest activity</div>
+                            </th>
+                            <th class="el-table_1_column_3 is-leaf el-table__cell">
+
                             </th>
                         </tr>
                         </thead>
@@ -316,6 +322,11 @@ updateColumns(columns.value);
                                     <!--                    </Transition>-->
                                     <!--                                </lazy-component>-->
                                 </div>
+                            </td>
+                            <td class="el-table_1_column_3 el-table__cell">
+                              <TaskDropdown :task="row">
+                                <i class="fas fa-ellipsis-h" style="margin-left: auto;" ></i>
+                              </TaskDropdown>
                             </td>
                         </tr>
                         </tbody>
@@ -555,5 +566,9 @@ updateColumns(columns.value);
 
 .col-activity {
     width: 280px;
+}
+
+.col-actions {
+  width: 15px;
 }
 </style>

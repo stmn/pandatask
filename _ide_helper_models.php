@@ -231,7 +231,7 @@ namespace App\Models{
  * @property array|null $tags
  * @property string|null $start_date
  * @property string|null $end_date
- * @property int $billable_status
+ * @property int $billable
  * @property int|null $estimation
  * @property mixed|null $custom_fields
  * @property \Illuminate\Support\Carbon $created_at

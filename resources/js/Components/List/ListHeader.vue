@@ -11,10 +11,10 @@ const {list, changeSort, changeOrder} = useList();
         <Link preserve-state preserve-scroll :only="['modal']"
               v-if="$can('create tasks', $page.props.project)"
               :href="$route('project.tasks.create', {project: $page.props.project.id})">
-        <el-button size="default" type="success" mr-2>
-            <i class="fa-solid fa-circle-plus mr-2"></i>
-            Add
-        </el-button>
+            <el-button size="default" type="success" mr-2>
+                <i class="fa-solid fa-circle-plus mr-2"></i>
+                Add
+            </el-button>
         </Link>
         <el-input
             :clearable="true"
@@ -28,8 +28,8 @@ const {list, changeSort, changeOrder} = useList();
         </el-input>
     </div>
 
-    <div float-right mt-3>
-        <el-text>
+    <div float-right mt-3 mb-1>
+        <el-text type="info">
             <div flex items-center justify-end>
                 <TasksFilters/>
 
@@ -45,14 +45,14 @@ const {list, changeSort, changeOrder} = useList();
                     </template>
                     <template #reference>
                         <span class="cursor-pointer">
-                            <i class="fa-solid fa-angle-down mr-1" style="vertical-align: middle;"></i>Columns
+                            <i class="fa-solid fa-angle-down mr-2" style="vertical-align: middle;"></i>Columns
                         </span>
                     </template>
                 </el-popover>
 
                 <el-divider v-if="list.columns.length" direction="vertical"></el-divider>
 
-                <el-dropdown v-if="list.columns.length">
+                <el-dropdown v-if="list.columns.length" type="info">
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item
@@ -63,9 +63,9 @@ const {list, changeSort, changeOrder} = useList();
                         </el-dropdown-menu>
                     </template>
 
-                    <span>
-                <i class="fa-solid fa-sort mr-1"></i> Sort by <u>{{ list.sort?.label }}</u>
-                </span>
+                    <el-text type="info">
+                        <i class="fa-solid fa-sort mr-2"></i>Sort by <u>{{ list.sort?.label }}</u>
+                    </el-text>
                 </el-dropdown>
 
                 <el-divider v-if="list.columns.length" direction="vertical"></el-divider>

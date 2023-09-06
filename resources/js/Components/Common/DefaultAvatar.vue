@@ -43,7 +43,7 @@ const backgrounds = [
 
 const initials = computed(() => {
     const words = props.name.split(' ');
-    return words.map(word => word[0]).join('').toUpperCase();
+    return words.map(word => word[0]).join('').toUpperCase().substr(0, props.letters);
 });
 
 const color = computed(() => {

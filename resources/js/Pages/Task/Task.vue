@@ -55,6 +55,7 @@ const taskForm = useForm({
     description: props.task.description,
     assignees: props.task.assignees,
     private: props.task.private,
+    billable: props.task.billable,
     status_id: props.task.status_id,
     priority_id: props.task.priority_id,
     tags: props.task.tags || [],
@@ -130,7 +131,9 @@ const onlyComments = useStorage('onlyComments', true);
                     </el-badge>
                 </template>
 
-                <editor v-model="activityForm.comment" placeholder="Write comment..."/>
+                <editor v-model="activityForm.comment"
+                        :min-height="60"
+                        placeholder="Write comment..."/>
 
                 <div v-if="activityForm.errors.comment" class="el-form-item__error">
                     {{ activityForm.errors.comment }}

@@ -75,6 +75,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::get('/projects/{project}/edit', [ProjectsController::class, 'form'])->name('projects.edit');
     Route::post('/projects/create', [ProjectsController::class, 'save'])->name('projects.store');
     Route::post('/projects/{project}/edit', [ProjectsController::class, 'save'])->name('projects.update');
+    Route::delete('/projects/{project}/delete', [ProjectsController::class, 'delete'])->name('projects.delete');
 
     Route::get('/tasks', [TasksController::class, 'index'])->name('tasks');
 
@@ -102,7 +103,7 @@ Route::middleware('auth')->group(callback: function () {
 
     // Project routes
 
-    Route::group(['as' => 'project', 'prefix' => '/project/{project}/'], function () {
+    Route::group(['as' => 'project', 'prefix' => '/project/{project:id}/'], function () {
         Route::get('', fn() => redirect()->route('project.tasks', ['project' => request()->route('project')]));
 
         Route::get('overview', [OverviewController::class, 'index'])->name('.overview');
@@ -124,12 +125,16 @@ Route::middleware('auth')->group(callback: function () {
         Route::post('timesheets/create', [TimesheetsController::class, 'save'])->name('.timesheets.store');
         Route::get('timesheets/{time}/edit', [TimesheetsController::class, 'form'])->name('.timesheets.edit');
         Route::post('timesheets/{time}/edit', [TimesheetsController::class, 'save'])->name('.timesheets.update');
+        Route::delete('timesheets/{time}/delete', [TimesheetsController::class, 'delete'])->name('.timesheets.delete');
 
 
         Route::get('activity', [ActivityController::class, 'index'])->name('.activity');
+        Route::post('activity/{activity}/private', [ActivityController::class, 'private'])->name('.activity.private');
+        Route::delete('activity/{activity}/delete', [ActivityController::class, 'delete'])->name('.activity.delete');
 
         Route::get('tasks/{task:number}', [ProjectTasksController::class, 'show'])->name('.task');
         Route::post('tasks/{task:number}', [ProjectTasksController::class, 'update'])->name('.task.update');
+        Route::delete('tasks/{task:number}/delete', [ProjectTasksController::class, 'delete'])->name('.task.delete');
     });
 
     Route::get('/leave-impersonation', [AuthenticatedSessionController::class, 'leaveImpersonation'])->name('leave-impersonation');

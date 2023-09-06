@@ -40,7 +40,7 @@ const props = defineProps({
                         style="align-self: flex-start; margin-right: 10px;"/>
 
             <div style="line-height: 22px;">
-                <div><b>{{ user?.first_name }} {{ user?.last_name }}</b></div>
+                <div><b>{{ user?.first_name }} {{ user?.last_name }}</b> <el-tag v-if="user.deleted_at" size="small" type="danger">Deleted</el-tag></div>
                 <div><small>{{ user.job_title }}</small></div>
                 <div style="margin-top: 0;">
 

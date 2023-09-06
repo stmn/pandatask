@@ -24,7 +24,7 @@
             </el-collapse>
         </template>
         <template #reference>
-            <span><i class="fa-solid fa-angle-down mr-1" style="vertical-align: middle;"></i>Filters</span>
+            <span><i class="fa-solid fa-angle-down mr-2" style="vertical-align: middle;"></i>Filters</span>
         </template>
     </el-popover>
     </el-config-provider>

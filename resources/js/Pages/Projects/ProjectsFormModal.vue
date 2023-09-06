@@ -24,6 +24,7 @@ props.custom_fields = [];
 // }
 
 const form = useForm(Object.assign({
+    id: null,
     name: '',
     description: null,
     clients: [],
@@ -31,6 +32,8 @@ const form = useForm(Object.assign({
     statuses: [],
     priorities: [],
     custom_fields: [],
+    delete_project: false,
+    delete_project_name: '',
 }, props.project))
 
 if (!props.project) {
@@ -45,7 +48,7 @@ const url = route(`projects.${props.project ? 'edit' : 'create'}`, {project: pro
 const create = () => form.post(url, {
     preserveState: true,
     preserveScroll: true,
-    only: ['tasks', 'errors', 'flash'],
+    only: ['tasks', 'projects', 'errors', 'flash'],
     onSuccess: () => {
         close();
     }
@@ -62,7 +65,7 @@ const activeTab = ref('general');
 
 <template>
     <Modal>
-        <template #title>{{ project ? 'Edit project' : 'Create a new project' }}</template>
+        <template #title>{{ project ? 'Project settings' : 'Create a new project' }}</template>
 
         <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane name="general">
@@ -145,6 +148,17 @@ const activeTab = ref('general');
                             </el-checkbox-button>
                         </el-checkbox-group>
                     </el-form-item>
+
+                  <el-form-item v-if="form.id">
+                    <el-checkbox v-model="form.delete_project" mr-2>
+                      <el-text type="danger">Delete project</el-text>
+                    </el-checkbox>
+                    <el-input v-if="form.delete_project"
+                              type="text"
+                              placeholder="Enter project name to confirm"
+                              v-model="form.delete_project_name" />
+                    <InputError :message="form.errors.delete_project_name"/>
+                  </el-form-item>
                 </el-form>
             </el-tab-pane>
             <el-tab-pane name="fields">

@@ -34,6 +34,7 @@ class TasksController extends ProjectController
 
         return Inertia::render('Project/Tasks/Tasks', [
             'activeTab' => 'tasks',
+            'project' => $project,
             'search' => $request->get('search'),
 //            'sort' => $request->get('sort', $sort),
             'tasks' => Inertia::lazy(fn() => $project->tasks()
@@ -57,6 +58,8 @@ class TasksController extends ProjectController
         $this->authorize('view', $task);
 
         $task->load('author', 'project', 'assignees');
+
+        $task->append(['total_logged_time', 'your_logged_time']);
 
         return Inertia::render('Task/Task', [
 //            'project' => $project,
@@ -134,15 +137,16 @@ class TasksController extends ProjectController
             'task.priority_id' => ['required', 'exists:priorities,id', 'sometimes'],
             'task.status_id' => ['required', 'exists:statuses,id', 'sometimes'],
             'task.private' => ['boolean'],
+            'task.billable' => ['boolean'],
             'task.tags' => ['array'],
             'task.custom_fields' => ['array'],
-            'task.start_date' => ['date'],
-            'task.end_date' => ['date'],
+            'task.start_date' => ['date', 'nullable'],
+            'task.end_date' => ['date', 'nullable'],
         ], $request->all());
 //dd($validated, $request->all());
         $activity = [
             'project_id' => $task->project_id,
-            'type' => ActivityType::TASK_CHANGED,
+            'type' => null,
             'details' => [
                 'changed' => [],
                 'attached' => [],
@@ -166,6 +170,10 @@ class TasksController extends ProjectController
             foreach ($changes as $key => $change) {
                 $oldValues = $original[$key];
                 $activity['details']['changed'][$key] = [$oldValues, $change];
+            }
+
+            if(count($activity['details']['changed'])) {
+                $activity['type'] = ActivityType::TASK_CHANGED;
             }
         }
 
@@ -200,32 +208,52 @@ class TasksController extends ProjectController
             }
 //        }
 
-        if($activity['details']['changed'] || $activity['details']['attached'] || $activity['details']['detached']) {
-            $activity = $task->activities()->create($activity);
-            assert($activity instanceof Activity);
+        if($activity['type']) {
+            $activityModel = $task->activities()->create($activity);
+            assert($activityModel instanceof Activity);
 
-            if($activity->type === ActivityType::TASK_COMMENTED) {
-                $task->assignees()
-                    ->where('id', '!=', loggedUser()->id)
-                    ->get()
-                    ->each(fn(User $user) => $user->notify(new NewTaskComment($activity)));
-            } elseif(
-                $activity['details']->where('field', 'status_id')->isNotEmpty()
-            ) {
-                $task->assignees()
-                    ->where('id', '!=', loggedUser()->id)
-                    ->get()
-                    ->each(fn(User $user) => $user->notify(new NewTaskStatus($activity)));
+            if($activity['details']['changed'] || $activity['details']['attached'] || $activity['details']['detached']) {
+                if($activityModel->type === ActivityType::TASK_COMMENTED) {
+                    $task->assignees()
+                        ->where('id', '!=', loggedUser()->id)
+                        ->get()
+                        ->each(fn(User $user) => $user->notify(new NewTaskComment($activity)));
+                } elseif(
+                    $activity['details']->where('field', 'status_id')->isNotEmpty()
+                ) {
+                    $task->assignees()
+                        ->where('id', '!=', loggedUser()->id)
+                        ->get()
+                        ->each(fn(User $user) => $user->notify(new NewTaskStatus($activity)));
+                }
             }
-        }
 
-        $files = Arr::get($request->allFiles(), 'activity.files', []);
-        if ($files) {
-            foreach ($files as $file) {
-                $activity->addMedia($file['raw'])->toMediaCollection('files');
+            $files = Arr::get($request->allFiles(), 'activity.files', []);
+            if ($files) {
+                foreach ($files as $file) {
+                    $activityModel->addMedia($file['raw'])->toMediaCollection('files');
+                }
             }
         }
 
         $this->success('Task updated.');
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function delete(Project $project, Task $task): RedirectResponse
+    {
+        $this->authorize('delete', $task);
+
+        if($task->activities()->exists() || $task->times()->exists()) {
+            $task->delete();
+        } else {
+            $task->forceDelete();
+        }
+
+        $this->success('Task deleted.');
+
+        return to_route('project.tasks', ['project' => $project]);
     }
 }

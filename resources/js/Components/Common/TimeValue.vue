@@ -35,7 +35,7 @@ const toggleTimeType = () => {
 <template>
     <span :class="`time ${forceType ? 'forced' : 'not-forced'}`"
           :title="timeType !== 'ago' ? useTimeAgo(time).value : useDateFormat(time, dateFormat).value"
-          @click="toggleTimeType"><i v-if="showClock" class="far fa-clock mr-1"></i>{{
+          @click="toggleTimeType"><i v-if="showClock" class="far fa-clock mr-2"></i>{{
             timeType === 'ago' ? useTimeAgo(time).value : useDateFormat(time, dateFormat).value
         }}
     </span>

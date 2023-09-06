@@ -28,7 +28,7 @@ return new class extends Migration
             $table->json('tags')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->tinyInteger('billable_status')->default(0);
+            $table->tinyInteger('billable')->default(0);
             $table->unsignedBigInteger('estimation')->nullable();
             $table->json('custom_fields')->nullable();
             $table->timestamp('created_at')->useCurrent();

@@ -69,9 +69,9 @@ export default {
     data() {
         return {
             editor: null,
+            minHeightPx: this.minHeight+'px',
         }
     },
-
     watch: {
         modelValue(value) {
             // HTML
@@ -141,8 +141,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.el-scrollbar__bar.is-horizontal {
+<style lang="scss" scoped>
+::v-deep(.el-scrollbar__bar.is-horizontal) {
     display: none !important;
+}
+::v-deep(.ProseMirror) {
+    min-height: v-bind(minHeightPx) !important;
 }
 </style>

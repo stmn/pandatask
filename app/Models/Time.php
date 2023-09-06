@@ -33,7 +33,19 @@ class Time extends Model
 
     protected $appends = [
         'permissions',
+        'formatted_time',
     ];
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (Time $time) {
+            $time->time = $time->start_at->diffInSeconds(
+                $time->end_at ?? now()
+            );
+        });
+    }
 
     public static function query(): Builder|TimeQueryBuilder
     {
@@ -49,12 +61,12 @@ class Time extends Model
 
     public function task(): BelongsTo|TaskQueryBuilder
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Task::class)->withTrashed();
     }
 
     public function author(): BelongsTo|UserQueryBuilder
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     // Actions
@@ -85,7 +97,15 @@ class Time extends Model
         return Attribute::make(
             get: fn() => [
                 'update time' => loggedUser()->can('update', $this),
+                'delete time' => loggedUser()->can('delete', $this),
             ],
+        );
+    }
+
+    protected function formattedTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => secondsToTime($this->start_at->diffInSeconds(now())),
         );
     }
 }

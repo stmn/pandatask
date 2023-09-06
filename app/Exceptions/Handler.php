@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -37,6 +39,12 @@ class Handler extends ExceptionHandler
                 $request->session()->flash('message', [
                     'type' => 'error',
                     'message' => $e->getMessage(),
+                ]);
+                return back();
+            } elseif($e instanceof ModelNotFoundException) {
+                $request->session()->flash('message', [
+                    'type' => 'error',
+                    'message' => 'Item not found - probably deleted.',
                 ]);
                 return back();
             }

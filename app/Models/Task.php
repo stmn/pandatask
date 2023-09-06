@@ -31,6 +31,7 @@ class Task extends Model
         'author_id',
         'number',
         'private',
+        'billable',
         'priority_id',
         'status_id',
         'latest_activity_id',
@@ -49,6 +50,7 @@ class Task extends Model
 
     protected $casts = [
         'private' => 'boolean',
+        'billable' => 'boolean',
         'tags' => 'array',
         'start_date' => 'date:Y-m-d',
         'end_date' => 'date:Y-m-d',
@@ -128,11 +130,25 @@ class Task extends Model
         );
     }
 
+    protected function totalLoggedTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => secondsToTime($this->times()->sum('time'))
+        );
+    }
+
+    protected function yourLoggedTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => secondsToTime($this->times()->where('author_id', loggedUser()?->id)->sum('time'))
+        );
+    }
+
     protected function permissions(): Attribute
     {
         return Attribute::make(
             get: fn() => [
-
+                'delete task' => true,//loggedUser()?->can('delete', $this),
             ],
         );
     }

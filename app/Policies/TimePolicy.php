@@ -9,9 +9,11 @@ use Illuminate\Auth\Access\Response;
 
 class TimePolicy
 {
-    public function __construct()
+    public function before()
     {
-        //
+        if (loggedUser()->isAdmin()) {
+            return true;
+        }
     }
 
     public function viewAny(User $user, Project $project): bool
@@ -21,7 +23,7 @@ class TimePolicy
 
     public function create(User $user, Project $project): bool|Response
     {
-        if($user->isClient()){
+        if ($user->isClient()) {
             return Response::deny('As a client you can not create time entries.');
         }
 
@@ -29,6 +31,11 @@ class TimePolicy
     }
 
     public function update(User $user, Time $time): bool
+    {
+        return $time->author->is(loggedUser());
+    }
+
+    public function delete(User $user, Time $time): bool
     {
         return $time->author->is(loggedUser());
     }

@@ -24,6 +24,7 @@ const props = defineProps({
 
 <template>
     <el-timeline-item
+        max-w-screen-lg
         v-if="!onlyComments || event?.type === 'task_commented'"
         :key="event.id"
         :id="`activity_${event.id}`">
